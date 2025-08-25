@@ -1,0 +1,247 @@
+/* RESET GENERAL */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ 
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px; /* evita que el formulario quede tapado por el footer */
+}
+
+/*PARA QUE LA PANTALLA SE MANTENGA QUIETA*/
+html, body {
+  overflow: hidden;
+  height: 100%;
+}
+
+/* BARRA SUPERIOR */
+.top-bar {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.top-bar .left-side {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.logo1 {
+  height: 40px;
+}
+
+.logo2 {
+  height: 40px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a img {
+  border: none;
+  outline: none;
+  display: inline-block;
+}
+
+.top-bar .right-side {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icono {
+  width: 25px;
+  height: 25px;
+  margin-right: 6px;
+}
+
+
+/* MENÚ DE NAVEGACIÓN */
+header {
+  background-color: #003f87;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.menu {
+  display: flex;
+  padding: 13px 30px;
+}
+
+.menu a {
+  color: white;
+  text-decoration: none;
+  margin-right: 40px;
+  font-size: 16px;
+}
+
+/* CONTENEDOR DEL FORMULARIO */
+.form-box {
+  width: 700px;               
+  padding: 7px;
+  margin: 150px auto;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  
+}
+
+/* CENTRAR LA IMAGEN */
+.logo-centro img { 
+  display: block;
+  margin: 0 auto 10px;
+  width: 60px;
+} 
+
+/* GRILLA CON DOS COLUMNAS MÁS COMPACTA */
+.form-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* COLUMNAS DE CAMPOS */
+.col { 
+  flex: 1;
+  margin-left: 40px; 
+}
+
+
+/* INPUTS Y SELECT MÁS PEQUEÑOS */
+.col input,
+.col select {
+  width: 80%;
+  padding: 6px 10px;
+  font-size: 14px;
+  margin-bottom: 9px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* ETIQUETAS MÁS PEGADAS Y PEQUEÑAS */
+.col label {
+  font-size: 14px;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* BOTONES */
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.form-buttons button {
+  padding: 8px 14px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#btn-cancelar {
+  background-color: #c82333;
+  color: white;
+}
+
+#btn-siguiente {
+  background-color: #218838;
+  color: white;
+}
+
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px 40px;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+  font-size: 18px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 24px;
+  color: #999; 
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+
+/* FOOTER */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.footer-bar {
+  background-color: #003f87;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 120px;
+  font-size: 14px;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center; 
+  gap: 8px;            
+}
+
+.footer-item img {
+  width: 18px;
+  height: 18px;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 10px;
+  background-color: white;
+  font-size: 14px;
+}

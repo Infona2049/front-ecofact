@@ -1,0 +1,223 @@
+/* RESET GENERAL */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ 
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px; /* evita que el formulario quede tapado por el footer */
+}
+
+/*PARA QUE LA PANTALLA SE MANTENGA QUIETA*/
+html, body {
+  overflow: hidden;
+  height: 100%;
+}
+
+/* BARRA SUPERIOR */
+.top-bar {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.top-bar .left-side {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.logo1 {
+  height: 40px;
+}
+ 
+.logo2 {
+  height: 40px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a img {
+  border: none;
+  outline: none;
+  display: inline-block;
+}
+
+.top-bar .right-side {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icono {
+  width: 25px;
+  height: 25px;
+  margin-right: 6px;
+}
+
+
+/* MENÚ DE NAVEGACIÓN */
+header {
+  background-color: #003f87;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.menu {
+  display: flex;
+  padding: 13px 30px;
+}
+
+.menu a {
+  color: white;
+  text-decoration: none;
+  margin-right: 40px;
+  font-size: 16px;
+}
+
+
+/* FILTROS Y TABLA */
+.filtros,
+.cuadro-tabla {
+  background: white;
+  padding: 20px;
+  width: 90%;
+  max-width: 1000px;
+  margin: 140px auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* FILTROS */
+.titulo {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.filtros-linea {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+
+.campo-fecha {
+  display: flex;
+  gap: 200px;
+  align-items: center;
+}
+
+.campo-fecha label {
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.campo-fecha input[type="date"] {
+  padding: 6px;
+  background-color: #c0cee9;
+  font-size: 15px;
+  border: none;
+  border-radius: 10px;
+}
+
+.fechainicial {
+  margin-right: 150px;
+}
+
+.campo-boton {
+  margin-top: 9px;
+  text-align: center;
+}
+
+.boton-buscar { 
+  background-color: green;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 5px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: background-color 0.3s;
+}
+
+.boton-buscar:hover {
+  background-color: darkgreen; 
+}
+
+/* TABLA */
+.tabla-facturas {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.tabla-facturas th,
+.tabla-facturas td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #999;
+}
+
+.tabla-facturas th {
+  background-color: #d0def1;
+  font-weight: bold;
+}
+
+/* FOOTER */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.footer-bar {
+  background-color: #003f87;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 120px;
+  font-size: 14px;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center; 
+  gap: 8px;            
+}
+
+.footer-item img {
+  width: 18px;
+  height: 18px;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 10px;
+  background-color: white;
+  font-size: 14px;
+}

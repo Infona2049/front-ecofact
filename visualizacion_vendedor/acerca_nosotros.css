@@ -1,0 +1,159 @@
+/* RESET GENERAL */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px; /* evita que el formulario quede tapado por el footer */
+}
+
+/* BARRA SUPERIOR */
+.top-bar {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.top-bar .left-side {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.logo1 {
+  height: 40px;
+}
+
+.logo2 {
+  height: 40px;
+}
+ 
+a {
+  text-decoration: none;
+}
+
+a img {
+  border: none;
+  outline: none;
+  display: inline-block;
+}
+
+.top-bar .right-side {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icono {
+  width: 25px;
+  height: 25px;
+  margin-right: 6px;
+}
+
+
+/* MENÚ DE NAVEGACIÓN */
+header {
+  background-color: #003f87;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.menu {
+  display: flex;
+  padding: 13px 30px;
+}
+
+.menu a {
+  color: white;
+  text-decoration: none;
+  margin-right: 40px;
+  font-size: 16px;
+}
+
+
+/* SECCIÓN ACERCA DE NOSOTROS */
+.titulo-nosotros {
+  text-align: center;
+  margin-top: 160px;
+  color: #023e8a;
+}
+
+.info-boxes {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 20px;
+  text-align: justify;
+  flex-wrap: wrap;
+}
+
+.box {
+  background-color: #e7ecf4;
+  padding: 15px;
+  width: 30%;
+  min-width: 250px;
+  border-radius: 6px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.box h3 {
+  margin-bottom: 25px;
+  color: #023e8a;
+  text-align: center;
+}
+
+
+/* FOOTER DE DONDE ESTA EL CORREO Y EL TELEFONO */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.footer-bar {
+  background-color: #003f87;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 120px;
+  font-size: 14px;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center; /* alinea icono con texto */
+  gap: 8px;            /* espacio entre icono y texto */
+}
+
+.footer-item img {
+  width: 18px;
+  height: 18px;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 10px;
+  background-color: white;
+  font-size: 14px;
+}

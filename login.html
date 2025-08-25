@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Iniciar sesión - EcoFact</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+  <div class="form-content">
+    <img class="logo" src="./img/Logo azul sin fondo.png" alt="Logo EcoFact">
+    
+    <form onsubmit="mostrarModal(event)">
+      <input type="email" required placeholder="Correo">
+      <input type="password" required placeholder="Contraseña">
+      <p class="recuperar"><u>¿Olvidó su contraseña?</u></p>
+      <button type="submit" class="boton2">Iniciar Sesión</button>
+      <p class="registro">¿No estás registrado? Regístrate <u>aquí</u></p>
+    </form>
+  </div>
+
+  <div id="modalRol" class="modal">
+    <div class="modal-contenido">
+      <h2>¿Cuál es tu rol?</h2>
+      <div class="roles-container">
+        <button onclick="seleccionarRol('vendedor')">Vendedor</button>
+        <button onclick="seleccionarRol('cliente')">Cliente</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="login.js" defer></script>
+</body>
+</html>

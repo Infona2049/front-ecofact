@@ -1,0 +1,263 @@
+/* RESET GENERAL */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} 
+ 
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px; /* evita que el formulario quede tapado por el footer */
+}
+
+
+/* BARRA SUPERIOR */
+.top-bar {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.top-bar .left-side {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.logo1 {
+  height: 40px;
+}
+
+.logo2 {
+  height: 40px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a img {
+  border: none;
+  outline: none;
+  display: inline-block;
+}
+
+.top-bar .right-side {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icono {
+  width: 25px;
+  height: 25px;
+  margin-right: 6px;
+}
+
+
+/* MENÚ DE NAVEGACIÓN */
+header {
+  background-color: #003f87;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.menu {
+  display: flex;
+  padding: 13px 30px;
+}
+
+.menu a {
+  color: white;
+  text-decoration: none;
+  margin-right: 40px;
+  font-size: 16px;
+}
+
+/* FOOTER */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.footer-bar {
+  background-color: #003f87;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 120px;
+  font-size: 14px;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center; 
+  gap: 8px;            
+}
+
+.footer-item img {
+  width: 18px;
+  height: 18px;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 10px;
+  background-color: white;
+  font-size: 14px;
+}
+
+/* TITULAR */
+h2 {
+  text-align: center;
+  padding: 20px;
+}
+
+
+/* FACTURA */
+.seccion-factura {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.card-datos {
+  background-color: white;
+  border-radius: 6px;
+  padding: 20px 40px;
+  width: 90%;
+  max-width: 700px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-datos h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-datos hr {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  color: #000;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: #b8c7e0;
+  color: #333;
+  font-size: 14px;
+  max-width: 300px;
+}
+
+select option[disabled] {
+  color: #888;
+}
+
+#funcionProducto {
+  width: 100%;
+  max-width: 300px; /* Igual que los otros campos */
+  min-height: 60px; /* Altura inicial */
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: #b8c7e0;
+  color: #333;
+  font-size: 14px;
+  resize: vertical; /* Permite agrandar manualmente */
+  overflow-y: auto; /* Scroll si el texto es muy largo */
+}
+
+
+/* BOTÓN SIGUIENTE */
+.btn-siguiente {
+  background-color: green;
+  color: white;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-siguiente:hover {
+  background-color: darkgreen;
+}
+
+/*parte superior y inferior fija
+/* Fijar la barra superior */
+.top-bar {
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100%;
+  z-index: 1000; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Fijar la barra de navegación debajo de la top-bar */
+header {
+  position: fixed;
+  top: 60px; /* ajusta si la .top-bar tiene más o menos altura */
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+/* Para que el contenido no quede oculto debajo */
+body {
+  padding-top: 120px; /* top-bar (60px) + header (60px aprox.) */
+}
+
+/* Fijar el footer abajo */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+/* Para evitar que se tape el contenido con el footer */
+body {
+  padding-bottom: 80px; /* ajusta según la altura del footer */
+}
