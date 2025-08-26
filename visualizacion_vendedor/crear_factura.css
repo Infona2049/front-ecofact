@@ -187,6 +187,12 @@ select {
   max-width: 300px;
 }
 
+#telefono::-webkit-inner-spin-button,
+#telefono::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 select option[disabled] {
   color: #888;
 }
