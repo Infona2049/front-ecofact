@@ -218,8 +218,8 @@ input[type="number"] {
 
 .iconoEliminar:hover {
   transform: scale(1.2);
-  background-color: #ffebee;
-  filter: brightness(0) saturate(100%) invert(23%) sepia(98%) saturate(6246%) hue-rotate(355deg) brightness(92%) contrast(108%);
+  background-color: #ff4757;
+  filter: invert(1);
 }
 
 /* TOTALES */
@@ -266,6 +266,11 @@ input[type="number"] {
   transform: translateY(0);
 }
 
+.btn-siguiente:focus {
+  outline: 3px solid #38b6ff;
+  outline-offset: 2px;
+}
+
 /* FOOTER */
 footer {
   position: fixed;
@@ -303,7 +308,7 @@ footer {
   font-size: clamp(11px, 2.5vw, 14px);
 }
 
-/* RESPONSIVE MÍNIMO */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .card-datos {
     width: 98%;
@@ -347,10 +352,7 @@ footer {
     padding: 8px;
   }
   
-  #tablaProductos th:nth-child(n+4) {
-    display: none;
-  }
-  
+  #tablaProductos th:nth-child(n+4),
   #tablaProductos td:nth-child(n+4) {
     display: none;
   }
@@ -371,7 +373,13 @@ footer {
   }
 }
 
-/* Enlaces sin decoración */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
 a {
   text-decoration: none;
 }
@@ -380,18 +388,4 @@ a img {
   border: none;
   outline: none;
   display: inline-block;
-}
-
-/* Mejoras de accesibilidad */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-    animation: none !important;
-  }
-}
-
-/* Focus para accesibilidad */
-.btn-siguiente:focus {
-  outline: 3px solid #38b6ff;
-  outline-offset: 2px;
 }

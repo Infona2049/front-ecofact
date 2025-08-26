@@ -1,193 +1,276 @@
-// --- Dropdown usuario (solo si existe en el HTML) ---
-const dropdownToggle = document.querySelector(".usuario");
-const dropdownMenu = document.querySelector(".dropdown-usuario");
+// --- Configuración inicial ---
+let consecutivoFactura = 1000;
+let subtotalGeneral = 0;
+let ivaGeneral = 0;
+let totalGeneral = 0;
 
-if (dropdownToggle && dropdownMenu) {
-  dropdownToggle.addEventListener("click", () => {
+// --- Datos de productos ---
+const PRODUCTOS = {
+  moviles: [
+    "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max",
+    "iPhone 14", "iPhone 14 Pro", "iPhone 14 Pro Max",
+    "iPhone 15", "iPhone 15 Pro", "iPhone 15 Pro Max",
+    "iPhone 16", "iPhone 16 Pro", "iPhone 16 Pro Max"
+  ],
+  cargadores: [
+    "Cargador USB-C 20W",
+    "Cargador MagSafe",
+    "Cargador MagSafe Duo",
+    "Cargador USB-C 35W doble"
+  ],
+  auriculares: [
+    "AirPods (2ª generación)",
+    "AirPods (3ª generación)",
+    "AirPods Pro (2ª generación)",
+    "AirPods Max"
+  ]
+};
+
+// --- Utilidades ---
+function formatearMoneda(valor) {
+  return valor.toLocaleString("es-CO", { minimumFractionDigits: 2 });
+}
+
+function actualizarTotales() {
+  document.getElementById("subtotal").textContent = formatearMoneda(subtotalGeneral);
+  document.getElementById("ivaTotal").textContent = formatearMoneda(ivaGeneral);
+  document.getElementById("granTotal").textContent = formatearMoneda(totalGeneral);
+}
+
+function limpiarFormulario() {
+  document.getElementById("cantidad").value = "";
+  document.getElementById("precio").value = "";
+}
+
+function mostrarOcultarContenedores(categoria) {
+  const contenedores = {
+    producto: document.getElementById("producto-container"),
+    almacenamiento: document.getElementById("almacenamiento-container"),
+    color: document.getElementById("color-container")
+  };
+
+  // Ocultar todos por defecto
+  Object.values(contenedores).forEach(container => {
+    if (container) container.style.display = "none";
+  });
+
+  // Mostrar según categoría
+  if (categoria && PRODUCTOS[categoria]) {
+    if (contenedores.producto) contenedores.producto.style.display = "block";
+    
+    if (categoria === "moviles") {
+      if (contenedores.almacenamiento) contenedores.almacenamiento.style.display = "block";
+      if (contenedores.color) contenedores.color.style.display = "block";
+    }
+  }
+}
+
+// --- Dropdown usuario ---
+function inicializarDropdown() {
+  const dropdownToggle = document.querySelector(".usuario");
+  const dropdownMenu = document.querySelector(".dropdown-usuario");
+
+  if (!dropdownToggle || !dropdownMenu) return;
+
+  dropdownToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
     dropdownMenu.classList.toggle("visible");
   });
 
-  window.addEventListener("click", function (e) {
+  document.addEventListener("click", (e) => {
     if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
       dropdownMenu.classList.remove("visible");
     }
   });
 }
 
-// --- Lógica dinámica de productos ---
-document.getElementById("categoria").addEventListener("change", mostrarOpciones);
-
+// --- Lógica de productos ---
 function mostrarOpciones() {
-  const categoria = document.getElementById("categoria").value;
+  const categoriaSelect = document.getElementById("categoria");
   const productoSelect = document.getElementById("producto");
-  const productoContainer = document.getElementById("producto-container");
-  const almacenamientoContainer = document.getElementById("almacenamiento-container");
-  const colorContainer = document.getElementById("color-container");
+  
+  if (!categoriaSelect || !productoSelect) return;
 
-  // Limpiar y ocultar por defecto
-  productoSelect.innerHTML = "";
-  productoContainer.style.display = "none";
-  almacenamientoContainer.style.display = "none";
-  colorContainer.style.display = "none";
+  const categoria = categoriaSelect.value;
+  
+  // Limpiar opciones anteriores
+  productoSelect.innerHTML = '<option value="">Seleccione un producto</option>';
+  
+  mostrarOcultarContenedores(categoria);
 
-  if (categoria === "moviles") {
-    productoContainer.style.display = "block";
-    almacenamientoContainer.style.display = "block";
-    colorContainer.style.display = "block";
-
-    const iphones = [
-      "iPhone 13","iPhone 13 Pro","iPhone 13 Pro Max",
-      "iPhone 14","iPhone 14 Pro","iPhone 14 Pro Max",
-      "iPhone 15","iPhone 15 Pro","iPhone 15 Pro Max",
-      "iPhone 16","iPhone 16 Pro","iPhone 16 Pro Max"
-    ];
-
-    iphones.forEach(modelo => {
-      let opt = document.createElement("option");
-      opt.value = modelo;
-      opt.textContent = modelo;
-      productoSelect.appendChild(opt);
+  if (categoria && PRODUCTOS[categoria]) {
+    const fragment = document.createDocumentFragment();
+    
+    PRODUCTOS[categoria].forEach(item => {
+      const option = document.createElement("option");
+      option.value = item;
+      option.textContent = item;
+      fragment.appendChild(option);
     });
-
-  } else if (categoria === "cargadores") {
-    productoContainer.style.display = "block";
-
-    const cargadores = [
-      "Cargador USB-C 20W",
-      "Cargador MagSafe",
-      "Cargador MagSafe Duo",
-      "Cargador USB-C 35W doble"
-    ];
-
-    cargadores.forEach(item => {
-      let opt = document.createElement("option");
-      opt.value = item;
-      opt.textContent = item;
-      productoSelect.appendChild(opt);
-    });
-
-  } else if (categoria === "auriculares") {
-    productoContainer.style.display = "block";
-
-    const auriculares = [
-      "AirPods (2ª generación)",
-      "AirPods (3ª generación)",
-      "AirPods Pro (2ª generación)",
-      "AirPods Max"
-    ];
-
-    auriculares.forEach(item => {
-      let opt = document.createElement("option");
-      opt.value = item;
-      opt.textContent = item;
-      productoSelect.appendChild(opt);
-    });
+    
+    productoSelect.appendChild(fragment);
   }
 }
 
-// --- AGREGAR PRODUCTO A LA TABLA ---
-const btnAgregar = document.getElementById("btnAgregar");
-const tablaProductosContainer = document.getElementById("tablaProductosContainer");
-const tablaProductos = document.querySelector("#tablaProductos tbody");
+// --- Manejo de tabla de productos ---
+function eliminarProducto(fila, subtotal, iva, total) {
+  subtotalGeneral -= subtotal;
+  ivaGeneral -= iva;
+  totalGeneral -= total;
 
-let subtotalGeneral = 0;
-let ivaGeneral = 0;
-let totalGeneral = 0;
+  actualizarTotales();
+  fila.remove();
 
-btnAgregar.addEventListener("click", () => {
-  const categoria = document.getElementById("categoria").value;
-  const producto = document.getElementById("producto").value;
-  const almacenamiento = document.getElementById("almacenamiento").value;
-  const color = document.getElementById("color").value;
-  const cantidad = parseInt(document.getElementById("cantidad").value);
-  const precio = parseFloat(document.getElementById("precio").value);
+  const tablaProductos = document.querySelector("#tablaProductos tbody");
+  const tablaProductosContainer = document.getElementById("tablaProductosContainer");
+  
+  if (tablaProductos && tablaProductos.rows.length === 0 && tablaProductosContainer) {
+    tablaProductosContainer.style.display = "none";
+  }
+}
 
-  if (!categoria || !producto || !cantidad || !precio) {
-    alert("Por favor complete los datos del producto.");
+function agregarProductoATabla() {
+  const elementos = {
+    categoria: document.getElementById("categoria"),
+    producto: document.getElementById("producto"),
+    almacenamiento: document.getElementById("almacenamiento"),
+    color: document.getElementById("color"),
+    cantidad: document.getElementById("cantidad"),
+    precio: document.getElementById("precio")
+  };
+
+  // Verificar que los elementos existan
+  if (!elementos.categoria || !elementos.producto || !elementos.cantidad || !elementos.precio) {
+    console.error("Faltan elementos del formulario");
     return;
   }
 
-  let nombreProducto = producto;
-  if (categoria === "moviles") {
-    nombreProducto += ` - ${almacenamiento} GB - ${color}`;
+  const datos = {
+    categoria: elementos.categoria.value,
+    producto: elementos.producto.value,
+    almacenamiento: elementos.almacenamiento?.value || "",
+    color: elementos.color?.value || "",
+    cantidad: parseInt(elementos.cantidad.value) || 0,
+    precio: parseFloat(elementos.precio.value) || 0
+  };
+
+  // Validaciones
+  if (!datos.categoria || !datos.producto || datos.cantidad <= 0 || datos.precio <= 0) {
+    alert("Por favor complete correctamente todos los datos del producto.");
+    return;
   }
 
-  const subtotal = cantidad * precio;
+  // Construir nombre del producto
+  let nombreProducto = datos.producto;
+  if (datos.categoria === "moviles" && datos.almacenamiento && datos.color) {
+    nombreProducto += ` - ${datos.almacenamiento} GB - ${datos.color}`;
+  }
+
+  // Cálculos
+  const subtotal = datos.cantidad * datos.precio;
   const iva = subtotal * 0.19;
   const total = subtotal + iva;
+
+  // Mostrar tabla y agregar fila
+  const tablaProductosContainer = document.getElementById("tablaProductosContainer");
+  const tablaProductos = document.querySelector("#tablaProductos tbody");
+  
+  if (!tablaProductosContainer || !tablaProductos) {
+    console.error("No se encontró la tabla de productos");
+    return;
+  }
 
   tablaProductosContainer.style.display = "block";
 
   const fila = document.createElement("tr");
   fila.innerHTML = `
     <td>${nombreProducto}</td>
-    <td>${cantidad}</td>
-    <td>$${precio.toLocaleString("es-CO",{minimumFractionDigits:2})} COP</td>
-    <td>$${iva.toLocaleString("es-CO",{minimumFractionDigits:2})} COP</td>
-    <td>$${total.toLocaleString("es-CO",{minimumFractionDigits:2})} COP</td>
+    <td>${datos.cantidad}</td>
+    <td>$${formatearMoneda(datos.precio)} COP</td>
+    <td>$${formatearMoneda(iva)} COP</td>
+    <td>$${formatearMoneda(total)} COP</td>
     <td>
-      <img src="img/eliminar.png" alt="Eliminar" class="iconoEliminar">
+      <button type="button" class="btn-eliminar" aria-label="Eliminar producto">
+        <img src="/img/eliminar.png" alt="Eliminar" class="iconoEliminar">
+      </button>
     </td>
   `;
+
+  // Agregar evento de eliminación
+  const btnEliminar = fila.querySelector(".btn-eliminar");
+  btnEliminar.addEventListener("click", () => {
+    eliminarProducto(fila, subtotal, iva, total);
+  });
+
   tablaProductos.appendChild(fila);
 
+  // Actualizar totales
   subtotalGeneral += subtotal;
   ivaGeneral += iva;
   totalGeneral += total;
+  actualizarTotales();
 
-  document.getElementById("subtotal").textContent = subtotalGeneral.toLocaleString("es-CO",{minimumFractionDigits:2});
-  document.getElementById("ivaTotal").textContent = ivaGeneral.toLocaleString("es-CO",{minimumFractionDigits:2});
-  document.getElementById("granTotal").textContent = totalGeneral.toLocaleString("es-CO",{minimumFractionDigits:2});
-
-  document.getElementById("cantidad").value = "";
-  document.getElementById("precio").value = "";
-
-  fila.querySelector(".iconoEliminar").addEventListener("click", () => {
-    subtotalGeneral -= subtotal;
-    ivaGeneral -= iva;
-    totalGeneral -= total;
-
-    document.getElementById("subtotal").textContent = subtotalGeneral.toLocaleString("es-CO",{minimumFractionDigits:2});
-    document.getElementById("ivaTotal").textContent = ivaGeneral.toLocaleString("es-CO",{minimumFractionDigits:2});
-    document.getElementById("granTotal").textContent = totalGeneral.toLocaleString("es-CO",{minimumFractionDigits:2});
-
-    fila.remove();
-
-    if (tablaProductos.rows.length === 0) {
-      tablaProductosContainer.style.display = "none";
-    }
-  });
-});
-
-// --- GENERAR FACTURA (Número, fecha y validación de emisor/receptor) ---
-let consecutivoFactura = 1000; // Se puede iniciar desde cualquier número
-
-const btnGenerarFactura = document.getElementById("btnGenerarFactura");
-if (btnGenerarFactura) {
-  btnGenerarFactura.addEventListener("click", () => {
-    const emisor = document.getElementById("emisor").value;
-    const receptor = document.getElementById("receptor").value;
-
-    if (!emisor || !receptor) {
-      alert("Debe llenar los datos del emisor y receptor de la factura.");
-      return;
-    }
-
-    if (tablaProductos.rows.length === 0) {
-      alert("Debe agregar al menos un producto.");
-      return;
-    }
-
-    consecutivoFactura++;
-    const fecha = new Date().toLocaleString("es-CO");
-
-    alert(
-      `Factura generada exitosamente\n\n` +
-      `Número: FAC-${consecutivoFactura}\n` +
-      `Fecha: ${fecha}\n` +
-      `Emisor: ${emisor}\n` +
-      `Receptor: ${receptor}\n` +
-      `Total: $${totalGeneral.toLocaleString("es-CO",{minimumFractionDigits:2})} COP`
-    );
-  });
+  // Limpiar formulario
+  limpiarFormulario();
 }
+
+// --- Generar factura ---
+function generarFactura() {
+  const emisor = document.getElementById("emisor")?.value?.trim();
+  const receptor = document.getElementById("receptor")?.value?.trim();
+  const tablaProductos = document.querySelector("#tablaProductos tbody");
+
+  if (!emisor || !receptor) {
+    alert("Debe llenar los datos del emisor y receptor de la factura.");
+    return;
+  }
+
+  if (!tablaProductos || tablaProductos.rows.length === 0) {
+    alert("Debe agregar al menos un producto.");
+    return;
+  }
+
+  consecutivoFactura++;
+  const fecha = new Date().toLocaleString("es-CO", {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  const mensaje = `Factura generada exitosamente
+
+Número: FAC-${consecutivoFactura}
+Fecha: ${fecha}
+Emisor: ${emisor}
+Receptor: ${receptor}
+Total: $${formatearMoneda(totalGeneral)} COP`;
+
+  alert(mensaje);
+}
+
+// --- Inicialización ---
+document.addEventListener("DOMContentLoaded", () => {
+  // Inicializar dropdown
+  inicializarDropdown();
+
+  // Event listeners
+  const categoriaSelect = document.getElementById("categoria");
+  if (categoriaSelect) {
+    categoriaSelect.addEventListener("change", mostrarOpciones);
+  }
+
+  const btnAgregar = document.getElementById("btnAgregar");
+  if (btnAgregar) {
+    btnAgregar.addEventListener("click", agregarProductoATabla);
+  }
+
+  const btnGenerarFactura = document.getElementById("btnGenerarFactura");
+  if (btnGenerarFactura) {
+    btnGenerarFactura.addEventListener("click", generarFactura);
+  }
+
+  // Inicializar estado
+  mostrarOpciones();
+});
