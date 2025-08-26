@@ -71,97 +71,90 @@
     </div>
   </div>
 
+<!-- Box: Información producto -->
+<div class="seccion-factura">
+  <div class="card-datos">
+    <h3>Información del producto</h3>
+    <hr />
 
-  <!-- Box: Información producto -->
-  <div class="seccion-factura">
-    <div class="card-datos">
-      <h3>Información del producto</h3>
-      <hr />
-
-      <div class="form-group">
-        <label for="categoria">Categoría</label>
-        <select id="categoria">
-          <option value="" selected>Seleccione</option>
-          <option value="moviles">Dispositivos móviles</option>
-          <option value="cargadores">Cargadores</option>
-          <option value="auriculares">Auriculares</option>
-        </select>
-      </div>
-
-      <!-- Aquí saldrá el select dinámico -->
-      <div class="form-group" id="producto-container" style="display:none;">
-        <label for="producto">Producto</label>
-        <select id="producto"></select>
-      </div>
-
-      <!-- Almacenamiento (solo móviles) -->
-      <div class="form-group" id="almacenamiento-container" style="display:none;">
-        <label for="almacenamiento">Almacenamiento</label>
-        <select id="almacenamiento">
-          <option value="">Seleccione</option>
-          <option value="64">64 GB</option>
-          <option value="128">128 GB</option>
-          <option value="256">256 GB</option>
-          <option value="516">516 GB</option>
-          <option value="1T">1T</option>
-        </select>
-      </div>
-
-      <!-- Color (solo móviles) -->
-      <div class="form-group" id="color-container" style="display:none;">
-        <label for="color">Color</label>
-        <select id="color">
-          <option value="">Seleccione</option>
-          <option value="Negro">Negro</option>
-          <option value="Blanco">Blanco</option>
-          <option value="Dorado">Dorado</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="cantidad">Cantidad</label>
-        <input type="number" id="cantidad" placeholder="Ingrese cantidad" />
-      </div>
-
-      <div class="form-group">
-        <label for="precio">Precio </label>
-        <input type="number" id="precio"/>
-      </div>
-
-      <!-- Botón para agregar productos -->
-      <button type="button" class="btn-siguiente" id="btnAgregar">AGREGAR PRODUCTO</button>
-
-      <!-- Tabla de productos agregados -->
-      <div class="seccion-factura" id="tablaProductosContainer" style="display:none;">
-        <div class="card-datos">
-          <h3>Productos en la factura</h3>
-          <hr />
-          <table id="tablaProductos" border="1" style="width:100%; border-collapse: collapse; text-align:center;">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio</th>
-                <th>IVA (19%)</th>
-                <th>Total</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-
-          <!-- Totales -->
-          <div style="margin-top:15px; text-align:right;">
-            <p><strong>Subtotal:</strong> $<span id="subtotal">0</span></p>
-            <p><strong>IVA:</strong> $<span id="ivaTotal">0</span></p>
-            <p><strong>Total:</strong> $<span id="granTotal">0</span></p>
-          </div>
-        </div>
-      </div>
-
-
+    <div class="form-group">
+      <label for="categoria">Categoría</label>
+      <select id="categoria">
+        <option value="" selected>Seleccione</option>
+        <option value="moviles">Dispositivos móviles</option>
+        <option value="cargadores">Cargadores</option>
+        <option value="auriculares">Auriculares</option>
+      </select>
     </div>
+
+    <div class="form-group" id="producto-container" style="display:none;">
+      <label for="producto">Producto</label>
+      <select id="producto"></select>
+    </div>
+
+    <div class="form-group" id="almacenamiento-container" style="display:none;">
+      <label for="almacenamiento">Almacenamiento</label>
+      <select id="almacenamiento">
+        <option value="">Seleccione</option>
+        <option value="64">64 GB</option>
+        <option value="128">128 GB</option>
+        <option value="256">256 GB</option>
+        <option value="516">516 GB</option>
+        <option value="1T">1T</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="color-container" style="display:none;">
+      <label for="color">Color</label>
+      <select id="color">
+        <option value="">Seleccione</option>
+        <option value="Negro">Negro</option>
+        <option value="Blanco">Blanco</option>
+        <option value="Dorado">Dorado</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="cantidad">Cantidad</label>
+      <input type="number" id="cantidad" placeholder="Ingrese cantidad" />
+    </div>
+
+    <div class="form-group">
+      <label for="precio">Precio </label>
+      <input type="number" id="precio"/>
+    </div>
+
+    <!-- Botón para agregar productos -->
+    <button type="button" class="btn-siguiente" id="btnAgregar">AGREGAR PRODUCTO</button>
+
+<div id="tablaProductosContainer" style="display:none; margin-top:20px; padding:10px; border:1px solid #ccc; border-radius:8px; overflow-x:auto;">
+  <table id="tablaProductos" style="width:100%; border-collapse: separate; border-spacing: 0 8px; text-align:center;">
+    <thead style="background-color:#f0f0f0;">
+      <tr>
+        <th style="width:30%; text-align:left; padding:8px;">Producto</th>
+        <th style="width:10%; padding:8px;">Cantidad</th>
+        <th style="width:15%; padding:8px; text-align:right;">Precio</th>
+        <th style="width:15%; padding:8px; text-align:right;">IVA (19%)</th>
+        <th style="width:15%; padding:8px; text-align:right;">Total</th>
+        <th style="width:15%; padding:8px;">Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- Totales -->
+  <div style="margin-top:15px; text-align:right; font-weight:bold;">
+    <p>Subtotal: $<span id="subtotal">0</span></p>
+    <p>IVA: $<span id="ivaTotal">0</span></p>
+    <p>Total: $<span id="granTotal">0</span></p>
   </div>
+</div>
+
+
+  </div>
+</div>
+
+
 
   <!-- Box: Datos terceros -->
   <div class="seccion-factura">

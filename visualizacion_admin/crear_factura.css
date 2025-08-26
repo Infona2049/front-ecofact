@@ -144,8 +144,8 @@ h2 {
   background-color: white;
   border-radius: 6px;
   padding: 20px 40px;
-  width: 90%;
-  max-width: 700px;
+  width: 95%;            /* antes 90% */
+  max-width: 1100px;     /* antes 700px */
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -235,7 +235,7 @@ select option[disabled] {
   background-color: darkgreen;
 }
 
-/*parte superior y inferior fija
+/*parte superior y inferior fija*/
 /* Fijar la barra superior */
 .top-bar {
   position: fixed;
@@ -271,5 +271,5 @@ footer {
 
 /* Para evitar que se tape el contenido con el footer */
 body {
-  padding-bottom: 80px; /* ajusta según la altura del footer */
+  padding-bottom: 80px; /* ajusta según la altura del footer */
 }

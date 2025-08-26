@@ -144,8 +144,8 @@ h2 {
   background-color: white;
   border-radius: 6px;
   padding: 20px 40px;
-  width: 90%;
-  max-width: 700px;
+  width: 95%;            /* antes 90% */
+  max-width: 1100px;     /* antes 700px */
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -191,6 +191,18 @@ select option[disabled] {
   color: #888;
 }
 
+.iconoEliminar {
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.iconoEliminar:hover {
+  transform: scale(1.2);        /* efecto de zoom */
+  filter: brightness(0) saturate(100%) invert(23%) sepia(98%) saturate(6246%) hue-rotate(355deg) brightness(92%) contrast(108%); /* se vuelve rojo */
+}
+
 #funcionProducto {
   width: 100%;
   max-width: 300px; /* Igual que los otros campos */
@@ -223,11 +235,11 @@ select option[disabled] {
   background-color: darkgreen;
 }
 
-/*parte superior y inferior fija
+/*parte superior y inferior fija*/
 /* Fijar la barra superior */
 .top-bar {
   position: fixed;
-  top: 0; 
+  top: 0;
   left: 0;
   width: 100%;
   z-index: 1000; 
@@ -259,5 +271,5 @@ footer {
 
 /* Para evitar que se tape el contenido con el footer */
 body {
-  padding-bottom: 80px; /* ajusta según la altura del footer */
+  padding-bottom: 80px; /* ajusta según la altura del footer */
 }

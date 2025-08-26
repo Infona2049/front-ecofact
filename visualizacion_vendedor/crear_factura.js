@@ -69,7 +69,7 @@ function mostrarOpciones() {
 
   } else if (categoria === "auriculares") {
     productoContainer.style.display = "block";
- 
+
     const auriculares = [
       "AirPods (2ª generación)",
       "AirPods (3ª generación)",
@@ -85,3 +85,84 @@ function mostrarOpciones() {
     });
   }
 }
+
+// --- AGREGAR PRODUCTO A LA TABLA ---
+const btnAgregar = document.getElementById("btnAgregar");
+const tablaProductosContainer = document.getElementById("tablaProductosContainer");
+const tablaProductos = document.querySelector("#tablaProductos tbody");
+
+let subtotalGeneral = 0;
+let ivaGeneral = 0;
+let totalGeneral = 0;
+
+btnAgregar.addEventListener("click", () => {
+  const categoria = document.getElementById("categoria").value;
+  const producto = document.getElementById("producto").value;
+  const almacenamiento = document.getElementById("almacenamiento").value;
+  const color = document.getElementById("color").value;
+  const cantidad = parseInt(document.getElementById("cantidad").value);
+  const precio = parseFloat(document.getElementById("precio").value);
+
+  if (!categoria || !producto || !cantidad || !precio) {
+    alert("Por favor complete los datos del producto.");
+    return;
+  }
+
+  // Nombre completo del producto
+  let nombreProducto = producto;
+  if (categoria === "moviles") {
+    nombreProducto += ` - ${almacenamiento} GB - ${color}`;
+  }
+
+  // Calcular valores
+  const subtotal = cantidad * precio;
+  const iva = subtotal * 0.19;
+  const total = subtotal + iva;
+
+  // Mostrar contenedor de tabla
+  tablaProductosContainer.style.display = "block";
+
+  // Crear fila con icono eliminar
+  const fila = document.createElement("tr");
+  fila.innerHTML = `
+    <td>${nombreProducto}</td>
+    <td>${cantidad}</td>
+    <td>$${precio.toFixed(2)}</td>
+    <td>$${iva.toFixed(2)}</td>
+    <td>$${total.toFixed(2)}</td>
+    <td>
+      <img src="img/eliminar.png" alt="Eliminar" class="iconoEliminar">
+    </td>
+  `;
+  tablaProductos.appendChild(fila);
+
+  // Actualizar totales generales
+  subtotalGeneral += subtotal;
+  ivaGeneral += iva;
+  totalGeneral += total;
+
+  document.getElementById("subtotal").textContent = subtotalGeneral.toFixed(2);
+  document.getElementById("ivaTotal").textContent = ivaGeneral.toFixed(2);
+  document.getElementById("granTotal").textContent = totalGeneral.toFixed(2);
+
+  // Resetear campos de cantidad y precio
+  document.getElementById("cantidad").value = "";
+  document.getElementById("precio").value = "";
+
+  // --- Eliminar producto ---
+  fila.querySelector(".iconoEliminar").addEventListener("click", () => {
+    subtotalGeneral -= subtotal;
+    ivaGeneral -= iva;
+    totalGeneral -= total;
+
+    document.getElementById("subtotal").textContent = subtotalGeneral.toFixed(2);
+    document.getElementById("ivaTotal").textContent = ivaGeneral.toFixed(2);
+    document.getElementById("granTotal").textContent = totalGeneral.toFixed(2);
+
+    fila.remove();
+
+    if (tablaProductos.rows.length === 0) {
+      tablaProductosContainer.style.display = "none";
+    }
+  });
+});
