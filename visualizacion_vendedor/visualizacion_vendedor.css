@@ -11,13 +11,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: 80px; /* evita que el formulario quede tapado por el footer */
-}
-
-/*PARA QUE LA PANTALLA SE MANTENGA QUIETA*/
-html, body {
-  overflow: hidden;
-  height: 100%;
 }
 
 /* BARRA SUPERIOR */
@@ -26,57 +19,49 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  height: 60px;
+  padding: clamp(6px, 2vw, 10px) clamp(8px, 4vw, 20px);
+  height: clamp(50px, 12vw, 60px);
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .top-bar .left-side {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: clamp(8px, 3vw, 30px);
 }
 
-.logo1 {
-  height: 40px;
-}
-
-.logo2 {
-  height: 40px;
-}
-
-a {
-  text-decoration: none;
-}
-
-a img {
-  border: none;
-  outline: none;
-  display: inline-block;
+.logo1, .logo2 {
+  height: clamp(28px, 8vw, 40px);
+  width: auto;
 }
 
 .top-bar .right-side {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: clamp(6px, 2vw, 20px);
 }
 
 .icono {
-  width: 25px;
-  height: 25px;
-  margin-right: 6px;
+  width: clamp(18px, 5vw, 25px);
+  height: clamp(18px, 5vw, 25px);
+  margin-right: clamp(1px, 1vw, 6px);
+  transition: transform 0.2s ease;
 }
 
+.icono:hover {
+  transform: scale(1.1);
+}
 
 /* MENÚ DE NAVEGACIÓN */
 header {
   background-color: #003f87;
   position: fixed;
-  top: 60px;
+  top: clamp(50px, 12vw, 60px);
   left: 0;
   width: 100%;
   z-index: 999;
@@ -84,14 +69,23 @@ header {
 
 .menu {
   display: flex;
-  padding: 13px 30px;
+  padding: clamp(8px, 2vw, 13px) clamp(10px, 4vw, 30px);
+  overflow-x: auto;
+  white-space: nowrap;
+  gap: clamp(15px, 4vw, 40px);
 }
 
 .menu a { 
   color: white;
   text-decoration: none;
-  margin-right: 40px;
-  font-size: 16px;
+  font-size: clamp(12px, 3vw, 16px);
+  transition: color 0.3s ease;
+  flex-shrink: 0;
+  padding: 5px 0;
+}
+
+.menu a:hover {
+  color: #38b6ff;
 }
 
 /* SECCIÓN DE BIENVENIDA */
@@ -99,17 +93,18 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 120px);
-  padding: 20px;
-  margin-top: 120px; 
+  flex: 1;
+  padding: clamp(10px, 3vw, 20px);
+  margin-top: clamp(95px, 20vw, 120px);
+  margin-bottom: clamp(60px, 15vw, 80px);
 }
 
 .welcome img {
   display: block;
-  max-width: 600px;
+  max-width: min(100%, 600px);
   width: 100%;
   height: auto;
-  padding: 0;
+  border-radius: 8px;
 }
 
 /* FOOTER */
@@ -127,24 +122,59 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 120px;
-  font-size: 14px;
+  padding: clamp(8px, 2vw, 6px) clamp(10px, 15vw, 120px);
+  font-size: clamp(11px, 2.5vw, 14px);
 }
 
 .footer-item {
   display: flex;
   align-items: center; 
-  gap: 8px;            
+  gap: clamp(4px, 1vw, 8px);
 }
 
 .footer-item img {
-  width: 18px;
-  height: 18px;
+  width: clamp(14px, 3vw, 18px);
+  height: clamp(14px, 3vw, 18px);
 }
 
 .footer-bottom {
   text-align: center;
-  padding: 10px;
+  padding: clamp(4px, 2vw, 10px);
   background-color: white;
-  font-size: 14px;
+  font-size: clamp(11px, 2.5vw, 14px);
+}
+
+/* RESPONSIVE MÍNIMO */
+@media (max-width: 480px) {
+  .footer-bar {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+  
+  .menu::-webkit-scrollbar {
+    height: 3px;
+  }
+  
+  .menu::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 3px;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .welcome img {
+    max-height: 250px;
+  }
+}
+
+/* Enlaces sin decoración */
+a {
+  text-decoration: none;
+}
+
+a img {
+  border: none;
+  outline: none;
+  display: inline-block;
 }

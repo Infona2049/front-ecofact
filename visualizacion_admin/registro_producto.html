@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Inventario</title>
+    <title>Registro producto</title>
     <link rel="stylesheet" href="registro_producto.css">
 </head>
 <body>
@@ -82,13 +82,16 @@
             <label for="precio">Precio (COP):</label>
             <input type="text" id="precio" name="precio" required placeholder="Ej: 100.000">
 
+            <label for="iva">IVA:</label>
+            <input id="iva" name="iva" required placeholder="19%" readonly>
+
             <label for="imagen">Imagen del producto:</label>
             <input type="file" id="imagen" name="imagen" accept="image/*">
 
             <label for="observaciones">Observaciones:</label>
             <textarea id="observaciones" name="observaciones" rows="3"></textarea>
 
-            <button type="submit" class="btn-guardar">Guardar</button>
+            <button type="submit" class="btn-guardar">Registrar producto</button>
         </form>
     </main>
 

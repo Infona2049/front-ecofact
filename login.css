@@ -37,19 +37,48 @@ body {
 
 /* === INPUTS === */
 input[type="email"],
-input[type="password"] {
-  width: 85%;
-  padding: 0.75rem;
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 0.75rem; /* espacio para el ojito */
   margin-bottom: 1rem;
   background-color: rgba(58, 99, 168, 0.5);
   border: none;
   font-size: 1rem;
+  color: #023e8a;
+  outline: none;
+  border-radius: 5px;
 }
 
 /* === PLACEHOLDER === */
 input::placeholder {
   color: #023e8a;
 }
+
+/* === CONTENEDOR DE CONTRASEÑA === */
+/* Contenedor */
+.password-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Input */
+.password-container input {
+  width: 100%;
+  padding-right: 40px; /* deja espacio al ojo */
+}
+
+/* Ojo */
+.password-container .toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #003366; /* mismo tono que registro */
+  font-size: 1rem;
+}
+
 
 /* === BOTÓN INICIAR SESIÓN === */
 .boton2 {
@@ -68,64 +97,22 @@ input::placeholder {
   transition: background-color 0.3s ease;
 }
 
+.boton2:hover {
+  background-color: #066f00;
+}
+
 /* === TEXTOS DEBAJO DEL FORMULARIO === */
 .recuperar,
 .registro {
   font-size: 0.9rem;
   color: #38b6ff;
   margin-top: 1.5rem;
-}
-
-/* === MODAL === */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-contenido {
-  background-color: #fff;
-  padding: 2rem;
-  width: 90%;
-  max-width: 31.25rem;
-  border-radius: 0.9rem;
-  text-align: center;
-}
-
-.modal-contenido h2 {
-  margin-bottom: 1.25rem;
-  font-size: 1.4rem;
-}
-
-.roles-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.625rem;
-  margin-top: 1rem;
-}
-
-.roles-container button {
-  background-color: #08a000;
-  color: white;
-  border: none;
-  padding: 0.625rem 1rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  white-space: nowrap;
 }
 
-.roles-container button:hover {
-  background-color: #066f00;
+.recuperar:hover,
+.registro:hover {
+  text-decoration: underline;
 }
 
 /* === MEDIA QUERY PARA MÓVILES === */
@@ -136,14 +123,5 @@ input::placeholder {
 
   .boton2 {
     width: 80%;
-  }
-
-  .modal-contenido h2 {
-    font-size: 1.2rem;
-  }
-
-  .roles-container button {
-    font-size: 0.9rem;
-    padding: 0.5rem 0.875rem;
   }
 }

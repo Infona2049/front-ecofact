@@ -1,52 +1,59 @@
 /* =========================================================
-   LÓGICA DE INICIO DE SESIÓN
-   - Si el correo contiene "@ecofact_sadmin"  -> super admin
-   - Si el correo contiene "@ecofact_admin"   -> admin
-   - En cualquier otro caso                   -> mostrar modal
+   LÓGICA DE INICIO DE SESIÓN (con SweetAlert2)
 ========================================================= */
+function login(event) {
+  event.preventDefault(); // Cancela el submit real
 
-function mostrarModal(event) {
-  event.preventDefault();                               // Cancela el submit real
-
-  const email = event.target                             // <form> → input email
+  const email = event.target
                  .querySelector('input[type="email"]')
                  .value
                  .trim()
                  .toLowerCase();
 
-  // 1) Super Admin
-  if (email.includes('@ecofactsadmin')) {
-    window.location.href =
-      'visualizacion_superAdmin/visualizacion_superAdmin.html';
-    return;
-  }
-
-  // 2) Admin
+  // 1) Admin
   if (email.includes('@ecofactadmin')) {
-    window.location.href =
-      'visualizacion_admin/visualizacion_admin.html';
+    Swal.fire({
+      icon: 'success',
+      title: 'Bienvenido Administrador',
+      text: 'Redirigiendo a tu panel...',
+      showConfirmButton: false,
+      timer: 2000
+    }).then(() => {
+      window.location.href = 'visualizacion_admin/visualizacion_admin.html';
+    });
     return;
   }
 
-  // 3) Usuario normal → elegir vendedor / cliente
-  document.getElementById('modalRol').style.display = 'flex';
+  // 2) Usuario normal
+  Swal.fire({
+    icon: 'info',
+    title: 'Usuario normal',
+    text: 'Redirección aún no definida',
+    confirmButtonText: 'Entendido'
+  });
 }
-
-
 
 /* =========================================================
-   SELECCIÓN DE ROL EN EL MODAL
+   OJITO PARA MOSTRAR / OCULTAR CONTRASEÑA (FontAwesome)
 ========================================================= */
-function seleccionarRol(rol) {
-  const rutas = {
-    vendedor: 'visualizacion_vendedor/visualizacion_vendedor.html',
-    cliente : 'visualizacion_cliente/visualizacion_cliente.html'
-  };
+document.addEventListener("DOMContentLoaded", () => {
+  const togglePassword = document.getElementById("togglePassword");
+  const passwordInput = document.getElementById("password");
 
-  const destino = rutas[rol];
-  if (destino) {
-    window.location.href = destino;
-  } else {
-    alert('Rol no reconocido');
+  if (togglePassword && passwordInput) {
+    togglePassword.addEventListener("click", () => {
+      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+
+      // Cambiar el ícono con FontAwesome
+      const icon = togglePassword.querySelector("i");
+      if (type === "password") {
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+      } else {
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+      }
+    });
   }
-}
+});
