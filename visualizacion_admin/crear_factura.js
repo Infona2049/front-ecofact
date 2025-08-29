@@ -14,15 +14,17 @@ const PRODUCTOS = {
   ],
   cargadores: [
     "Cargador USB-C 20W",
-    "Cargador MagSafe",
     "Cargador MagSafe Duo",
     "Cargador USB-C 35W doble"
   ],
   auriculares: [
-    "AirPods (2ª generación)",
-    "AirPods (3ª generación)",
-    "AirPods Pro (2ª generación)",
-    "AirPods Max"
+    "AirPods 2.ª gen",
+    "AirPods 3.ª gen",
+    "AirPods 4",
+    "AirPods Pro 2.ª gen",
+    "AirPods Max",
+    "EarPods con USB-C",
+    "EarPods con Lightning"
   ]
 };
 
