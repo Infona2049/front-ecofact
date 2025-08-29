@@ -35,8 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const cargadores = [
     "Cargador USB-C 20W",
-    "Cargador MagSafe Duo",
-    "Cargador USB-C 35W doble"
+    "Cargador USB-C 35W doble",
+    "Cargador USB lightning"
+
   ];
 
 const auriculares = [
