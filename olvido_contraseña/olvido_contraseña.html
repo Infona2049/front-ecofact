@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="olvido_contraseña.css">
 </head>
 <body>
-    <!-- Barra superior -->
+    <!-- Barra superior --> 
     <div class="top-bar">
         <div class="left-side">
             <a href="olvido_contraseña.html">
@@ -21,28 +21,32 @@
     <header>
         <nav class="menu">
         </nav>
-    </header> 
+    </header>  
 
     <!-- Contenedor de recuperación -->
     <main class="contenedor">
- 
         <div class="card">
             <h3>Ahora vamos a comprobar su identidad</h3>
             <p>¿Cómo quieres obtener tu código de seguridad?</p>
 
-            <form>
-              
-              <label>
-                    <input type="radio" name="metodo" />
-                    Enviar mensaje texto al *****@gmail.com
-                </label>
+        <label>
+            <input type="radio" name="metodo" />
+            Enviar codigo de revuperacion a correo electrónico mmmm*****@gmail.com
+        </label>
 
-                <div class="botones">
-                    <button type="button" class="cancelar">CANCELAR</button>
-                    <button type="submit" class="siguiente">ACEPTAR</button>
-                </div>
-            </form>
+        <div class="botones">
+            <button type="button" class="cancelar" onclick="window.location.href='login.html'">CANCELAR</button>
+            <button type="button" class="siguiente">SIGUIENTE</button>
+        </div>
+    </div>
+
+        </div>
     </main>
+
+    <!-- Mensaje de éxito -->
+    <div id="mensajeExito" class="mensaje-exito">
+        <!-- Se llena desde JS -->
+    </div>
 
     <!-- Pie de página -->
     <footer>

@@ -9,7 +9,7 @@ body {
   font-family: Arial, sans-serif;
   background: #f4f4f4;
   min-height: 100vh;
-  display: flex;
+  display: flex; 
   flex-direction: column;
 }
 
@@ -171,6 +171,15 @@ footer {
   font-size: 14px;
 }
 
+/* Eliminar puntico de los radios */
+.card input[type="radio"] {
+  appearance: none;          /* Quita estilo nativo */
+  -webkit-appearance: none;  /* Safari / Chrome */
+  -moz-appearance: none;     /* Firefox */
+  margin: 0;
+}
+
+
 /* Enlace */
 .card a {
   display: inline-block;
@@ -214,6 +223,25 @@ footer {
   background: #006600;
 }
 
+.mensaje-exito {
+  display: none; /* oculto al inicio */
+  background-color: #e6f0ff;
+  color: #003f87;
+  border: 1px solid #003f87;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+  width: fit-content;
+  margin: 20px auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 
 
