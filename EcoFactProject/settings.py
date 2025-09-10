@@ -11,117 +11,124 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os  # Importamos os para manejar rutas de archivos en el sistema operativo
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Construye rutas dentro del proyecto, BASE_DIR apunta a la carpeta raíz del proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+# Configuraciones básicas de seguridad y despliegue
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-b%oh&@$)n5f89ef_#8%l96#tu+0)ujp%@l_wow)8ulgf2etj7+'
+# Clave secreta para criptografía, debe mantenerse privada en producción
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# Modo debug activado para desarrollo, desactivar en producción
 
 ALLOWED_HOSTS = []
+# Lista de hosts permitidos para servir la app, vacía permite localhost
 
 
-# Application definition
-
+# Aplicaciones instaladas en el proyecto
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'core',
+    'django.contrib.admin',          # Admin de Django
+    'django.contrib.auth',           # Sistema de autenticación
+    'django.contrib.contenttypes',   # Soporte para tipos de contenido
+    'django.contrib.sessions',       # Manejo de sesiones
+    'django.contrib.messages',       # Mensajes flash
+    'django.contrib.staticfiles',    # Archivos estáticos (CSS, JS)
+    'core',                         # Tu app principal donde están los modelos y lógica
 ]
 
+# Middleware: capas que procesan las peticiones y respuestas
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',  # Protección CSRF
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Autenticación
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'EcoFactProject.urls'
+# Archivo principal de rutas URL
 
+# Configuración de plantillas HTML
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',  # Motor de plantillas Django
+        'DIRS': [],  # Directorios adicionales para buscar plantillas
+        'APP_DIRS': True,  # Buscar plantillas dentro de las apps instaladas
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',  # Añade objeto request al contexto
+                'django.contrib.auth.context_processors.auth',  # Añade info de usuario autenticado
+                'django.contrib.messages.context_processors.messages',  # Añade mensajes flash
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'EcoFactProject.wsgi.application'
+# Punto de entrada WSGI para servidores de producción
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
+# Configuración de base de datos PostgreSQL
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'EcoFact',
-        'USER': 'postgres',
-        'PASSWORD': '123',
-        'HOST': 'localhost',
-        'PORT': '5000',
+        'ENGINE': 'django.db.backends.postgresql',  # Motor PostgreSQL
+        'NAME': 'EcoFact',                          # Nombre de la base de datos
+        'USER': 'postgres',                         # Usuario de la base
+        'PASSWORD': '123',                          # Contraseña
+        'HOST': 'localhost',                        # Host de la base de datos
+        'PORT': '5000',                             # Puerto de conexión
     }
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
+# Validadores de contraseña para mejorar seguridad
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
+# Configuración internacional
+LANGUAGE_CODE = 'en-us'  # Idioma por defecto
 
-LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'        # Zona horaria
 
-TIME_ZONE = 'UTC'
+USE_I18N = True          # Soporte para internacionalización
 
-USE_I18N = True
-
-USE_TZ = True
+USE_TZ = True            # Uso de zonas horarias
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
+# Archivos estáticos (CSS, JS, imágenes estáticas)
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
+# Configuración para archivos multimedia (imágenes subidas por usuarios)
+MEDIA_URL = '/media/'  # URL base para acceder a archivos media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Carpeta donde se almacenan los archivos media
+
+# Tipo de campo por defecto para claves primarias
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# ---------------------------------------------------
+# Cambios específicos para tu proyecto:
+
+# 1. AUTH_USER_MODEL:
+#    Le indicamos a Django que use el modelo de usuario personalizado 'Usuario' que definiste en la app 'core'.
+#    Esto es fundamental para que el sistema de autenticación funcione con tu modelo y no con el User por defecto.
+AUTH_USER_MODEL = 'core.Usuario'
+
+# 2. MEDIA_URL y MEDIA_ROOT:
+#    Configuramos la ruta y URL para manejar archivos multimedia (imágenes) que se usan en los campos ImageField de tus modelos.
+#    MEDIA_URL es la URL pública para acceder a estos archivos.
+#    MEDIA_ROOT es la ruta absoluta en el sistema donde se guardan los archivos subidos.
+#    Recuerda que en desarrollo debes configurar urls.py para servir estos archivos.
+    
