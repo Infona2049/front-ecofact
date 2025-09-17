@@ -78,11 +78,11 @@ WSGI_APPLICATION = 'EcoFactProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',  # Motor PostgreSQL
-        'NAME': 'EcoFact',                          # Nombre de la base de datos
+        'NAME': 'ecofact',                          # Nombre de la base de datos
         'USER': 'postgres',                         # Usuario de la base
         'PASSWORD': '123',                          # Contraseña
         'HOST': 'localhost',                        # Host de la base de datos
-        'PORT': '5000',                             # Puerto de conexión
+        'PORT': '5432',                             # Puerto de conexión
     }
 }
 
