@@ -107,7 +107,12 @@ USE_TZ = True            # Uso de zonas horarias
 
 
 # Archivos estáticos (CSS, JS, imágenes estáticas)
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "core" / "static",
+]
+
 
 
 # Configuración para archivos multimedia (imágenes subidas por usuarios)

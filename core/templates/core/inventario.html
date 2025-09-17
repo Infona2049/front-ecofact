@@ -1,33 +1,34 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inventario</title>
-  <link rel="stylesheet" href="inventario.css">
+  <link rel="stylesheet" href="{% static 'core/css/inventario.css' %}">
 </head>
 <body>
   <!-- Barra superior -->
   <div class="top-bar">
     <div class="left-side">
-      <a href="visualizacion_Admin.html">
-        <img src="/img/Logo azul sin fondo.png" alt="EcoFact Logo" class="logo1" />
-        <img src="/img/logo empresa.png" alt="Empresa logo " class="logo2" />
+      <a href="{% url 'visualizacion_admin' %}">
+        <img src="{% static 'core/img/Logo azul sin fondo.png' %}" alt="EcoFact Logo" class="logo1" />
+        <img src="{% static 'core/img/logo empresa.png' %}" alt="Empresa logo " class="logo2" />
       </a>
     </div> 
 
     <div class="right-side">
-      <a href="documentos.html"><img src="/img/documento.png" class="icono"></a>
-      <a href="actualizar_perfil.html"><img src="/img/editar.png" class="icono"></a>
-      <a href="/cambiocontraseña"><img src="/img/contrasena.png" class="icono"></a>
-      <a href="login.html"><img src="/img/cerrar-sesion.png" class="icono"></a>
+      <a href="{% url 'documentos' %}"><img src="{% static 'core/img/documento.png' %}" class="icono"></a>
+      <a href="{% url 'actualizar_perfil' %}"><img src="{% static 'core/img/editar.png' %}" class="icono"></a>
+      <a href="{% url 'cambiocontraseña' %}"><img src="{% static 'core/img/contrasena.png' %}" class="icono"></a>
+      <a href="{% url 'login' %}"><img src="{% static 'core/img/cerrar-sesion.png' %}" class="icono"></a>
     </div>
   </div>
 
   <!-- Barra de navegación -->
   <header>
     <nav class="menu">
-      <a href="visualizacion_Admin.html">Inicio</a>
+      <a href="{% url 'visualizacion_admin' %}">Inicio</a>
     </nav>  
   </header>
 
@@ -53,14 +54,14 @@
   <!-- Pie de página -->
   <footer>
     <div class="footer-bar"> 
-      <div class="footer-item">
-        <img src="/img/mensaje (1).png" alt="Correo"> 
-        Ecofactproyect@gmail.com
-      </div>
-      <div class="footer-item">
-        <img src="/img/llamada-telefonica (1).png" alt="Teléfono"> 
-        333-333-333
-      </div>
+            <div class="footer-item">
+                <img src="{% static 'core/img/mensaje.png' %}" alt="Ubicación">
+                Ecofactproyect@gmail.com
+            </div>
+            <div class="footer-item">
+                <img src="{% static 'core/img/llamada-telefonica.png' %}" alt="Teléfono"> 
+                333-333-333
+            </div>
     </div>
     <div class="footer-bottom">@2025-ECOFACT</div> 
   </footer>

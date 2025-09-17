@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Olvido de Contraseña</title>
+  <!-- Vinculo al CSS -->
+  <link rel="stylesheet" href="{% static 'core/css/olvido_contraseña.css' %}">
+</head>
+<body>
+  <!-- Barra superior --> 
+  <div class="top-bar">
+      <div class="left-side">
+          <a href="{% url 'olvido_contraseña' %}">
+              <img src="{% static 'core/img/Logo azul sin fondo.png' %}" alt="EcoFact Logo" class="logo1" />
+              <img src="{% static 'core/img/logo empresa.png' %}" alt="Empresa logo " class="logo2" />
+          </a>
+      </div>
+  </div>
+
+  <!-- Barra de navegación -->
+  <header>
+      <nav class="menu">
+      </nav>
+  </header>  
+
+  <!-- Contenedor principal -->
+  <div class="container">
+    <!-- Pantalla ingreso de correo -->
+    <div id="correo">
+      <h2>Recuperar contraseña</h2>
+      <p class="small">Ingresa el correo asociado a tu cuenta.</p>
+      <input id="correo-input" type="email" placeholder="Ingresa tu correo">
+      <div id="correo-error" class="message-error hidden"></div>
+      <button onclick="enviarCodigo()">Enviar código</button>
+    </div>
+
+    <!-- Pantalla código -->
+    <div id="codigo" class="hidden">
+      <h2>Verifica tu correo</h2>
+      <p class="small">Introduce el código que llegaría a tu correo.</p>
+      <input id="codigo-input" type="text" placeholder="Ingresa el código recibido">
+      <div id="codigo-error" class="message-error hidden"></div>
+      <button onclick="verificarCodigo()">Verificar código</button>
+      <button class="secondary" onclick="mostrarPantalla('correo')">Volver</button>
+    </div>
+
+    <!-- Pantalla restablecer -->
+    <div id="reset" class="hidden">
+      <h2>Restablecer contraseña</h2>
+      <p class="small">Escribe una nueva contraseña y confírmala.</p>
+      <input id="newpass" type="password" placeholder="Nueva contraseña">
+      <input id="confpass" type="password" placeholder="Confirmar contraseña">
+      <div id="reset-error" class="message-error hidden"></div>
+      <button onclick="guardarNueva()">Guardar nueva contraseña</button>
+      <button class="secondary" onclick="mostrarPantalla('codigo')">Volver</button>
+    </div>
+
+    <!-- Pantalla éxito -->
+    <div id="success" class="hidden">
+      <h2>¡Hecho!</h2>
+      <div class="message-success">
+        <span class="check">✓</span>
+        <span>Se ha restablecido la contraseña con éxito.</span>
+      </div>
+      <p class="small-note">Ahora puedes iniciar sesión con tu nueva contraseña.</p>
+      <button onclick="irLogin()">Volver a inicio de sesion</button>
+    </div>
+  </div>
+
+  <!-- Pie de página -->
+  <footer>
+      <div class="footer-bar"> 
+          <div class="footer-item">
+              <img src="{% static 'core/img/mensaje.png' %}" alt="Correo"> 
+              Ecofactproyect@gmail.com
+          </div>
+          <div class="footer-item">
+              <img src="{% static 'core/img/llamada-telefonica.png' %}" alt="Teléfono"> 
+              333-333-333
+          </div>
+      </div>
+      <div class="footer-bottom">@2025-ECOFACT</div> 
+  </footer>
+
+  <!-- Vinculo al JS -->
+  <script src="{% static 'core/js/olvido_contraseña.js' %}"></script>
+</body>
+</html>
