@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Iniciar sesión - EcoFact</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+  <div class="form-content">
+    <img class="logo" src="./img/Logo azul sin fondo.png" alt="Logo EcoFact">
+    
+    <form onsubmit="login(event)">
+      <input type="email" required placeholder="Correo">
+
+      <!-- Campo de contraseña con ojito -->
+<!-- Contenedor de contraseña -->
+  <div class="password-container">
+    <input type="password" id="password" placeholder="Contraseña" required>
+    <span class="toggle-password" id="togglePassword">
+      <i class="fa-solid fa-eye"></i>
+    </span>
+  </div>
+
+
+      <p class="recuperar">
+         <a href="olvido_contraseña/olvido_contraseña.html"><u>¿Olvidó su contraseña?</u></a>
+      </p>
+
+      <button type="submit" class="boton2">Iniciar Sesión</button>
+      <p class="registro">
+        <a href="registro.html"><u>¿No estás registrado?  Regístrate aquí</u></a> 
+      </p>
+    </form>
+  </div>
+
+  <script src="login.js" defer></script>
+</body>
+</html>

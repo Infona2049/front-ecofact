@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crear factura</title>
+  <link rel="stylesheet" href="crear_factura.css" />
+</head>
+<body>
+
+    <!-- Barra superior -->
+    <div class="top-bar">
+        <div class="left-side">
+            <a href="visualizacion_Admin.html">
+                <img src="/img/Logo azul sin fondo.png" alt="EcoFact Logo" class="logo1" />
+                <img src="/img/logo empresa.png" alt="Empresa logo " class="logo2" />
+            </a>
+        </div>
+
+        <div class="right-side">
+            <a href="documentos.html"><img src="/img/documento.png" class="icono"></a>
+            <a href="actualizar_perfil.html"><img src="/img/editar.png" class="icono"></a>
+            <a href="/cambiocontraseña"><img src="/img/contrasena.png" class="icono"></a>
+            <a href="/login.html"><img src="/img/cerrar-sesion.png" class="icono"></a>
+        </div>
+    </div>
+
+  <!-- Barra de navegación -->
+  <header>
+    <nav class="menu">
+      <a href="visualizacion_Admin.html">Inicio</a>
+    </nav>
+  </header>
+
+  <h2>Nueva factura</h2>
+
+  <!-- Box: Datos generales -->
+  <div class="seccion-factura">
+    <div class="card-datos">
+      <h3>Datos generales</h3>
+      <hr />
+      <div class="form-group">
+        <label for="fecha">Fecha</label>
+        <input type="date" id="fecha" />
+      </div> 
+    </div>
+  </div>
+
+  <!-- Box: Datos cliente -->
+  <div class="seccion-factura">
+    <div class="card-datos">
+      <h3>Datos del cliente</h3>
+      <hr />
+      <div class="form-group">
+        <label for="nombreCliente">Nombre</label>
+        <input type="text" id="nombreCliente" placeholder="Nombre completo" />
+      </div>
+      <div class="form-group">
+        <label for="cedulaCliente">Cédula</label>
+        <input type="text" id="cedulaCliente" placeholder="Número de documento" />
+      </div>
+      <div class="form-group">
+        <label for="correoCliente">Correo</label>
+        <input type="email" id="correoCliente" placeholder="correo@ejemplo.com" />
+      </div>
+      <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input type="number" id="telefono" placeholder="Ej. 3001234567" />
+      </div>
+      <div class="form-group">
+        <label for="direccion">Dirección</label>
+        <input type="text" id="direccion" placeholder="Barrio/Conjuto" />
+      </div>
+    </div>
+  </div>
+
+<!-- Box: Información producto -->
+<div class="seccion-factura">
+  <div class="card-datos">
+    <h3>Información del producto</h3>
+    <hr />
+
+    <div class="form-group">
+      <label for="codigo_barras">Codigo de barras </label>
+      <input type="text" id="codigo_barras"/>
+    </div>
+
+    
+    <div class="form-group">
+      <label for="categoria">Categoría</label>
+      <select id="categoria">
+        <option value="" selected>Seleccione</option>
+        <option value="moviles">Dispositivos móviles</option>
+        <option value="cargadores">Cargadores</option>
+        <option value="auriculares">Auriculares</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="producto-container" style="display:none;">
+      <label for="producto">Producto</label>
+      <select id="producto"></select>
+    </div>
+
+    <div class="form-group" id="almacenamiento-container" style="display:none;">
+      <label for="almacenamiento">Almacenamiento</label>
+      <select id="almacenamiento">
+        <option value="">Seleccione</option>
+        <option value="128">128 GB</option>
+        <option value="256">256 GB</option>
+        <option value="516">512 GB</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="color-container" style="display:none;">
+      <label for="color">Color</label>
+      <select id="color">
+        <option value="">Seleccione</option>
+        <option value="Negro">Negro</option>
+        <option value="Blanco">Blanco</option>
+        <option value="Dorado">Dorado</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="cantidad">Cantidad</label>
+      <input type="number" id="cantidad" placeholder="Ingrese cantidad" />
+    </div>
+
+    <div class="form-group">
+      <label for="precio">Precio </label>
+      <input type="number" id="precio"/>
+    </div>
+
+
+    <!-- Botón para agregar productos -->
+    <button type="button" class="btn-siguiente" id="btnAgregar">AGREGAR PRODUCTO</button>
+
+    <!-- Tabla mejorada -->
+<div id="tablaProductosContainer" style="display:none; margin-top:20px; padding:15px; border:1px solid #ddd; border-radius:10px; background:#fafafa; overflow-x:auto;">
+  <table id="tablaProductos" style="width:100%; border-collapse:collapse; text-align:center;">
+    <thead style="background-color:#007bff; color:white;">
+      <tr>
+        <th style="padding:10px; text-align:left;">Producto</th>
+        <th style="padding:10px;">Cantidad</th>
+        <th style="padding:10px;">Precio</th>
+        <th style="padding:10px;">IVA (19%)</th>
+        <th style="padding:10px;">Total</th>
+        <th style="padding:10px;">Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- Totales -->
+  <div style="margin-top:15px; text-align:right; font-weight:bold; font-size:16px;">
+    <p>Subtotal: <span id="subtotal">0</span> COP</p>
+    <p>IVA: <span id="ivaTotal">0</span> COP</p>
+    <p style="font-size:18px; color:#007bff;">Total: <span id="granTotal">0</span> COP</p>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+  <!-- Box: Datos terceros -->
+  <div class="seccion-factura">
+    <div class="card-datos">
+      <h3>Datos terceros</h3>
+      <hr />
+      <div class="form-group">
+        <label for="medioPago">Medio de pago</label>
+        <select id="medioPago">
+          <option value="" disabled selected>Seleccione</option>
+          <option value="efectivo">Efectivo</option>
+          <option value="tarjeta">Tarjeta</option>
+          <option value="transferencia">Transferencia</option>
+        </select>
+      </div>
+      <button class="btn-siguiente">SIGUIENTE</button>
+    </div>
+  </div>
+  
+   <!-- Pie de página -->
+    <footer>
+        <div class="footer-bar"> 
+            <div class="footer-item">
+                <img src="/img/mensaje (1).png" alt="Correo"> 
+                Ecofactproyect@gmail.com
+            </div>
+            <div class="footer-item">
+                <img src="/img/llamada-telefonica (1).png" alt="Teléfono"> 
+                333-333-333
+            </div>
+        </div>
+        <div class="footer-bottom">@2025-ECOFACT</div> 
+    </footer>
+
+  <script src="crear_factura.js"></script>
+</body>
+</html>

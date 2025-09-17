@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro - EcoFact</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="registro.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+
+<div class="form-content">
+  <img class="logo" src="./img/Logo azul sin fondo.png" alt="Logo EcoFact">
+
+  <form>
+    <div class="form-grid">
+      <!-- Columna izquierda -->
+      <div class="form-col">
+        <input type="text" name="nombre_usuario" required placeholder="Primer nombre">
+        <input type="text" name="segundo_nombre_usuario" placeholder="Segundo nombre">
+        <input type="text" name="apellido_usuario" required placeholder="Primer apellido">
+        <input type="text" name="segundo_apellido_usuario" placeholder="Segundo apellido">
+
+        <select name="tipo_documento_usuario" required>
+          <option value="" disabled selected>Tipo de documento</option>
+          <option value="cc">Cédula de ciudadanía (CC)</option>
+          <option value="ce">Cédula de extranjería (CE)</option>
+          <option value="pa">Pasaporte (PA)</option>
+          <option value="ppt">PPT</option>
+          <option value="nit">NIT</option>
+          <option value="cif">CIF</option>
+          <option value="ruc">RUC</option>
+        </select>
+
+        <input type="text" name="numero_documento_usuario" required placeholder="Número de documento">
+      </div>
+
+      <!-- Columna derecha -->
+      <div class="form-col">
+        <input type="text" name="direccion_usuario" placeholder="Dirección">
+        <input type="email" name="correo_electronico_usuario" required placeholder="Correo electrónico">
+        <input type="text" name="telefono_usuario" placeholder="Teléfono">
+
+        <div class="password-container">
+          <input type="password" name="contraseña_usuario" id="password" required placeholder="Contraseña">
+          <button type="button" id="togglePassword" class="toggle-password">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+
+        <div class="password-container">
+          <input type="password" id="confirmPassword" required placeholder="Confirmar contraseña">
+          <button type="button" id="toggleConfirmPassword" class="toggle-password">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+
+        <select name="rol_usuario" required>
+          <option value="" disabled selected>Selecciona tu rol</option>
+          <option value="cliente">Cliente</option>
+          <option value="vendedor">Vendedor</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Botón centrado -->
+    <button type="submit" class="boton2">Registrarse</button>
+
+    <p class="registro">¿Ya tienes cuenta? 
+      <a href="login.html"><u>Inicia sesión aquí</u></a>
+    </p>
+  </form>
+</div>
+
+<script src="registro.js"></script>
+
+</body>
+</html>
