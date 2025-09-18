@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import Inventario
 
 def login_view(request):
     return render(request, 'core/login.html')
@@ -20,6 +21,10 @@ def registro_producto_view(request):
 
 def inventario_view(request):
     return render(request, 'core/inventario.html')
+
+def inventario_view(request):
+    inventarios = Inventario.objects.select_related('producto').all()
+    return render(request, 'core/inventario.html', {'inventarios': inventarios})
 
 def historial_factura_view(request):
     return render(request, 'core/historial_factura.html')

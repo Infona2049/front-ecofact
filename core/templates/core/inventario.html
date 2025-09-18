@@ -47,23 +47,36 @@
             <th>Codigo de barras</th>
           </tr>
         </thead>
+        <tbody>
+            {% for inventario in inventarios %}
+            <tr>
+              <td>{{ inventario.producto.nombre_producto }}</td>
+              <td>{{ inventario.producto.modelo_producto }}</td>
+              <td>{{ inventario.stock_actual_inventario }}</td>
+              <td>{{ inventario.stock_minimo_inventario }}</td>
+              <td>{{ inventario.fecha_actualizacion_inventario|date:"d/m/Y H:i" }}</td>
+              <td>{{ inventario.codigo_barras_inventario }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6">No hay productos en el inventario.</td>
+            </tr>
+            {% endfor %}
       </table>
     </div>
   </main>
 
   <!-- Pie de página -->
-  <footer>
-    <div class="footer-bar"> 
-            <div class="footer-item">
-                <img src="{% static 'core/img/mensaje.png' %}" alt="Ubicación">
-                Ecofactproyect@gmail.com
-            </div>
-            <div class="footer-item">
-                <img src="{% static 'core/img/llamada-telefonica.png' %}" alt="Teléfono"> 
-                333-333-333
-            </div>
+<footer>
+    <div class="footer-item">
+        <img src="{% static 'core/img/mensaje.png' %}" alt="Ubicación">
+        Ecofactproyect@gmail.com
+    </div>
+    <div class="footer-item">
+        <img src="{% static 'core/img/llamada-telefonica.png' %}" alt="Teléfono"> 
+        333-333-333
     </div>
     <div class="footer-bottom">@2025-ECOFACT</div> 
-  </footer>
+</footer>
 </body>
 </html>
