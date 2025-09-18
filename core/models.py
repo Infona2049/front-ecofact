@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import uuid
 
 # Opciones para ENUM
 TIPO_DOCUMENTO_CHOICES = [
@@ -42,6 +43,12 @@ REGIMEN_EMPRESA_CHOICES = [
     ('Especial', 'Especial'),
 ]
 
+COLOR_PRODUCTO_CHOICES = [
+    ('negro', 'Negro'),
+    ('blanco', 'Blanco'),
+    ('dorado', 'Dorado'),
+]
+
 class Usuario(AbstractUser):
     id_usuario = models.AutoField(primary_key=True)
     username = models.CharField(max_length=150, unique=True, null=False, blank=False)
@@ -59,7 +66,7 @@ class Usuario(AbstractUser):
 
     USERNAME_FIELD = 'correo_electronico_usuario'
     REQUIRED_FIELDS = ['username', 'nombre_usuario', 'apellido_usuario', 'rol_usuario']
-    
+
     def __str__(self):
         return self.correo_electronico_usuario
 
@@ -83,12 +90,19 @@ class Producto(models.Model):
     categoria_producto = models.CharField(max_length=20, choices=CATEGORIA_PRODUCTO_CHOICES)
     modelo_producto = models.CharField(max_length=50)
     capacidad_producto = models.IntegerField()
-    color_producto = models.CharField(max_length=20)
-    descripcion_producto = models.TextField()
+    color_producto = models.CharField(max_length=20, choices=COLOR_PRODUCTO_CHOICES)
+    descripcion_producto = models.TextField(blank=True, null=True)
     precio_producto = models.DecimalField(max_digits=10, decimal_places=2)
-    codigo_barras_producto = models.CharField(max_length=100, unique=True)
-    iva_producto = models.DecimalField(max_digits=10, decimal_places=2)
-    imagen_producto = models.ImageField(upload_to='productos/', unique=True)
+    codigo_barras_producto = models.CharField(max_length=100, unique=True, blank=True)
+    iva_producto = models.DecimalField(max_digits=10, decimal_places=2, default=19.00, editable=False)
+    imagen_producto = models.ImageField(upload_to='productos/',blank=True, null=True,)
+
+    def save(self, *args, **kwargs):
+        if not self.codigo_barras_producto:
+            self.codigo_barras_producto = str(uuid.uuid4()).replace('-', '')[:12].upper()
+        
+        self.iva_producto = 19.00
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.nombre_producto
