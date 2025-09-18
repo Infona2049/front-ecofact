@@ -13,10 +13,9 @@
     <div class="left-side">
       <a href="{% url 'visualizacion_admin' %}">
         <img src="{% static 'core/img/Logo azul sin fondo.png' %}" alt="EcoFact Logo" class="logo1" />
-        <img src="{% static 'core/img/logo empresa.png' %}" alt="Empresa logo " class="logo2" />
+        <img src="{% static 'core/img/logo empresa.png' %}" alt="Empresa logo" class="logo2" />
       </a>
-    </div> 
-
+    </div>
     <div class="right-side">
       <a href="{% url 'documentos' %}"><img src="{% static 'core/img/documento.png' %}" class="icono"></a>
       <a href="{% url 'actualizar_perfil' %}"><img src="{% static 'core/img/editar.png' %}" class="icono"></a>
@@ -29,7 +28,7 @@
   <header>
     <nav class="menu">
       <a href="{% url 'visualizacion_admin' %}">Inicio</a>
-    </nav>  
+    </nav>
   </header>
 
   <!-- Inventario -->
@@ -44,39 +43,42 @@
             <th>Stock Actual</th>
             <th>Stock Mínimo</th>
             <th>Última Actualización</th>
-            <th>Codigo de barras</th>
+            <th>Código de barras</th>
           </tr>
         </thead>
         <tbody>
-            {% for inventario in inventarios %}
-            <tr>
-              <td>{{ inventario.producto.nombre_producto }}</td>
-              <td>{{ inventario.producto.modelo_producto }}</td>
-              <td>{{ inventario.stock_actual_inventario }}</td>
-              <td>{{ inventario.stock_minimo_inventario }}</td>
-              <td>{{ inventario.fecha_actualizacion_inventario|date:"d/m/Y H:i" }}</td>
-              <td>{{ inventario.codigo_barras_inventario }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-              <td colspan="6">No hay productos en el inventario.</td>
-            </tr>
-            {% endfor %}
+          {% for inventario in inventarios %}
+          <tr>
+            <td>{{ inventario.producto.nombre_producto }}</td>
+            <td>{{ inventario.producto.modelo_producto }}</td>
+            <td>{{ inventario.stock_actual_inventario }}</td>
+            <td>{{ inventario.stock_minimo_inventario }}</td>
+            <td>{{ inventario.fecha_actualizacion_inventario|date:"d/m/Y H:i" }}</td>
+            <td>{{ inventario.codigo_barras_inventario }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6">No hay productos en el inventario.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
       </table>
     </div>
   </main>
 
   <!-- Pie de página -->
-<footer>
-    <div class="footer-item">
-        <img src="{% static 'core/img/mensaje.png' %}" alt="Ubicación">
+  <footer>
+    <div class="footer-bar">
+      <div class="footer-item">
+        <img src="{% static 'core/img/mensaje.png' %}" alt="Correo">
         Ecofactproyect@gmail.com
-    </div>
-    <div class="footer-item">
-        <img src="{% static 'core/img/llamada-telefonica.png' %}" alt="Teléfono"> 
+      </div>
+      <div class="footer-item">
+        <img src="{% static 'core/img/llamada-telefonica.png' %}" alt="Teléfono">
         333-333-333
+      </div>
     </div>
-    <div class="footer-bottom">@2025-ECOFACT</div> 
-</footer>
+    <div class="footer-bottom">@2025-ECOFACT</div>
+  </footer>
 </body>
 </html>

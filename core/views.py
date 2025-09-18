@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Inventario
+from .forms import ProductoForm
 
 def login_view(request):
     return render(request, 'core/login.html')
@@ -17,13 +18,25 @@ def acerca_nosotros_view(request):
     return render(request, 'core/acerca_nosotros.html')
 
 def registro_producto_view(request):
-    return render(request, 'core/registro_producto.html')
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES)
+        if form.is_valid():
+            producto = form.save()
+            # Crear inventario automáticamente
+            Inventario.objects.create(
+                producto=producto,
+                stock_actual_inventario=0,
+                stock_minimo_inventario=1,
+                codigo_barras_inventario=producto.codigo_barras_producto
+            )
+            mensaje_exito = True
+            form = ProductoForm()  # Limpiar el formulario después de guardar
+    else:
+        form = ProductoForm()
+    return render(request, 'core/registro_producto.html', {'form': form})
 
 def inventario_view(request):
-    return render(request, 'core/inventario.html')
-
-def inventario_view(request):
-    inventarios = Inventario.objects.select_related('producto').all()
+    inventarios = Inventario.objects.select_related('producto').order_by('fecha_actualizacion_inventario')
     return render(request, 'core/inventario.html', {'inventarios': inventarios})
 
 def historial_factura_view(request):

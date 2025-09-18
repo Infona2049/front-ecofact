@@ -114,7 +114,7 @@ class Inventario(models.Model):
     stock_minimo_inventario = models.IntegerField(default=1)
     fecha_actualizacion_inventario = models.DateTimeField(auto_now=True)
     codigo_barras_inventario = models.CharField(max_length=100, unique=True)
-    imagen_inventario = models.ImageField(upload_to='inventario/', unique=True)
+    imagen_inventario = models.ImageField(upload_to='inventario/', blank=True, null=True,)
 
     def __str__(self):
         return f"{self.producto.nombre_producto} - Stock: {self.stock_actual_inventario}"

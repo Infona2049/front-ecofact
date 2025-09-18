@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Registro producto</title>
     <link rel="stylesheet" href="{% static 'core/css/registro_producto.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <!-- Barra superior -->
@@ -15,8 +16,7 @@
                 <img src="{% static 'core/img/Logo azul sin fondo.png' %}" alt="EcoFact Logo" class="logo1" />
                 <img src="{% static 'core/img/logo empresa.png' %}" alt="Empresa logo" class="logo2" />
             </a>
-        </div> 
-
+        </div>
         <div class="right-side">
             <a href="{% url 'documentos' %}"><img src="{% static 'core/img/documento.png' %}" class="icono"></a>
             <a href="{% url 'actualizar_perfil' %}"><img src="{% static 'core/img/editar.png' %}" class="icono"></a>
@@ -29,89 +29,60 @@
     <header>
         <nav class="menu">
             <a href="{% url 'visualizacion_admin' %}">Inicio</a>
-        </nav>  
+        </nav>
     </header>
 
-    <!-- Formulario de inventario -->
+    <!-- Formulario de registro de producto -->
     <main class="contenedor">
         <h2>Registro de producto</h2>
-        <form id="form-inventario" class="form-card" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <!-- Categoría -->
-            <label for="categoria">Categoría:</label>
-            <select id="categoria" name="categoria" required>
-                <option value="">Seleccione</option>
-                <option value="moviles">Dispositivos móviles</option>
-                <option value="cargadores">Cargadores</option>
-                <option value="auriculares">Auriculares</option>
-            </select>
-
-            <!-- Campos extra (solo móviles) -->
-            <div id="extras-moviles" style="display:none;">
-                <label for="modelo">Modelo:</label>
-                <select id="modelo" name="modelo">
-                    <option value="">Seleccione</option>
-                    <option value="iphone-13">iPhone 13</option>
-                    <option value="iphone-14">iPhone 14</option>
-                    <option value="iphone-15">iPhone 15</option>
-                </select>
-
-                <label for="color">Color:</label>
-                <select id="color" name="color">
-                    <option value="">Seleccione</option>
-                    <option value="negro">Negro</option>
-                    <option value="blanco">Blanco</option>
-                    <option value="dorado">Dorado</option>
-                </select>
-
-                <label for="almacenamiento">Almacenamiento:</label>
-                <select id="almacenamiento" name="almacenamiento">
-                    <option value="">Seleccione</option>
-                    <option value="128">128 GB</option>
-                    <option value="256">256 GB</option>
-                    <option value="512">512 GB</option>
-                </select>
+        {% if form.errors %}
+            <div class="form-errors">
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
             </div>
-
-            <!-- Campos generales -->
-            <label for="cantidad">Cantidad:</label>
-            <input type="number" id="cantidad" name="cantidad" min="1" required>
-
-            <label for="precio">Precio (COP):</label>
-            <input type="text" id="precio" name="precio" required placeholder="Ej: 100.000">
-
-            <label for="iva">IVA:</label>
-            <input id="iva" name="iva" required placeholder="19%" readonly>
-
-            <label for="imagen">Imagen del producto:</label>
-            <input type="file" id="imagen" name="imagen" accept="image/*">
-
-            <label for="observaciones">Observaciones:</label>
-            <textarea id="observaciones" name="observaciones" rows="3"></textarea>
-
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" class="form-card">
+            {% csrf_token %}
+            {{ form.as_p }}
             <button type="submit" class="btn-guardar">Registrar producto</button>
         </form>
     </main>
 
-   <!-- Pie de página -->
+    <!-- SweetAlert de éxito -->
+    {% if mensaje_exito %}
+    <script>
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "¡El producto se ha registrado exitosamente!",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    </script>
+    {% endif %}
+
+    <!-- Pie de página -->
     <footer>
-        <div class="footer-bar"> 
+        <div class="footer-bar">
             <div class="footer-item">
-                <img src="{% static 'core/img/mensaje.png' %}" alt="Correo"> 
+                <img src="{% static 'core/img/mensaje.png' %}" alt="Correo">
                 Ecofactproyect@gmail.com
             </div>
             <div class="footer-item">
-                <img src="{% static 'core/img/llamada-telefonica.png' %}" alt="Teléfono"> 
+                <img src="{% static 'core/img/llamada-telefonica.png' %}" alt="Teléfono">
                 333-333-333
             </div>
         </div>
-        <div class="footer-bottom">@2025-ECOFACT</div> 
+        <div class="footer-bottom">@2025-ECOFACT</div>
     </footer>
-
-    <!-- Notificación flotante -->
-    <div id="mensaje-exito" class="mensaje-exito" style="display:none;">
-        <span>¡El producto se ha guardado exitosamente!</span>
-    </div>
 
     <script src="{% static 'core/js/registro_producto.js' %}"></script>
 </body>
