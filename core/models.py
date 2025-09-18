@@ -44,6 +44,7 @@ REGIMEN_EMPRESA_CHOICES = [
 
 class Usuario(AbstractUser):
     id_usuario = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=150, unique=True, null=False, blank=False)
     nombre_usuario = models.CharField(max_length=30)
     segundo_nombre_usuario = models.CharField(max_length=30, blank=True, null=True)
     apellido_usuario = models.CharField(max_length=30)
@@ -57,8 +58,8 @@ class Usuario(AbstractUser):
     fecha_creacion_usuario = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = 'correo_electronico_usuario'
-    REQUIRED_FIELDS = ['nombre_usuario', 'apellido_usuario', 'rol_usuario']
-
+    REQUIRED_FIELDS = ['username', 'nombre_usuario', 'apellido_usuario', 'rol_usuario']
+    
     def __str__(self):
         return self.correo_electronico_usuario
 
