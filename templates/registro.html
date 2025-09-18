@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro - EcoFact</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Enlace al CSS estático -->
+  <link rel="stylesheet" href="{% static 'css/registro.css' %}">
+  <!-- Font Awesome para íconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- SweetAlert para alertas bonitas -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div class="form-content">
+  <!-- Logo -->
+  <img class="logo" src="{% static 'img/Logo azul sin fondo.png' %}" alt="Logo EcoFact">
+
+  <!-- Formulario de registro -->
+  <form id="registroForm" method="post" action="">
+    {% csrf_token %} <!-- Token de seguridad para POST -->
+
+    <div class="form-grid">
+      <!-- Columna izquierda -->
+      <div class="form-col">
+        <!-- Campos del formulario -->
+        {{ form.nombre_usuario }}
+        {{ form.segundo_nombre_usuario }}
+        {{ form.apellido_usuario }}
+        {{ form.segundo_apellido_usuario }}
+        {{ form.tipo_documento_usuario }}
+        {{ form.numero_documento_usuario }}
+      </div>
+
+      <!-- Columna derecha -->
+      <div class="form-col">
+        {{ form.direccion_usuario }}
+        {{ form.correo_electronico_usuario }}
+        {{ form.telefono_usuario }}
+
+        <!--campo contraseña con id-->
+        {{ form.password1 }}
+       <!-- <i id="togglePassword" class="fa-solid fa-eye"></i>-->
+
+        {{ form.password2 }}
+        <!--<i id="toggleConfirmPassword" class="fa-solid fa-eye"></i>-->
+
+        {{ form.rol_usuario }}
+      </div>
+    </div>
+
+    <!-- Botón de envío -->
+    <button type="submit" class="boton2">Registrarse</button>
+
+    <!-- Link para ir al login -->
+    <p class="registro">¿Ya tienes cuenta? 
+      <a href="../templates/login.html"><u>Inicia sesión aquí</u></a>
+    </p>
+  </form>
+</div>
+
+<!-- Script para toggle de contraseña -->
+<script src="{% static 'js/registro.js' %}"></script>
+
+
+</body>
+</html>

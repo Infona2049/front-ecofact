@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',       # Mensajes flash
     'django.contrib.staticfiles',    # Archivos estáticos (CSS, JS)
     'core',                         # Tu app principal donde están los modelos y lógica
+    'App_registroProducto',         #Modulo 1
+    'App_registroUsuario',          #Modulo2
 ]
 
 # Middleware: capas que procesan las peticiones y respuestas
@@ -58,7 +60,11 @@ ROOT_URLCONF = 'EcoFactProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',  # Motor de plantillas Django
-        'DIRS': [],  # Directorios adicionales para buscar plantillas
+        'DIRS': [os.path.join(BASE_DIR, "visualizacion_admin"),# Directorios adicionales para buscar plantillas
+                os.path.join(BASE_DIR, "templates"), 
+                 os.path.join(BASE_DIR, "visualizacion_cliente"),
+                 os.path.join(BASE_DIR, "visualizacion_vendedor")],   
+
         'APP_DIRS': True,  # Buscar plantillas dentro de las apps instaladas
         'OPTIONS': {
             'context_processors': [
@@ -78,11 +84,11 @@ WSGI_APPLICATION = 'EcoFactProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',  # Motor PostgreSQL
-        'NAME': 'EcoFact',                          # Nombre de la base de datos
+        'NAME': 'proyectoecofact',                          # Nombre de la base de datos
         'USER': 'postgres',                         # Usuario de la base
         'PASSWORD': '123',                          # Contraseña
         'HOST': 'localhost',                        # Host de la base de datos
-        'PORT': '5000',                             # Puerto de conexión
+        'PORT': '5432',                             # Puerto de conexión
     }
 }
 
@@ -107,7 +113,15 @@ USE_TZ = True            # Uso de zonas horarias
 
 
 # Archivos estáticos (CSS, JS, imágenes estáticas)
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+# Carpeta donde estarán tus archivos estáticos durante el desarrollo
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+# Carpeta donde Django juntará todos los estáticos en producción
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
 # Configuración para archivos multimedia (imágenes subidas por usuarios)
