@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Inventario
 from .forms import ProductoForm
+from django.urls import reverse
 
 def login_view(request):
     return render(request, 'core/login.html')
@@ -22,18 +23,18 @@ def registro_producto_view(request):
         form = ProductoForm(request.POST, request.FILES)
         if form.is_valid():
             producto = form.save()
-            # Crear inventario automáticamente
             Inventario.objects.create(
                 producto=producto,
                 stock_actual_inventario=0,
                 stock_minimo_inventario=1,
                 codigo_barras_inventario=producto.codigo_barras_producto
             )
-            mensaje_exito = True
-            form = ProductoForm()  # Limpiar el formulario después de guardar
+            # Redirige usando GET para evitar reenvío del formulario
+            return redirect(f"{reverse('registro_producto')}?exito=1")
     else:
         form = ProductoForm()
     return render(request, 'core/registro_producto.html', {'form': form})
+
 
 def inventario_view(request):
     inventarios = Inventario.objects.select_related('producto').order_by('fecha_actualizacion_inventario')

@@ -89,7 +89,7 @@ class Producto(models.Model):
     nombre_producto = models.CharField(max_length=50)
     categoria_producto = models.CharField(max_length=20, choices=CATEGORIA_PRODUCTO_CHOICES)
     modelo_producto = models.CharField(max_length=50)
-    capacidad_producto = models.IntegerField()
+    capacidad_producto = models.CharField(max_length=20, choices=[('No Aplica', 'No Aplica'),('128GB', '128GB'), ('256GB', '256GB'), ('512GB', '512GB')])
     color_producto = models.CharField(max_length=20, choices=COLOR_PRODUCTO_CHOICES)
     descripcion_producto = models.TextField(blank=True, null=True)
     precio_producto = models.DecimalField(max_digits=10, decimal_places=2)
