@@ -42,19 +42,13 @@ Copia el archivo de ejemplo y configúralo:
 copy .env.example .env
 ```
 
-**Para usar SQLite (más fácil para desarrollo individual):**
+**✅ CONFIGURACIÓN ACTUAL: Base de datos Neon (en la nube)**
+El proyecto ya está configurado para usar Neon. Todos los miembros del equipo 
+pueden usar las mismas credenciales sin cambios adicionales.
+
+**Para desarrollo individual (opcional):**
 ```
 USE_POSTGRESQL=False
-```
-
-**Para usar PostgreSQL (recomendado para equipos):**
-```
-USE_POSTGRESQL=True
-DB_NAME=ecofact
-DB_USER=tu_usuario_postgres
-DB_PASSWORD=tu_contraseña_postgres
-DB_HOST=localhost
-DB_PORT=5432
 ```
 
 ### 6. Configurar base de datos
@@ -74,23 +68,46 @@ python manage.py runserver 8001
 
 ## 🔗 Configuración para Equipos
 
-### Opción A: SQLite (Individual)
-- Cada desarrollador tiene su propia base de datos
-- Los usuarios de prueba se crean con `python manage.py create_test_users`
-- Fácil setup, ideal para desarrollo individual
+### ✅ **Configuración Actual: Base de Datos en la Nube (Neon)**
 
-### Opción B: PostgreSQL (Equipos)
-- Base de datos compartida entre todo el equipo
-- Todos acceden a los mismos usuarios
-- Requiere configurar PostgreSQL en cada máquina
+**¡El proyecto ya está configurado para trabajo en equipo!**
 
-#### Para configurar PostgreSQL:
-1. Instalar PostgreSQL en tu máquina
-2. Crear base de datos: `createdb ecofact`
-3. Cambiar `.env`: `USE_POSTGRESQL=True`
-4. Configurar usuario y contraseña en `.env`
-5. Ejecutar migraciones: `python manage.py migrate`
-6. Crear usuarios: `python manage.py create_test_users`
+- 🌐 **Base de datos compartida:** Todos acceden a la misma BD en Neon
+- 🔄 **Datos sincronizados:** Cambios en tiempo real para todo el equipo  
+- 🚀 **Sin configuración adicional:** Solo hacer `git pull` y usar
+
+### 🔧 **Configuración para nuevos miembros:**
+
+```bash
+# 1. Clonar repositorio
+git clone https://github.com/Infona2049/front-ecofact.git
+cd front-ecofact
+
+# 2. Crear entorno virtual  
+python -m venv venv
+venv\Scripts\activate
+
+# 3. Instalar dependencias
+pip install -r requirements.txt
+
+# 4. Copiar configuración (ya tiene credenciales de Neon)
+copy .env.example .env
+
+# 5. ¡Listo! La BD ya está configurada
+python manage.py runserver 8001
+```
+
+### 👥 **Usuarios disponibles para todos:**
+- **Admin:** admin@ecofact.com / admin123
+- **Vendedor:** vendedor@ecofact.com / vendedor123  
+- **Cliente:** cliente@ecofact.com / cliente123
+
+### 📊 **Ventajas de la configuración actual:**
+- ✅ **Base de datos compartida en la nube**
+- ✅ **Sin conflictos entre miembros del equipo**
+- ✅ **Acceso desde cualquier ubicación**
+- ✅ **Backup automático en Neon**
+- ✅ **512MB gratuitos (más que suficiente)**
 
 ## 🔐 Usuarios de Prueba
 
