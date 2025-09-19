@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Registro producto</title>
-    <link rel="stylesheet" href="{% static 'core/css/registro_producto.css' %}">
+    <link rel="stylesheet" href="{% static 'productos/css/registro_producto.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
@@ -13,15 +13,15 @@
     <div class="top-bar">
         <div class="left-side">
             <a href="{% url 'visualizacion_admin' %}">
-                <img src="{% static 'core/img/Logo azul sin fondo.png' %}" alt="EcoFact Logo" class="logo1" />
-                <img src="{% static 'core/img/logo empresa.png' %}" alt="Empresa logo" class="logo2" />
+                <img src="{% static 'img/Logo azul sin fondo.png' %}" alt="EcoFact Logo" class="logo1" />
+                <img src="{% static 'img/logo empresa.png' %}" alt="Empresa logo" class="logo2" />
             </a>
         </div>
         <div class="right-side">
-            <a href="{% url 'documentos' %}"><img src="{% static 'core/img/documento.png' %}" class="icono"></a>
-            <a href="{% url 'actualizar_perfil' %}"><img src="{% static 'core/img/editar.png' %}" class="icono"></a>
-            <a href="{% url 'cambiocontraseña' %}"><img src="{% static 'core/img/contrasena.png' %}" class="icono"></a>
-            <a href="{% url 'login' %}"><img src="{% static 'core/img/cerrar-sesion.png' %}" class="icono"></a>
+            <a href="{% url 'documentos' %}"><img src="{% static 'img/documento.png' %}" class="icono"></a>
+            <a href="{% url 'actualizar_perfil' %}"><img src="{% static 'img/editar.png' %}" class="icono"></a>
+            <a href="{% url 'cambiocontraseña' %}"><img src="{% static 'img/contrasena.png' %}" class="icono"></a>
+            <a href="{% url 'login' %}"><img src="{% static 'img/cerrar-sesion.png' %}" class="icono"></a>
         </div>
     </div>
 
@@ -35,7 +35,7 @@
     <!-- Formulario de registro de producto -->
     <main class="contenedor">
         <h2>Registro de producto</h2>
-        {% if form.errors %}
+        {% if form.errors and request.method == "POST" %}
             <div class="form-errors">
                 <ul>
                     {% for field in form %}
@@ -56,37 +56,32 @@
         </form>
     </main>
 
-    <!-- SweetAlert de éxito -->
-    {% if mensaje_exito %}
-    <script>
-        Swal.fire({
-            icon: "success",
-            title: "¡El producto se ha registrado exitosamente!",
-            confirmButtonText: "OK",
-            allowOutsideClick: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.reload();
-            }
-        });
-    </script>
-    {% endif %}
-
     <!-- Pie de página -->
     <footer>
         <div class="footer-bar">
             <div class="footer-item">
-                <img src="{% static 'core/img/mensaje.png' %}" alt="Correo">
+                <img src="{% static 'img/mensaje.png' %}" alt="Correo">
                 Ecofactproyect@gmail.com
             </div>
             <div class="footer-item">
-                <img src="{% static 'core/img/llamada-telefonica.png' %}" alt="Teléfono">
+                <img src="{% static 'img/llamada-telefonica.png' %}" alt="Teléfono">
                 333-333-333
             </div>
         </div>
         <div class="footer-bottom">@2025-ECOFACT</div>
     </footer>
 
-    <script src="{% static 'core/js/registro_producto.js' %}"></script>
+    {% if exito %}
+    <script>
+        Swal.fire({
+            icon: "success",
+            title: "¡El producto se ha registrado exitosamente!",
+            confirmButtonText: "OK",
+            allowOutsideClick: false
+        });
+    </script>
+    {% endif %}
+
+    <script src="{% static 'productos/js/registro_producto.js' %}"></script>
 </body>
 </html>

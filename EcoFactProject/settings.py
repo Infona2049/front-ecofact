@@ -111,7 +111,7 @@ USE_TZ = True            # Uso de zonas horarias
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "core" / "static",
+    BASE_DIR / "static",
 ]
 
 

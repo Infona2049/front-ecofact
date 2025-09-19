@@ -18,9 +18,9 @@ def registro_producto_view(request):
             return redirect(f"{reverse('registro_producto')}?exito=1")
     else:
         form = ProductoForm()
-    return render(request, 'core/registro_producto.html', {'form': form, 'exito': exito})
+    return render(request, 'productos/registro_producto.html', {'form': form, 'exito': exito})
 
 
 def inventario_view(request):
     inventarios = Inventario.objects.select_related('producto').order_by('fecha_actualizacion_inventario')
-    return render(request, 'core/inventario.html', {'inventarios': inventarios}) 
+    return render(request, 'productos/inventario.html', {'inventarios': inventarios}) 
