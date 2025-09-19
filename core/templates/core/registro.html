@@ -12,58 +12,69 @@
 <body>
 
 <div class="form-content">
-  <img class="logo" src="{% static 'core/img/Logo azul sin fondo.png' %}" alt="Logo EcoFact">
+  <img class="logo" src="{% static 'img/Logo azul sin fondo.png' %}" alt="Logo EcoFact">
 
-  <form>
+  <!-- Mostrar mensajes de error/éxito -->
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Mostrar errores de formulario -->
+  {% if form.errors %}
+    <div class="alert alert-error">
+      <strong>Por favor corrige los siguientes errores:</strong>
+      <ul>
+        {% for field, errors in form.errors.items %}
+          {% for error in errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
     <div class="form-grid">
       <!-- Columna izquierda -->
       <div class="form-col">
-        <input type="text" name="nombre_usuario" required placeholder="Primer nombre">
-        <input type="text" name="segundo_nombre_usuario" placeholder="Segundo nombre">
-        <input type="text" name="apellido_usuario" required placeholder="Primer apellido">
-        <input type="text" name="segundo_apellido_usuario" placeholder="Segundo apellido">
-
-        <select name="tipo_documento_usuario" required>
-          <option value="" disabled selected>Tipo de documento</option>
-          <option value="cc">Cédula de ciudadanía (CC)</option>
-          <option value="ce">Cédula de extranjería (CE)</option>
-          <option value="pa">Pasaporte (PA)</option>
-          <option value="ppt">PPT</option>
-          <option value="nit">NIT</option>
-          <option value="cif">CIF</option>
-          <option value="ruc">RUC</option>
-        </select>
-
-        <input type="text" name="numero_documento_usuario" required placeholder="Número de documento">
+        {{ form.nombre_usuario }}
+        {{ form.segundo_nombre_usuario }}
+        {{ form.apellido_usuario }}
+        {{ form.segundo_apellido_usuario }}
+        {{ form.tipo_documento_usuario }}
+        {{ form.numero_documento_usuario }}
       </div>
 
       <!-- Columna derecha -->
       <div class="form-col">
-        <input type="text" name="direccion_usuario" placeholder="Dirección">
-        <input type="email" name="correo_electronico_usuario" required placeholder="Correo electrónico">
-        <input type="text" name="telefono_usuario" placeholder="Teléfono">
+        {{ form.correo_electronico_usuario }}
+        {{ form.direccion_usuario }}
+        {{ form.telefono_usuario }}
 
         <div class="password-container">
-          <input type="password" name="contraseña_usuario" id="password" required placeholder="Contraseña">
+          {{ form.password1 }}
           <button type="button" id="togglePassword" class="toggle-password">
             <i class="fa-solid fa-eye"></i>
           </button>
         </div>
 
         <div class="password-container">
-          <input type="password" id="confirmPassword" required placeholder="Confirmar contraseña">
+          {{ form.password2 }}
           <button type="button" id="toggleConfirmPassword" class="toggle-password">
             <i class="fa-solid fa-eye"></i>
           </button>
         </div>
-
-        <select name="rol_usuario" required>
-          <option value="" disabled selected>Selecciona tu rol</option>
-          <option value="cliente">Cliente</option>
-          <option value="vendedor">Vendedor</option>
-        </select>
       </div>
     </div>
+
+    <!-- Campos ocultos -->
+    {{ form.username }}
+    {{ form.rol_usuario }}
 
     <!-- Botón centrado -->
     <button type="submit" class="boton2">Registrarse</button>

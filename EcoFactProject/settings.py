@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os  # Importamos os para manejar rutas de archivos en el sistema operativo
+from decouple import config
 
 # Construye rutas dentro del proyecto, BASE_DIR apunta a la carpeta raíz del proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,10 +20,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Configuraciones básicas de seguridad y despliegue
 
-SECRET_KEY = 'django-insecure-b%oh&@$)n5f89ef_#8%l96#tu+0)ujp%@l_wow)8ulgf2etj7+'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-b%oh&@$)n5f89ef_#8%l96#tu+0)ujp%@l_wow)8ulgf2etj7+')
 # Clave secreta para criptografía, debe mantenerse privada en producción
 
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 # Modo debug activado para desarrollo, desactivar en producción
 
 ALLOWED_HOSTS = []
@@ -75,17 +76,31 @@ WSGI_APPLICATION = 'EcoFactProject.wsgi.application'
 # Punto de entrada WSGI para servidores de producción
 
 
-# Configuración de base de datos PostgreSQL
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # Motor PostgreSQL
-        'NAME': 'ecofact',                          # Nombre de la base de datos
-        'USER': 'postgres',                         # Usuario de la base
-        'PASSWORD': '123',                          # Contraseña
-        'HOST': 'localhost',                        # Host de la base de datos
-        'PORT': '5432',                             # Puerto de conexión
+# Configuración de base de datos (PostgreSQL preferido, SQLite como fallback)
+USE_POSTGRESQL = config('USE_POSTGRESQL', default=False, cast=bool)
+
+if USE_POSTGRESQL:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME', default='ecofact'),
+            'USER': config('DB_USER', default='postgres'),
+            'PASSWORD': config('DB_PASSWORD', default='123'),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='5432'),
+            'OPTIONS': {
+                'client_encoding': 'UTF8',
+            },
+        }
     }
-}
+else:
+    # SQLite como fallback para desarrollo
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Validadores de contraseña para mejorar seguridad
@@ -113,6 +128,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+# Para producción - donde Django recogerá todos los archivos estáticos
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 
