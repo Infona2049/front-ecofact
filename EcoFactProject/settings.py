@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',       # Mensajes flash
     'django.contrib.staticfiles',    # Archivos estáticos (CSS, JS)
     'core',                         # Tu app principal donde están los modelos y lógica
+    'productos',                    # App para gestión de productos
 ]
 
 # Middleware: capas que procesan las peticiones y respuestas

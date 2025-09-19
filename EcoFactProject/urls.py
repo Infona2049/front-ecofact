@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from core import views 
 from django.conf import settings
-from django.conf.urls.static import static
+from django.conf.urls.static import static, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -11,7 +11,7 @@ urlpatterns = [
     path('actualizar_perfil/', views.actualizar_perfil_view, name='actualizar_perfil'),
     path('cambiocontraseña/', views.cambiocontraseña_view, name='cambiocontraseña'),
     path('acerca_nosotros/', views.acerca_nosotros_view, name='acerca_nosotros'),
-    path('registro_producto/', views.registro_producto_view, name='registro_producto'),
+    path('productos/', include('productos.urls')),
     path('inventario/', views.inventario_view, name='inventario'),
     path('historial_factura/', views.historial_factura_view, name='historial_factura'),
     path('crear_factura/', views.crear_factura_view, name='crear_factura'),
