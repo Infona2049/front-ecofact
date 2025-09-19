@@ -1,55 +1,49 @@
 /* =========================================================
-   LÓGICA DE INICIO DE SESIÓN (con SweetAlert2)
+   LÓGICA DE INICIO DE SESIÓN (con SweetAlert2 y Django)
 ========================================================= */
 function login(event) {
   event.preventDefault(); // Cancela el submit real
 
-  const email = event.target
-                 .querySelector('input[type="email"]')
-                 .value
-                 .trim()
-                 .toLowerCase();
+  const form = event.target;
+  const formData = new FormData(form);
 
-  // 1) Admin
-  if (email.includes('@ecofactadmin.com')) {
-    Swal.fire({
-      icon: 'success',
-      title: 'Bienvenido Administrador',
-      text: 'Redirigiendo a tu panel...',
-      showConfirmButton: false,
-      timer: 2000
-    }).then(() => {
-      window.location.href = 'visualizacion_admin/visualizacion_admin.html';
-    });
-    return;
-  }
-
-  // 2) Usuario normal
-  Swal.fire({
-    icon: 'warning',
-    title: 'Aceptar Términos y Condiciones',
-    text: 'Por favor, acepta los términos y condiciones para continuar.',
-    showCancelButton: true,
-    confirmButtonText: 'Aceptar',
-    cancelButtonText: 'Cancelar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // Aquí puedes redirigir al usuario o realizar otra acción
+  // Realizar petición AJAX
+  fetch(form.action || window.location.pathname, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
       Swal.fire({
         icon: 'success',
-        title: 'Gracias',
-        text: 'Has aceptado los términos y condiciones.',
-        confirmButtonText: 'Continuar'
+        title: data.message,
+        text: 'Redirigiendo a tu panel...',
+        showConfirmButton: false,
+        timer: 2000
+      }).then(() => {
+        window.location.href = data.redirect_url;
       });
-      // Redirigir o realizar otra acción aquí
     } else {
       Swal.fire({
-        icon: 'info',
-        title: 'Cancelado',
-        text: 'No has aceptado los términos y condiciones.',
-        confirmButtonText: 'Entendido'
+        icon: 'error',
+        title: 'Error de autenticación',
+        text: data.message,
+        confirmButtonText: 'Intentar de nuevo'
       });
     }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Ocurrió un error al procesar la solicitud',
+      confirmButtonText: 'Intentar de nuevo'
+    });
   });
 }
 

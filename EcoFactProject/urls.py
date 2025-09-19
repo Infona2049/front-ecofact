@@ -7,6 +7,10 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('admin-dashboard/', views.admin_dashboard_view, name='admin_dashboard'),
+    path('vendedor-dashboard/', views.vendedor_dashboard_view, name='vendedor_dashboard'),
+    path('cliente-dashboard/', views.cliente_dashboard_view, name='cliente_dashboard'),
     path('documentos/', views.documentos_view, name='documentos'),
     path('actualizar_perfil/', views.actualizar_perfil_view, name='actualizar_perfil'),
     path('cambiocontraseña/', views.cambiocontraseña_view, name='cambiocontraseña'),

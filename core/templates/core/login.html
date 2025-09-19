@@ -15,12 +15,13 @@
   <div class="form-content">
     <img class="logo" src="{% static 'core/img/Logo azul sin fondo.png' %}" alt="Logo EcoFact">
     
-    <form onsubmit="login(event)">
-      <input type="email" required placeholder="Correo">
+    <form method="post" onsubmit="login(event)">
+      {% csrf_token %}
+      <input type="email" name="email" required placeholder="Correo">
 
       <!-- Campo de contraseña con ojito -->
       <div class="password-container">
-        <input type="password" id="password" placeholder="Contraseña" required>
+        <input type="password" name="password" id="password" placeholder="Contraseña" required>
         <span class="toggle-password" id="togglePassword">
           <i class="fa-solid fa-eye"></i>
         </span>

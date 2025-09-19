@@ -1,7 +1,82 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from functools import wraps
+import json
+
+def role_required(allowed_roles):
+    """Decorador para restringir acceso por roles"""
+    def decorator(view_func):
+        @wraps(view_func)
+        def _wrapped_view(request, *args, **kwargs):
+            if not request.user.is_authenticated:
+                return redirect('login')
+            
+            if request.user.rol_usuario not in allowed_roles:
+                messages.error(request, 'No tienes permisos para acceder a esta página')
+                return redirect('login')
+            
+            return view_func(request, *args, **kwargs)
+        return _wrapped_view
+    return decorator
 
 def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        
+        # Autenticar usuario
+        user = authenticate(request, username=email, password=password)
+        
+        if user is not None:
+            login(request, user)
+            
+            # Redirigir según el rol del usuario
+            if user.rol_usuario == 'admin':
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Bienvenido Administrador',
+                    'redirect_url': '/admin-dashboard/'
+                })
+            elif user.rol_usuario == 'vendedor':
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Bienvenido Vendedor',
+                    'redirect_url': '/vendedor-dashboard/'
+                })
+            elif user.rol_usuario == 'cliente':
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Bienvenido Cliente',
+                    'redirect_url': '/cliente-dashboard/'
+                })
+        else:
+            return JsonResponse({
+                'success': False,
+                'message': 'Credenciales incorrectas'
+            })
+    
     return render(request, 'core/login.html')
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, 'Has cerrado sesión exitosamente')
+    return redirect('login')
+
+@role_required(['admin'])
+def admin_dashboard_view(request):
+    return render(request, 'core/visualizacion_Admin.html')
+
+@role_required(['vendedor'])
+def vendedor_dashboard_view(request):
+    return render(request, 'core/visualizacion_Vendedor.html')
+
+@role_required(['cliente'])
+def cliente_dashboard_view(request):
+    return render(request, 'core/visualizacion_Cliente.html')
 
 def documentos_view(request):
     return render(request, 'core/documentos.html')
