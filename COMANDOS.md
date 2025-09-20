@@ -50,10 +50,12 @@ python manage.py create_user --email nuevo@ecofact.com --password 123456 --nombr
 ```
 
 ## Usuarios predeterminados
+- **Superadmin:** superadmin@ecofact.com / superadmin123 (Django Admin)
 - **Admin:** admin@ecofact.com / admin123
 - **Vendedor:** vendedor@ecofact.com / vendedor123
 - **Cliente:** cliente@ecofact.com / cliente123
-- **Superadmin:** superadmin@ecofact.com / superadmin123
+
+> **Nota:** Estos usuarios se crean automáticamente al ejecutar los scripts de instalación.
 
 ## URLs importantes
 - **Aplicación:** http://localhost:8001/

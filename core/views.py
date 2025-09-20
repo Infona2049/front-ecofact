@@ -36,7 +36,13 @@ def login_view(request):
             login(request, user)
             
             # Redirigir según el rol del usuario
-            if user.rol_usuario == 'admin':
+            if user.is_superuser:
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Bienvenido Superadmin',
+                    'redirect_url': '/admin/'
+                })
+            elif user.rol_usuario == 'admin':
                 return JsonResponse({
                     'success': True,
                     'message': 'Bienvenido Administrador',

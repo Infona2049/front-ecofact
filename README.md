@@ -13,13 +13,6 @@ cd front-ecofact
 setup.bat
 ```
 
-**En Linux/Mac:**
-```bash
-git clone https://github.com/Infona2049/front-ecofact.git
-cd front-ecofact
-chmod +x setup.sh
-./setup.sh
-```
 
 ### Opción B: Configuración Manual
 
@@ -132,9 +125,12 @@ python manage.py runserver 8001
 
 | Rol | Email | Contraseña | URL de acceso |
 |-----|-------|------------|---------------|
+| **Superadmin** | superadmin@ecofact.com | superadmin123 | `/admin/` (Django Admin) |
 | **Administrador** | admin@ecofact.com | admin123 | `/admin-dashboard/` |
 | **Vendedor** | vendedor@ecofact.com | vendedor123 | `/vendedor-dashboard/` |
 | **Cliente** | cliente@ecofact.com | cliente123 | `/cliente-dashboard/` |
+
+> **Nota:** Los usuarios se crean automáticamente con los scripts de instalación.
 
 ## 🌐 URLs Principales
 
@@ -202,12 +198,6 @@ Si las imágenes no cargan, verifica que el servidor esté ejecutándose y que l
 - **Archivos de media:** Las imágenes están en `static/img/`
 - **Registro:** Solo permite crear usuarios con rol "Cliente"
 
-## 🤝 Colaboración
-
-1. Crear rama para tu feature: `git checkout -b feature/mi-feature`
-2. Hacer commits descriptivos: `git commit -m "feat: agregar nueva funcionalidad"`
-3. Push a tu rama: `git push origin feature/mi-feature`
-4. Crear Pull Request
 
 ## 📞 Contacto
 
