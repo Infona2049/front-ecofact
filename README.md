@@ -2,12 +2,32 @@
 
 Sistema de facturación con autenticación por roles desarrollado en Django.
 
-## 🚀 Instalación y Configuración
+## 🚀 Configuración Rápida para Nuevos Miembros (Recomendado)
+
+### Opción A: Script Automático (Más Fácil)
+
+**En Windows:**
+```bash
+git clone https://github.com/Infona2049/front-ecofact.git
+cd front-ecofact
+setup.bat
+```
+
+**En Linux/Mac:**
+```bash
+git clone https://github.com/Infona2049/front-ecofact.git
+cd front-ecofact
+chmod +x setup.sh
+./setup.sh
+```
+
+### Opción B: Configuración Manual
+
+## 🚀 Instalación y Configuración para Nuevos Miembros del Equipo
 
 ### Requisitos previos
 - Python 3.11 o superior
 - Git
-- PostgreSQL (opcional, recomendado para equipos)
 
 ### 1. Clonar el repositorio
 ```bash
@@ -37,34 +57,33 @@ pip install -r requirements.txt
 ```
 
 ### 5. Configurar variables de entorno
-Copia el archivo de ejemplo y configúralo:
 ```bash
 copy .env.example .env
 ```
 
 **✅ CONFIGURACIÓN ACTUAL: Base de datos Neon (en la nube)**
-El proyecto ya está configurado para usar Neon. Todos los miembros del equipo 
-pueden usar las mismas credenciales sin cambios adicionales.
+El proyecto ya está configurado para usar Neon. El archivo `.env.example` 
+contiene las credenciales correctas de la base de datos compartida.
 
-**Para desarrollo individual (opcional):**
-```
-USE_POSTGRESQL=False
-```
-
-### 6. Configurar base de datos
+### 6. Ejecutar migraciones (solo primera vez)
 ```bash
 python manage.py migrate
 ```
 
-### 7. Crear usuarios de prueba
+### 7. Crear superusuario para panel admin (opcional)
 ```bash
-python manage.py create_test_users
+python manage.py create_superuser
 ```
+Esto te permitirá acceder a http://localhost:8001/admin/ para gestionar usuarios.
 
 ### 8. Ejecutar el servidor
 ```bash
 python manage.py runserver 8001
 ```
+
+### 9. ¡Listo! Acceder a la aplicación
+- **Aplicación principal:** http://localhost:8001/
+- **Panel de administración:** http://localhost:8001/admin/
 
 ## 🔗 Configuración para Equipos
 
