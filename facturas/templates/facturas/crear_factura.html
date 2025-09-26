@@ -5,9 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Crear factura</title>
-  <link rel="stylesheet" href="{% static 'core/css/crear_factura.css' %}" />
+  <link rel="stylesheet" href="{% static 'facturas/css/crear_factura.css' %}" />
 </head>
 <body>
+
+    <!-- Aseguramos que el cookie csrftoken exista -->
+    <form style="display:none;">{% csrf_token %}</form>
+
 
     <!-- Barra superior -->
     <div class="top-bar">
@@ -175,7 +179,8 @@
           <option value="transferencia">Transferencia</option>
         </select>
       </div>
-      <button class="btn-siguiente">SIGUIENTE</button>
+      <!-- Aqui ponemos el id que el JS espera -->
+      <button type="button" class="btn-siguiente" id="btnGenerarFactura">GENERAR FACTURA</button>
     </div>
   </div>
   
@@ -183,17 +188,17 @@
     <footer>
         <div class="footer-bar"> 
             <div class="footer-item">
-                <img src="{% static 'core/img/mensaje.png' %}" alt="Ubicación">
+                <img src="{% static 'img/mensaje.png' %}" alt="Ubicación">
                 Ecofactproyect@gmail.com
             </div>
             <div class="footer-item">
-                <img src="{% static 'core/img/llamada-telefonica.png' %}" alt="Teléfono"> 
+                <img src="{% static 'img/llamada-telefonica.png' %}" alt="Teléfono"> 
                 333-333-333
             </div>
         </div>
         <div class="footer-bottom">@2025-ECOFACT</div> 
     </footer>
 
-  <script src="{% static 'core/js/crear_factura.js' %}"></script>
+  <script src="{% static 'facturas/js/crear_factura.js' %}"></script>
 </body>
 </html>

@@ -22,7 +22,7 @@ urlpatterns = [
     path('acerca_nosotros/', views.acerca_nosotros_view, name='acerca_nosotros'),
     path('productos/', include('productos.urls')),  
     path('historial_factura/', views.historial_factura_view, name='historial_factura'),
-    path('crear_factura/', views.crear_factura_view, name='crear_factura'),
+    path("facturas/", include("facturas.urls")),
     path('olvido_contraseña/', views.olvido_contraseña_view, name='olvido_contraseña'),
     path('registro/', views.registro_view, name='registro'),
     path('visualizacion_admin/', views.visualizacion_admin_view, name='visualizacion_admin'),

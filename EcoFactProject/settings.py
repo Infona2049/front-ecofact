@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',    # Archivos estáticos (CSS, JS)
     'core',                         # Tu app principal donde están los modelos y lógica
     'productos',                    # App para gestión de productos
+    'facturas',                     #App para gention de facturas
 ]
 
 # Middleware: capas que procesan las peticiones y respuestas
@@ -89,10 +90,10 @@ if USE_POSTGRESQL:
             'HOST': config('DB_HOST', default='localhost'),
             'PORT': config('DB_PORT', default='5432'),
             'OPTIONS': {
-                'client_encoding': 'UTF8',
+                'sslmode': 'require', #asegura que la conexión con tu base de datos Neon sea segura y encriptada, pero no valida contra qué servidor te conectas
             },
-        }
-    }
+     }
+}
 else:
     # SQLite como fallback para desarrollo
     DATABASES = {
@@ -156,3 +157,12 @@ AUTH_USER_MODEL = 'core.Usuario'
 #    MEDIA_ROOT es la ruta absoluta en el sistema donde se guardan los archivos subidos.
 #    Recuerda que en desarrollo debes configurar urls.py para servir estos archivos.
     
+#CONFIGURACIÓN MAILTRAP
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "sandbox.smtp.mailtrap.io"
+EMAIL_HOST_USER = "37784d5fd7e4f7"
+EMAIL_HOST_PASSWORD = "d1db56fe8a2834"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = "facturacion@ecofact.com"
