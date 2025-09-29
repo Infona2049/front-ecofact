@@ -4,7 +4,6 @@ from .models import Factura
 
 # Register your models here.
 
-
 @admin.register(Factura)
 class FacturaAdmin(admin.ModelAdmin):
     list_display = (
