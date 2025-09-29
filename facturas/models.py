@@ -11,9 +11,8 @@ class Factura(models.Model):
     telefono = models.CharField(max_length=20, blank=True, null=True)
     direccion = models.CharField(max_length=255, blank=True, null=True)
     estado = models.CharField(max_length=30, default="Pendiente")
-    # ✅ Agregar este campo
+    # Agregar este campo
     fecha = models.DateField(default=date.today)
-
     fecha_factura = models.DateField(default=date.today)
     metodo_pago_factura = models.CharField(max_length=15, default="Efectivo")
     cufe_factura = models.CharField(max_length=255, unique=True, default="TEMP")
@@ -24,3 +23,19 @@ class Factura(models.Model):
 
     class Meta:
         db_table = "facturas_factura"
+        app_label = "facturas"  # fuerza a que se registre bajo facturas
+
+
+#EN ESTA PARTE SE SIGUE TRABAJANDO YA QUE SE NECESITA MODIFICAR LA BASE DE DATOS
+
+class DetalleFactura(models.Model):
+    factura = models.ForeignKey(Factura, related_name="detalles", on_delete=models.CASCADE)
+    producto = models.CharField(max_length=200)
+    cantidad = models.IntegerField()
+    precio = models.DecimalField(max_digits=12, decimal_places=2)
+    iva = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"{self.producto} (x{self.cantidad}) - Factura {self.factura.id}"
+

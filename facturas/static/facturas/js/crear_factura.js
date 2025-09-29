@@ -4,7 +4,7 @@ let subtotalGeneral = 0;
 let ivaGeneral = 0;
 let totalGeneral = 0;
 
-// --- Datos de productos (igual que antes) ---
+// --- Datos de productos  ---
 const PRODUCTOS = {
   moviles: [
     "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max",
@@ -64,7 +64,7 @@ function mostrarOcultarContenedores(categoria) {
   }
 }
 
-// --- Dropdown usuario (si lo usas) ---
+// --- Dropdown usuario  ---
 function inicializarDropdown() {
   const dropdownToggle = document.querySelector(".usuario");
   const dropdownMenu = document.querySelector(".dropdown-usuario");

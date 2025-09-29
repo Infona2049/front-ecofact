@@ -164,6 +164,7 @@ header {
 }
 
 /* TABLA */
+
 .tabla-facturas {
   width: 100%;
   border-collapse: collapse;
@@ -232,6 +233,7 @@ footer {
 }
 
 /* RESPONSIVE MÍNIMO */
+
 @media (max-width: 768px) {
   .filtros-linea {
     flex-direction: column;
@@ -305,4 +307,162 @@ a img {
   border: none;
   outline: none;
   display: inline-block;
+}
+
+/* TABLA
+   =========================================
+   Ajuste final para alinear encabezados y filas
+   ========================================= */
+.cuadro-tabla {
+  background: white;
+  padding: 20px;
+  width: 95%;
+  max-width: 1200px;
+  margin: 20px auto 80px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  overflow-x: auto; /* Scroll horizontal en móviles */
+}
+
+/* Importante: NO usar display:block ni en la tabla ni en thead/tbody */
+/* Se eliminaron las reglas viejas que rompían la alineación */
+
+.tabla-facturas {
+  width: 100%;
+  border-collapse: collapse;    /* Bordes unidos para alinear */
+  table-layout: fixed;          /* Columnas con ancho fijo */
+  text-align: center;
+}
+
+.tabla-facturas th,
+.tabla-facturas td {
+  padding: 10px;
+  border: 1px solid #999;
+  text-align: center;
+  vertical-align: middle;
+  word-wrap: break-word;
+}
+
+.tabla-facturas th {
+  background-color: #d9e6f2;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Ancho sugerido por columna */
+.tabla-facturas th:nth-child(1),
+.tabla-facturas td:nth-child(1) { width: 15%; }
+.tabla-facturas th:nth-child(2),
+.tabla-facturas td:nth-child(2) { width: 20%; }
+.tabla-facturas th:nth-child(3),
+.tabla-facturas td:nth-child(3) { width: 15%; }
+.tabla-facturas th:nth-child(4),
+.tabla-facturas td:nth-child(4) { width: 15%; }
+.tabla-facturas th:nth-child(5),
+.tabla-facturas td:nth-child(5) { width: 10%; }
+.tabla-facturas th:nth-child(6),
+.tabla-facturas td:nth-child(6) { width: 10%; }
+.tabla-facturas th:nth-child(7),
+.tabla-facturas td:nth-child(7) { width: 20%; }
+
+/* RESPONSIVE
+   Mantener la tabla alineada con scroll horizontal en pantallas pequeñas
+*/
+@media (max-width: 768px) {
+  .cuadro-tabla {
+    overflow-x: auto;
+  }
+
+  .tabla-facturas {
+    width: max-content;   /* Ajusta el ancho al contenido para permitir scroll */
+    min-width: 100%;
+  }
+
+  .tabla-facturas th,
+  .tabla-facturas td {
+    font-size: 13px;
+    padding: 8px;
+  }
+}
+
+/* FOOTER */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  margin-top: auto;
+}
+
+.footer-bar {
+  background-color: #003f87;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(8px, 2vw, 6px) clamp(10px, 15vw, 120px);
+  font-size: clamp(11px, 2.5vw, 14px);
+}
+
+.footer-item {
+  display: flex;
+  align-items: center; 
+  gap: clamp(4px, 1vw, 8px);
+}
+
+.footer-item img {
+  width: clamp(14px, 3vw, 18px);
+  height: clamp(14px, 3vw, 18px);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: clamp(4px, 2vw, 10px);
+  background-color: white;
+  font-size: clamp(11px, 2.5vw, 14px);
+}
+
+/* Enlaces sin decoración */
+a {
+  text-decoration: none;
+}
+
+a img {
+  border: none;
+  outline: none;
+  display: inline-block;
+}
+
+
+/* ===========================
+   PAGINACIÓN
+   =========================== */
+.paginacion {
+  margin: 15px 0;
+  text-align: center;
+}
+
+.paginacion span,
+.paginacion a {
+  display: inline-block;
+  margin: 0 5px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: #003f87;
+  background-color: #e6eef8;
+  transition: background 0.3s;
+}
+
+.paginacion a:hover {
+  background-color: #003f87;
+  color: white;
+}
+
+.paginacion .current {
+  background-color: #003f87;
+  color: white;
 }
