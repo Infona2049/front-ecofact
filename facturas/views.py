@@ -11,47 +11,34 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 #----------------------------------------------------------------------------------------
-
 def crear_factura(request):
     if request.method == "POST":
         data = json.loads(request.body)
 
         try:
-            # 1. Crear la factura principal
+            # 1. Guardamos la factura con un CUFE temporal
             factura = Factura.objects.create(
-                fecha=date.today(),
+                fecha=date.today(),  # asegura que nunca sea NULL
                 fecha_factura=date.today(),
-                metodo_pago_factura=data.get("metodo_pago_factura", "Efectivo"),
-                cufe_factura="TEMP",
+                metodo_pago_factura=data.get("metodo_pago_factura", "Efectivo",),
+                cufe_factura="TEMP",   # aquí ya no se llama enviar_a_intermediario(None)
                 sutotal_factura=data.get("subtotal", 0),
                 iva_total_factura=data.get("iva", 0),
                 total_factura=data.get("total", 0),
-                cliente_id=data.get("cliente_id", 1),
-                nombre_receptor=data.get("nombre_receptor", ""),
-                correo_cliente=data.get("correo_cliente", ""),
-                telefono=data.get("telefono", ""),
-                direccion=data.get("direccion", "")
+                cliente_id=data.get("cliente_id", 1)
+                
             )
 
-            # 2. Crear detalles de productos
-            items = data.get("items", [])
-            for item in items:
-                DetalleFactura.objects.create(
-                    factura=factura,
-                    producto=item.get("producto", ""),
-                    cantidad=item.get("cantidad", 0),
-                    precio=item.get("precio", 0),
-                    iva=item.get("iva", 0),
-                    total=item.get("total", 0),
-                )
-
-            # 3. Obtener CUFE real
+        
+            # 2. Ahora sí, llamamos al intermediario con la factura real
             cufe = enviar_a_intermediario(factura)
+
+            # 3. Guardamos el CUFE definitivo
             factura.cufe_factura = cufe
             factura.save()
 
-            # 4. Enviar correo (si tiene email)
-            if factura.correo_cliente:
+            if hasattr(factura, "correo_cliente") and factura.correo_cliente: #agregado 25/09/2025
+
                 send_mail(
                     subject=f"Factura #{factura.id} - EcoFact",
                     message=f"Gracias por su compra.\nTotal: {factura.total_factura}\nCUFE: {factura.cufe_factura}",
@@ -59,10 +46,11 @@ def crear_factura(request):
                     recipient_list=[factura.correo_cliente],
                     fail_silently=False,
                 )
+            #agregado 25/09/2025
 
             return JsonResponse({
                 "status": "ok",
-                "id_factura": factura.id,
+                "id_factura": factura.id,   # revisa si en tu modelo es id_factura o id
                 "cufe": factura.cufe_factura,
                 "total": factura.total_factura
             })
@@ -73,6 +61,7 @@ def crear_factura(request):
             return JsonResponse({"status": "error", "message": str(e)}, status=500)
 
     return render(request, "facturas/crear_factura.html")
+
 
 def factura_exitosa(request):
     return render(request, "facturas/factura_exitosa.html")

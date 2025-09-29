@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 from productos.models import Producto
+from facturas.models import Factura
 
 # Opciones para ENUM
 TIPO_DOCUMENTO_CHOICES = [
@@ -56,7 +57,7 @@ class Usuario(AbstractUser):
     USERNAME_FIELD = 'correo_electronico_usuario'
     REQUIRED_FIELDS = ['username', 'nombre_usuario', 'apellido_usuario', 'rol_usuario']
 
-    def __str__(self):
+    def _str_(self):
         return self.correo_electronico_usuario
 
 class Empresa(models.Model):
@@ -70,35 +71,24 @@ class Empresa(models.Model):
     representante_legal = models.CharField(max_length=100)
     fecha_creacion_empresa = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
+    def _str_(self):
         return self.nombre_empresa
 
 
-class Factura(models.Model):
-    id_factura = models.AutoField(primary_key=True)
-    fecha_factura = models.DateField()
-    cliente = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    metodo_pago_factura = models.CharField(max_length=15, choices=METODO_PAGO_CHOICES)
-    cufe_factura = models.CharField(max_length=255, unique=True)
-    sutotal_factura = models.DecimalField(max_digits=10, decimal_places=2)
-    iva_total_factura = models.DecimalField(max_digits=10, decimal_places=2)
-    total_factura = models.DecimalField(max_digits=10, decimal_places=2)
-
-    def __str__(self):
-        return f"Factura {self.id_factura} - Cliente: {self.cliente}"
 
 class DetalleFactura(models.Model):
     id_detalle_factura = models.AutoField(primary_key=True)
-    factura = models.ForeignKey(Factura, on_delete=models.CASCADE)
+    factura = models.ForeignKey(Factura, on_delete=models.CASCADE)  
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad_detalle_factura = models.IntegerField()
     precio_unitario_detalle_factura = models.DecimalField(max_digits=10, decimal_places=2)
     subtotal_detalle_factura = models.DecimalField(max_digits=10, decimal_places=2)
     iva_detalle_factura = models.DecimalField(max_digits=10, decimal_places=2)
     total_detalle_factura = models.DecimalField(max_digits=10, decimal_places=2)
+  
+    def _str_(self):
+        return f"Detalle {self.id_detalle_factura} - Factura {self.factura.id}"
 
-    def __str__(self):
-        return f"Detalle {self.id_detalle_factura} - Factura {self.factura.id_factura}"
 
 class HistorialFactura(models.Model):
     id_historial_factura = models.AutoField(primary_key=True)
@@ -108,5 +98,5 @@ class HistorialFactura(models.Model):
     evento_historial_factura = models.CharField(max_length=10, choices=EVENTO_HISTORIAL_CHOICES)
     observacion_historial_factura = models.TextField(blank=True, null=True)
 
-    def __str__(self):
+    def _str_(self):
         return f"Historial {self.id_historial_factura} - Factura {self.factura.id_factura}"

@@ -1,17 +1,17 @@
+#es el modelo de la base de datos para llamar los campos en el formulario 
 from django.db import models
 from datetime import date
 
-class Factura(models.Model):
+class Factura(models.Model): 
     id = models.BigAutoField(primary_key=True)
-    nombre_emisor = models.CharField(max_length=255)
-    nit_emisor = models.CharField(max_length=50)
+    nombre_emisor = models.CharField(max_length=255, default= "Apple S.A.S")
+    nit_emisor = models.CharField(max_length=50, default = "4587128-141")
     nombre_receptor = models.CharField(max_length=255)
     nit_receptor = models.CharField(max_length=50)
     correo_cliente = models.EmailField()
     telefono = models.CharField(max_length=20, blank=True, null=True)
     direccion = models.CharField(max_length=255, blank=True, null=True)
     estado = models.CharField(max_length=30, default="Pendiente")
-    # Agregar este campo
     fecha = models.DateField(default=date.today)
     fecha_factura = models.DateField(default=date.today)
     metodo_pago_factura = models.CharField(max_length=15, default="Efectivo")
@@ -23,7 +23,6 @@ class Factura(models.Model):
 
     class Meta:
         db_table = "facturas_factura"
-        app_label = "facturas"  # fuerza a que se registre bajo facturas
 
 
 #EN ESTA PARTE SE SIGUE TRABAJANDO YA QUE SE NECESITA MODIFICAR LA BASE DE DATOS

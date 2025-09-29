@@ -42,22 +42,7 @@ class EmpresaAdmin(admin.ModelAdmin):
     search_fields = ('nombre_empresa', 'nit_empresa', 'representante_legal')
     ordering = ('id_empresa',)
 
-@admin.register(Factura)
-class FacturaAdmin(admin.ModelAdmin):
-    list_display = (
-        'id_factura',
-        'fecha_factura',
-        'cliente',
-        'metodo_pago_factura',
-        'cufe_factura',
-        'sutotal_factura',
-        'iva_total_factura',
-        'total_factura',
-    )
-    list_filter = ('fecha_factura', 'metodo_pago_factura')
-    search_fields = ('cliente__nombre_usuario', 'cliente__apellido_usuario', 'cufe_factura')
-    date_hierarchy = 'fecha_factura'
-    ordering = ('-fecha_factura',)
+
 
 @admin.register(DetalleFactura)
 class DetalleFacturaAdmin(admin.ModelAdmin):
