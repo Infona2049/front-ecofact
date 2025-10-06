@@ -38,3 +38,4 @@ document.addEventListener("DOMContentLoaded", function () { // evita que se ejec
     console.log(" No encontré el botón .boton-buscar en el DOM");
   }
 });
+

@@ -4,6 +4,51 @@ let subtotalGeneral = 0;
 let ivaGeneral = 0;
 let totalGeneral = 0;
 
+
+
+function agregarProductoATabla() { // Valida los campos para que no queden sin llenar
+  // --- VALIDAR CAMPOS DEL CLIENTE ---
+  const nombreCliente = document.getElementById("nombreCliente")?.value.trim();
+  const correoCliente = document.getElementById("correoCliente")?.value.trim();
+  const telefonoCliente = document.getElementById("telefonoCliente")?.value.trim();
+  const direccionCliente = document.getElementById("direccionCliente")?.value.trim();
+
+  if (!nombreCliente || !correoCliente || !telefonoCliente || !direccionCliente) {
+    alert("Debe completar todos los datos del cliente antes de agregar un producto.");
+    return;
+  }
+
+  // --- VALIDAR CAMPOS DEL PRODUCTO ---
+  const elementos = {
+    categoria: document.getElementById("categoria"),
+    producto: document.getElementById("producto"),
+    almacenamiento: document.getElementById("almacenamiento"),
+    color: document.getElementById("color"),
+    cantidad: document.getElementById("cantidad"),
+    precio: document.getElementById("precio")
+  };
+
+  if (!elementos.categoria || !elementos.producto || !elementos.cantidad || !elementos.precio) {
+    console.error("Faltan elementos del formulario");
+    return;
+  }
+
+  const datos = {
+    categoria: elementos.categoria.value,
+    producto: elementos.producto.value,
+    almacenamiento: elementos.almacenamiento?.value || "",
+    color: elementos.color?.value || "",
+    cantidad: parseInt(elementos.cantidad.value) || 0,
+    precio: parseFloat(elementos.precio.value) || 0
+  };
+
+  if (!datos.categoria || !datos.producto || datos.cantidad <= 0 || datos.precio <= 0) {
+    alert("Por favor complete correctamente todos los datos del producto.");
+    return;
+  }
+
+}
+
 // --- Datos de productos  ---
 const PRODUCTOS = {
   moviles: [
@@ -227,45 +272,60 @@ function construirItemsDesdeTabla() {
 
 // --- Generar factura (envío al backend) ---
 function generarFactura() {
-  const emisor = document.getElementById("nombreCliente")?.value?.trim();
-  const correo = document.getElementById("correoCliente")?.value?.trim();
-  const tablaProductos = document.querySelector("#tablaProductos tbody");
+  const nombreCliente = document.getElementById("nombreCliente")?.value?.trim();
+  const correoCliente = document.getElementById("correoCliente")?.value?.trim();
+  const telefonoCliente = document.getElementById("telefono")?.value?.trim();
+  const direccionCliente = document.getElementById("direccion")?.value?.trim();
+  const metodoPago = document.getElementById("medioPago")?.value;
 
-  if (!emisor || !correo) {
-    alert("Debe llenar los datos del cliente.");
+  if (!nombreCliente || !correoCliente || !telefonoCliente || !direccionCliente) {
+    alert("Debe llenar todos los datos del cliente.");
     return;
   }
 
+  const tablaProductos = document.querySelector("#tablaProductos tbody");
   if (!tablaProductos || tablaProductos.rows.length === 0) {
     alert("Debe agregar al menos un producto.");
     return;
   }
 
-  //revisar estos campos para que no de los diferentes medios de pago e igua que los id de los clientes 
+  if (!metodoPago) {
+    alert("Debe seleccionar un método de pago.");
+    return;
+  }
+
   const items = construirItemsDesdeTabla();
 
-    const data = {
-      metodo_pago_factura: "Efectivo",
-      subtotal: subtotalGeneral,
-      iva: ivaGeneral,
-      total: totalGeneral,
-      cliente_id: 1  // o el id real del cliente
-    };
+  const data = {
+    nombre_receptor: nombreCliente,
+    nit_receptor: document.getElementById("cedulaCliente")?.value || "",
+    correo_cliente: correoCliente,
+    telefono: telefonoCliente,
+    direccion: direccionCliente,
+    metodo_pago_factura: metodoPago,
+    fecha_factura: new Date().toLocaleDateString("en-CA"),// Muestra la fecha exacta asi este antes de media noche seguira mostrando que es 6 no 7
+    estado: "Pendiente",
+    sutotal_factura: subtotalGeneral,
+    iva_total_factura: ivaGeneral,
+    total_factura: totalGeneral,
+    cliente_id: 1,
+    cufe_factura: "TEMP" + Date.now(),
+    productos: items
+  };
 
   fetch("/facturas/crear/", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "X-CSRFToken": getCSRFToken()
-  },
-  body: JSON.stringify(data),
-})
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCSRFToken()
+    },
+    body: JSON.stringify(data)
+  })
   .then(response => response.json())
   .then(result => {
     if (result.status === "ok") {
       consecutivoFactura++;
       alert(`Factura enviada con éxito. CUFE: ${result.cufe}`);
-      // opcional: redirigir a página de éxito
       window.location.href = "/facturas/exitosa/";
     } else {
       alert("Error al generar la factura");
@@ -291,4 +351,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnGenerarFactura) btnGenerarFactura.addEventListener("click", generarFactura);
 
   mostrarOpciones();
+
+  // --- NUEVO: establecer fecha automática ---
+  const fechaInput = document.getElementById("fecha");
+  if (fechaInput) {
+    const hoy = new Date().toISOString().split("T")[0];
+    fechaInput.value = hoy;
+  }
 });

@@ -1,4 +1,3 @@
-#es el modelo de la base de datos para llamar los campos en el formulario 
 from django.db import models
 from datetime import date
 
@@ -12,9 +11,9 @@ class Factura(models.Model):
     telefono = models.CharField(max_length=20, blank=True, null=True)
     direccion = models.CharField(max_length=255, blank=True, null=True)
     estado = models.CharField(max_length=30, default="Pendiente")
-    fecha = models.DateField(default=date.today)
-    fecha_factura = models.DateField(default=date.today)
-    metodo_pago_factura = models.CharField(max_length=15, default="Efectivo")
+    fecha = models.DateField(default=date.today)  # ✅ corregido
+    fecha_factura = models.DateField(default=date.today)  # ✅ corregido
+    metodo_pago_factura = models.CharField(max_length=15)  # ✅ quitado default
     cufe_factura = models.CharField(max_length=255, unique=True, default="TEMP")
     sutotal_factura = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     iva_total_factura = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -24,8 +23,6 @@ class Factura(models.Model):
     class Meta:
         db_table = "facturas_factura"
 
-
-#EN ESTA PARTE SE SIGUE TRABAJANDO YA QUE SE NECESITA MODIFICAR LA BASE DE DATOS
 
 class DetalleFactura(models.Model):
     factura = models.ForeignKey(Factura, related_name="detalles", on_delete=models.CASCADE)
@@ -37,4 +34,3 @@ class DetalleFactura(models.Model):
 
     def __str__(self):
         return f"{self.producto} (x{self.cantidad}) - Factura {self.factura.id}"
-

@@ -76,19 +76,6 @@ class Empresa(models.Model):
 
 
 
-class DetalleFactura(models.Model):
-    id_detalle_factura = models.AutoField(primary_key=True)
-    factura = models.ForeignKey(Factura, on_delete=models.CASCADE)  
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    cantidad_detalle_factura = models.IntegerField()
-    precio_unitario_detalle_factura = models.DecimalField(max_digits=10, decimal_places=2)
-    subtotal_detalle_factura = models.DecimalField(max_digits=10, decimal_places=2)
-    iva_detalle_factura = models.DecimalField(max_digits=10, decimal_places=2)
-    total_detalle_factura = models.DecimalField(max_digits=10, decimal_places=2)
-  
-    def _str_(self):
-        return f"Detalle {self.id_detalle_factura} - Factura {self.factura.id}"
-
 
 class HistorialFactura(models.Model):
     id_historial_factura = models.AutoField(primary_key=True)

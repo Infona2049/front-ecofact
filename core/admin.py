@@ -2,11 +2,12 @@ from django.contrib import admin
 from .models import (
     Usuario,
     Empresa,
-    Factura,
-    DetalleFactura,
     HistorialFactura
 )
+# Se cambió el import del modelo DetalleFactura, ahora se importa desde facturas.models
+from facturas.models import DetalleFactura  
 
+# --- MODELO USUARIO ---
 @admin.register(Usuario)
 class UsuarioAdmin(admin.ModelAdmin):
     list_display = (
@@ -28,6 +29,8 @@ class UsuarioAdmin(admin.ModelAdmin):
     )
     ordering = ('id_usuario',)
 
+
+# --- MODELO EMPRESA ---
 @admin.register(Empresa)
 class EmpresaAdmin(admin.ModelAdmin):
     list_display = (
@@ -43,23 +46,27 @@ class EmpresaAdmin(admin.ModelAdmin):
     ordering = ('id_empresa',)
 
 
-
+# --- MODELO DETALLE FACTURA ---
 @admin.register(DetalleFactura)
 class DetalleFacturaAdmin(admin.ModelAdmin):
+    # Se actualizó list_display para usar los nombres reales de los campos del modelo facturas.DetalleFactura
     list_display = (
-        'id_detalle_factura',
+        'id',             # antes era id_detalle_factura
         'factura',
         'producto',
-        'cantidad_detalle_factura',
-        'precio_unitario_detalle_factura',
-        'subtotal_detalle_factura',
-        'iva_detalle_factura',
-        'total_detalle_factura',
+        'cantidad',       # antes era cantidad_detalle_factura
+        'precio',         # antes era precio_unitario_detalle_factura
+        'iva',            # antes era iva_detalle_factura
+        'total',          # antes era total_detalle_factura
     )
     list_filter = ('producto',)
-    search_fields = ('producto__nombre_producto', 'factura__cufe_factura')
-    ordering = ('id_detalle_factura',)
+    # Se actualizó search_fields para que coincida con los campos actuales
+    search_fields = ('producto', 'factura__cufe_factura')
+    # Se cambió ordering de id_detalle_factura a id
+    ordering = ('id',)
 
+
+# --- MODELO HISTORIAL FACTURA ---
 @admin.register(HistorialFactura)
 class HistorialFacturaAdmin(admin.ModelAdmin):
     list_display = (
