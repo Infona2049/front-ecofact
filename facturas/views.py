@@ -8,10 +8,12 @@ from django.core.paginator import Paginator
 from io import BytesIO
 import json, traceback, os
 
-# NUEVO: para PDF con logos
+# === Librerías adicionales ===
 from django.conf import settings
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
+import qrcode       # Generar códigos QR
+import base64       # Convertir imágenes a texto base64 para mostrar en HTML
 
 # ----------------------------------------------------------------------------------------
 # VISTA: CREAR FACTURA
@@ -31,7 +33,7 @@ def crear_factura(request):
             if not isinstance(data["productos"], list) or len(data["productos"]) == 0:
                 return JsonResponse({"status": "error", "message": "Debe agregar al menos un producto."}, status=400)
 
-            # Crear factura
+            # Crear factura principal
             factura = Factura.objects.create(
                 nombre_receptor=data["nombre_receptor"],
                 nit_receptor=data["nit_receptor"],
@@ -73,11 +75,10 @@ def crear_factura(request):
                     fail_silently=False,
                 )
 
-            # URLs de descarga (para mostrar en frontend)
+            # URLs de descarga
             pdf_url = f"/facturas/pdf/{factura.id}/"
             xml_url = f"/facturas/xml/{factura.id}/"
 
-            # Respuesta exitosa
             return JsonResponse({
                 "status": "ok",
                 "id_factura": factura.id,
@@ -92,9 +93,11 @@ def crear_factura(request):
             traceback.print_exc()
             return JsonResponse({"status": "error", "message": str(e)}, status=500)
 
-    # Si es GET → mostrar formulario
     return render(request, "facturas/crear_factura.html")
 
+
+# ----------------------------------------------------------------------------------------
+# FACTURA EXITOSA
 # ----------------------------------------------------------------------------------------
 def factura_exitosa(request):
     return render(request, "facturas/factura_exitosa.html")
@@ -106,6 +109,7 @@ def factura_exitosa(request):
 def historial_factura(request):
     fecha_inicial = request.GET.get('fecha_inicial')
     fecha_final = request.GET.get('fecha_final')
+
     facturas = Factura.objects.all().order_by('-id')
 
     if fecha_inicial and fecha_final:
@@ -124,20 +128,31 @@ def historial_factura(request):
 
 
 # ----------------------------------------------------------------------------------------
-# VISTA FACTURA EN HTML
+# FACTURA EN HTML (con código QR)
 # ----------------------------------------------------------------------------------------
 def factura_print(request, pk):
     factura = get_object_or_404(Factura, pk=pk)
     detalles = DetalleFactura.objects.filter(factura=factura)
 
+    # === Generar código QR dinámico ===
+    qr_data = f"http://{request.get_host()}/facturas/pdf/{factura.id}/"  # enlace al PDF de la factura
+    qr_img = qrcode.make(qr_data)
+
+    # Convertir el QR en base64 para mostrarlo en HTML
+    buffer = BytesIO()
+    qr_img.save(buffer, format="PNG")
+    qr_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    buffer.close()
+
     return render(request, "facturas/factura_print.html", {
         "factura": factura,
-        "detalles": detalles
+        "detalles": detalles,
+        "qr_base64": qr_base64
     })
 
 
 # ----------------------------------------------------------------------------------------
-# VISTA FACTURA EN PDF (CON LOGOS + DATOS EMPRESA)
+# FACTURA EN PDF (con logos y código QR)
 # ----------------------------------------------------------------------------------------
 def factura_pdf(request, pk):
     factura = get_object_or_404(Factura, pk=pk)
@@ -160,7 +175,7 @@ def factura_pdf(request, pk):
     except:
         pass
 
-    # === DATOS DE LA EMPRESA APPLE PEREIRA ===
+    # === DATOS EMPRESA ===
     y -= 60
     p.setFont("Helvetica-Bold", 11)
     p.drawString(200, y, "APPLE PEREIRA S.A.S")
@@ -171,7 +186,7 @@ def factura_pdf(request, pk):
     p.drawString(200, y - 60, "Correo: contacto@applepereira.com")
     p.drawString(200, y - 75, "Régimen: Común")
 
-    # === ENCABEZADO FACTURA ===
+    # === ENCABEZADO ===
     y -= 100
     p.setFont("Helvetica-Bold", 12)
     p.drawString(230, y, "FACTURA ELECTRÓNICA")
@@ -182,6 +197,19 @@ def factura_pdf(request, pk):
     p.drawString(50, y - 30, f"Cliente: {factura.nombre_receptor}")
     p.drawString(50, y - 45, f"NIT: {factura.nit_receptor}")
     p.drawString(50, y - 60, f"CUFE: {factura.cufe_factura}")
+
+    # === CÓDIGO QR EN EL PDF ===
+    qr_data = (
+        f"Factura N°: {factura.id}\n"
+        f"CUFE: {factura.cufe_factura}\n"
+        f"Total: ${factura.total_factura}\n"
+        f"Fecha: {factura.fecha_factura}"
+    )
+    qr_img = qrcode.make(qr_data)
+    qr_buffer = BytesIO()
+    qr_img.save(qr_buffer, format="PNG")
+    qr_buffer.seek(0)
+    p.drawImage(ImageReader(qr_buffer), 450, 600, width=100, height=100)
 
     # === DETALLES ===
     y -= 100
@@ -208,30 +236,31 @@ def factura_pdf(request, pk):
     p.drawString(370, y, "TOTAL:")
     p.drawString(450, y, f"${factura.total_factura}")
 
-    # === PIE ===
+    # === PIE DE PÁGINA ===
     y -= 40
     p.setFont("Helvetica-Oblique", 9)
     p.drawString(50, y, "Gracias por confiar en EcoFact.")
     p.drawString(50, y - 15, "Factura generada electrónicamente - No requiere firma.")
 
+    # Finalizar
     p.showPage()
     p.save()
-
     buffer.seek(0)
+
     response = HttpResponse(buffer, content_type="application/pdf")
-    response["Content-Disposition"] = f'inline; filename="Factura_{factura.id}.pdf"'
+    response["Content-Disposition"] = f'inline; filename=\"Factura_{factura.id}.pdf\"'
     return response
 
 
 # ----------------------------------------------------------------------------------------
-# VISTA FACTURA EN XML
+# FACTURA EN XML
 # ----------------------------------------------------------------------------------------
 def factura_xml(request, pk):
     factura = get_object_or_404(Factura, pk=pk)
     detalles = DetalleFactura.objects.filter(factura=factura)
 
     response = HttpResponse(content_type="application/xml")
-    response["Content-Disposition"] = f'attachment; filename="Factura_{factura.id}.xml"'
+    response["Content-Disposition"] = f'attachment; filename=\"Factura_{factura.id}.xml\"'
 
     response.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     response.write("<factura>\n")
