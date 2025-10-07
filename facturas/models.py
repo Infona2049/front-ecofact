@@ -11,9 +11,9 @@ class Factura(models.Model):
     telefono = models.CharField(max_length=20, blank=True, null=True)
     direccion = models.CharField(max_length=255, blank=True, null=True)
     estado = models.CharField(max_length=30, default="Pendiente")
-    fecha = models.DateField(default=date.today)  # ✅ corregido
-    fecha_factura = models.DateField(default=date.today)  # ✅ corregido
-    metodo_pago_factura = models.CharField(max_length=15)  # ✅ quitado default
+    fecha = models.DateField(default=date.today)  # corregido
+    fecha_factura = models.DateField(default=date.today)  # corregido
+    metodo_pago_factura = models.CharField(max_length=15)  # quitado default
     cufe_factura = models.CharField(max_length=255, unique=True, default="TEMP")
     sutotal_factura = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     iva_total_factura = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -34,3 +34,4 @@ class DetalleFactura(models.Model):
 
     def __str__(self):
         return f"{self.producto} (x{self.cantidad}) - Factura {self.factura.id}"
+

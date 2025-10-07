@@ -1,32 +1,37 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from .models import Factura, DetalleFactura
 from .services import enviar_a_intermediario
 from django.core.mail import send_mail
-from datetime import date, datetime, timedelta
-import json, traceback
-#////////////////////////////////////////////////////////////////////////////////////////////
-from django.http import HttpResponse
-#from reportlab.pdfgen import canvas
-from io import BytesIO
+from datetime import date
 from django.core.paginator import Paginator
+from io import BytesIO
+import json, traceback, os
+
+# NUEVO: para PDF con logos
+from django.conf import settings
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+
+# ----------------------------------------------------------------------------------------
+# VISTA: CREAR FACTURA
 # ----------------------------------------------------------------------------------------
 def crear_factura(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
 
-            #  Validar que vengan todos los campos
+            # Validar campos obligatorios
             campos_obligatorios = ["nombre_receptor", "nit_receptor", "correo_cliente", "productos"]
             for campo in campos_obligatorios:
                 if campo not in data or not data[campo]:
                     return JsonResponse({"status": "error", "message": f"El campo '{campo}' es obligatorio."}, status=400)
 
-            # Validar que haya al menos un producto
+            # Validar que haya productos
             if not isinstance(data["productos"], list) or len(data["productos"]) == 0:
                 return JsonResponse({"status": "error", "message": "Debe agregar al menos un producto."}, status=400)
 
-            #  Crear factura con datos iniciales
+            # Crear factura
             factura = Factura.objects.create(
                 nombre_receptor=data["nombre_receptor"],
                 nit_receptor=data["nit_receptor"],
@@ -42,23 +47,23 @@ def crear_factura(request):
                 cufe_factura="TEMP"
             )
 
-            # Guardar detalle de factura
+            # Guardar detalle de productos
             for prod in data["productos"]:
                 DetalleFactura.objects.create(
                     factura=factura,
-                    producto=prod.get("nombre", ""),
+                    producto=prod.get("producto", ""),
                     cantidad=prod.get("cantidad", 0),
                     precio=prod.get("precio", 0),
                     iva=prod.get("iva", 0),
                     total=prod.get("total", 0)
                 )
 
-            #  Generar CUFE real
+            # Generar CUFE real
             cufe = enviar_a_intermediario(factura)
             factura.cufe_factura = cufe
             factura.save()
 
-            # 5 Enviar correo (si hay correo del cliente)
+            # Enviar correo al cliente
             if factura.correo_cliente:
                 send_mail(
                     subject=f"Factura #{factura.id} - EcoFact",
@@ -68,12 +73,18 @@ def crear_factura(request):
                     fail_silently=False,
                 )
 
-            #  Respuesta exitosa
+            # URLs de descarga (para mostrar en frontend)
+            pdf_url = f"/facturas/pdf/{factura.id}/"
+            xml_url = f"/facturas/xml/{factura.id}/"
+
+            # Respuesta exitosa
             return JsonResponse({
                 "status": "ok",
                 "id_factura": factura.id,
                 "cufe": factura.cufe_factura,
-                "total": factura.total_factura
+                "total": factura.total_factura,
+                "pdf_url": pdf_url,
+                "xml_url": xml_url
             })
 
         except Exception as e:
@@ -81,55 +92,40 @@ def crear_factura(request):
             traceback.print_exc()
             return JsonResponse({"status": "error", "message": str(e)}, status=500)
 
-    # Si es GET, renderiza la página normalmente
+    # Si es GET → mostrar formulario
     return render(request, "facturas/crear_factura.html")
 
+# ----------------------------------------------------------------------------------------
 def factura_exitosa(request):
     return render(request, "facturas/factura_exitosa.html")
 
 
-#---------------------------------------------------------------------------------------------
-
-#NUEVO 06/10/2025
-
-
+# ----------------------------------------------------------------------------------------
+# HISTORIAL DE FACTURAS
+# ----------------------------------------------------------------------------------------
 def historial_factura(request):
-    """
-    Vista que muestra el historial de facturas con:
-    - Filtro por fecha
-    - Paginación
-    """
-
-    # --- 1. Capturamos los parámetros GET de las fechas ---
     fecha_inicial = request.GET.get('fecha_inicial')
     fecha_final = request.GET.get('fecha_final')
+    facturas = Factura.objects.all().order_by('-id')
 
-    # --- 2. Traemos todas las facturas ordenadas por fecha más reciente ---
-    facturas = Factura.objects.all().order_by('-fecha_factura')
-
-    # --- 3. Si el usuario seleccionó fechas, filtramos el queryset ---
     if fecha_inicial and fecha_final:
         facturas = facturas.filter(fecha_factura__range=[fecha_inicial, fecha_final])
 
-    # --- 4. Paginamos el resultado: 5 facturas por página ---
     paginator = Paginator(facturas, 5)
-    page_number = request.GET.get('page')  # página actual
-    page_obj = paginator.get_page(page_number)  # página seleccionada
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-    # --- 5. Enviamos a la plantilla la página actual y las fechas para mantener el filtro ---
     context = {
-        'facturas': page_obj,                # ahora 'facturas' es una página, no un queryset completo
-        'fecha_inicial': fecha_inicial,      # para mantener el valor en los campos
+        'facturas': page_obj,
+        'fecha_inicial': fecha_inicial,
         'fecha_final': fecha_final
     }
-
     return render(request, 'facturas/historial_factura.html', context)
 
 
-
-# -----------------------------
-# Vista para ver la factura en HTML (imprimir)
-# -----------------------------
+# ----------------------------------------------------------------------------------------
+# VISTA FACTURA EN HTML
+# ----------------------------------------------------------------------------------------
 def factura_print(request, pk):
     factura = get_object_or_404(Factura, pk=pk)
     detalles = DetalleFactura.objects.filter(factura=factura)
@@ -140,40 +136,83 @@ def factura_print(request, pk):
     })
 
 
-# -----------------------------
-# Vista para generar PDF
-# -----------------------------
+# ----------------------------------------------------------------------------------------
+# VISTA FACTURA EN PDF (CON LOGOS + DATOS EMPRESA)
+# ----------------------------------------------------------------------------------------
 def factura_pdf(request, pk):
     factura = get_object_or_404(Factura, pk=pk)
     detalles = DetalleFactura.objects.filter(factura=factura)
 
     buffer = BytesIO()
     p = canvas.Canvas(buffer)
-    p.setFont("Helvetica", 11)
+    p.setFont("Helvetica", 10)
 
-    # Encabezado
-    p.drawString(100, 800, f"Factura #{factura.id}")
-    p.drawString(100, 780, f"Cliente: {factura.nombre_receptor}")
-    p.drawString(100, 760, f"NIT: {factura.nit_receptor}")
-    p.drawString(100, 740, f"Fecha: {factura.fecha_factura}")
-    p.drawString(100, 720, f"Total: ${factura.total_factura}")
+    # === LOGOS ===
+    ecofact_logo = os.path.join(settings.STATIC_ROOT, "img/logo azul sin fondo.png")
+    empresa_logo = os.path.join(settings.STATIC_ROOT, "img/logo empresa.png")
 
-    # Tabla de productos
-    y = 690
-    p.drawString(100, y, "Producto")
-    p.drawString(250, y, "Cantidad")
-    p.drawString(330, y, "Precio")
-    p.drawString(420, y, "IVA")
-    p.drawString(480, y, "Total")
+    y = 800
+    try:
+        if os.path.exists(ecofact_logo):
+            p.drawImage(ImageReader(ecofact_logo), 50, y - 40, width=80, height=40)
+        if os.path.exists(empresa_logo):
+            p.drawImage(ImageReader(empresa_logo), 450, y - 40, width=80, height=40)
+    except:
+        pass
+
+    # === DATOS DE LA EMPRESA APPLE PEREIRA ===
+    y -= 60
+    p.setFont("Helvetica-Bold", 11)
+    p.drawString(200, y, "APPLE PEREIRA S.A.S")
+    p.setFont("Helvetica", 9)
+    p.drawString(200, y - 15, "NIT: 901.234.567-8")
+    p.drawString(200, y - 30, "Dirección: Cra 10 #20-30, Pereira, Risaralda")
+    p.drawString(200, y - 45, "Teléfono: +57 606 333 4455")
+    p.drawString(200, y - 60, "Correo: contacto@applepereira.com")
+    p.drawString(200, y - 75, "Régimen: Común")
+
+    # === ENCABEZADO FACTURA ===
+    y -= 100
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(230, y, "FACTURA ELECTRÓNICA")
+    y -= 50
+    p.setFont("Helvetica", 10)
+    p.drawString(50, y, f"N° Factura: {factura.id}")
+    p.drawString(50, y - 15, f"Fecha: {factura.fecha_factura}")
+    p.drawString(50, y - 30, f"Cliente: {factura.nombre_receptor}")
+    p.drawString(50, y - 45, f"NIT: {factura.nit_receptor}")
+    p.drawString(50, y - 60, f"CUFE: {factura.cufe_factura}")
+
+    # === DETALLES ===
+    y -= 100
+    p.setFont("Helvetica-Bold", 10)
+    p.drawString(50, y, "Producto")
+    p.drawString(230, y, "Cantidad")
+    p.drawString(300, y, "Precio")
+    p.drawString(370, y, "IVA")
+    p.drawString(450, y, "Total")
 
     y -= 20
+    p.setFont("Helvetica", 9)
     for d in detalles:
-        p.drawString(100, y, d.producto)
-        p.drawString(250, y, str(d.cantidad))
-        p.drawString(330, y, f"${d.precio}")
-        p.drawString(420, y, f"${d.iva}")
-        p.drawString(480, y, f"${d.total}")
-        y -= 20
+        p.drawString(50, y, d.producto)
+        p.drawString(230, y, str(d.cantidad))
+        p.drawString(300, y, f"${d.precio}")
+        p.drawString(370, y, f"${d.iva}")
+        p.drawString(450, y, f"${d.total}")
+        y -= 15
+
+    # === TOTAL ===
+    y -= 20
+    p.setFont("Helvetica-Bold", 10)
+    p.drawString(370, y, "TOTAL:")
+    p.drawString(450, y, f"${factura.total_factura}")
+
+    # === PIE ===
+    y -= 40
+    p.setFont("Helvetica-Oblique", 9)
+    p.drawString(50, y, "Gracias por confiar en EcoFact.")
+    p.drawString(50, y - 15, "Factura generada electrónicamente - No requiere firma.")
 
     p.showPage()
     p.save()
@@ -184,9 +223,9 @@ def factura_pdf(request, pk):
     return response
 
 
-# -----------------------------
-# Vista para generar XML (opcional)
-# -----------------------------
+# ----------------------------------------------------------------------------------------
+# VISTA FACTURA EN XML
+# ----------------------------------------------------------------------------------------
 def factura_xml(request, pk):
     factura = get_object_or_404(Factura, pk=pk)
     detalles = DetalleFactura.objects.filter(factura=factura)

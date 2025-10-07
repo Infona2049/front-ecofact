@@ -49,21 +49,19 @@ class EmpresaAdmin(admin.ModelAdmin):
 # --- MODELO DETALLE FACTURA ---
 @admin.register(DetalleFactura)
 class DetalleFacturaAdmin(admin.ModelAdmin):
-    # Se actualizó list_display para usar los nombres reales de los campos del modelo facturas.DetalleFactura
     list_display = (
-        'id',             # antes era id_detalle_factura
-        'factura',
-        'producto',
-        'cantidad',       # antes era cantidad_detalle_factura
-        'precio',         # antes era precio_unitario_detalle_factura
-        'iva',            # antes era iva_detalle_factura
-        'total',          # antes era total_detalle_factura
-    )
-    list_filter = ('producto',)
-    # Se actualizó search_fields para que coincida con los campos actuales
-    search_fields = ('producto', 'factura__cufe_factura')
-    # Se cambió ordering de id_detalle_factura a id
-    ordering = ('id',)
+       'id',
+       'factura',
+       'producto',
+       'cantidad',
+        'precio',
+       'iva',
+      'total',
+)
+list_filter = ('producto',)
+search_fields = ('producto', 'factura__cufe_factura')
+ordering = ('id',)
+
 
 
 # --- MODELO HISTORIAL FACTURA ---
