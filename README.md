@@ -2,207 +2,198 @@
 
 Sistema de facturación con autenticación por roles desarrollado en Django.
 
-## 🚀 Configuración Rápida para Nuevos Miembros (Recomendado)
+## 🚀 Configuración Rápida para Nuevos Miembros del Equipo
 
-### Opción A: Script Automático (Más Fácil)
-
-**En Windows:**
-```bash
-git clone https://github.com/Infona2049/front-ecofact.git
-cd front-ecofact
-setup.bat
-```
-
-
-### Opción B: Configuración Manual
-
-## 🚀 Instalación y Configuración para Nuevos Miembros del Equipo
-
-### Requisitos previos
-- Python 3.11 o superior
-- Git
-
-### 1. Clonar el repositorio
-```bash
-git clone https://github.com/Infona2049/front-ecofact.git
-cd front-ecofact
-```
-
-### 2. Crear entorno virtual
-```bash
-python -m venv venv
-```
-
-### 3. Activar entorno virtual
-**En Windows:**
-```bash
-venv\Scripts\activate
-```
-
-**En Linux/Mac:**
-```bash
-source venv/bin/activate
-```
-
-### 4. Instalar dependencias
-```bash
-pip install -r requirements.txt
-```
-
-### 5. Configurar variables de entorno
-```bash
-copy .env.example .env
-```
-
-**✅ CONFIGURACIÓN ACTUAL: Base de datos Neon (en la nube)**
-El proyecto ya está configurado para usar Neon. El archivo `.env.example` 
-contiene las credenciales correctas de la base de datos compartida.
-
-### 6. Ejecutar migraciones (solo primera vez)
-```bash
-python manage.py migrate
-```
-
-### 7. Crear superusuario para panel admin (opcional)
-```bash
-python manage.py create_superuser
-```
-Esto te permitirá acceder a http://localhost:8001/admin/ para gestionar usuarios.
-
-### 8. Ejecutar el servidor
-```bash
-python manage.py runserver 8001
-```
-
-### 9. ¡Listo! Acceder a la aplicación
-- **Aplicación principal:** http://localhost:8001/
-- **Panel de administración:** http://localhost:8001/admin/
-
-## 🔗 Configuración para Equipos
-
-### ✅ **Configuración Actual: Base de Datos en la Nube (Neon)**
-
-**¡El proyecto ya está configurado para trabajo en equipo!**
-
-- 🌐 **Base de datos compartida:** Todos acceden a la misma BD en Neon
-- 🔄 **Datos sincronizados:** Cambios en tiempo real para todo el equipo  
-- 🚀 **Sin configuración adicional:** Solo hacer `git pull` y usar
-
-### 🔧 **Configuración para nuevos miembros:**
+### ⚡ Pasos Rápidos (5 minutos)
 
 ```bash
-# 1. Clonar repositorio
+# 1. Clonar el repositorio
 git clone https://github.com/Infona2049/front-ecofact.git
 cd front-ecofact
 
-# 2. Crear entorno virtual  
+# 2. Crear y activar entorno virtual
 python -m venv venv
 venv\Scripts\activate
 
 # 3. Instalar dependencias
 pip install -r requirements.txt
 
-# 4. Copiar configuración (ya tiene credenciales de Neon)
-copy .env.example .env
+# 4. Aplicar migraciones
+python manage.py migrate
 
-# 5. ¡Listo! La BD ya está configurada
-python manage.py runserver 8001
+# 5. Crear usuarios de prueba (¡IMPORTANTE!)
+python manage.py setup_test_users
+
+# 6. Ejecutar servidor
+python manage.py runserver
 ```
 
-### 👥 **Usuarios disponibles para todos:**
-- **Admin:** admin@ecofact.com / admin123
-- **Vendedor:** vendedor@ecofact.com / vendedor123  
-- **Cliente:** cliente@ecofact.com / cliente123
+### 🔑 Usuarios de Prueba Disponibles
 
-### 📊 **Ventajas de la configuración actual:**
-- ✅ **Base de datos compartida en la nube**
-- ✅ **Sin conflictos entre miembros del equipo**
-- ✅ **Acceso desde cualquier ubicación**
-- ✅ **Backup automático en Neon**
-- ✅ **512MB gratuitos (más que suficiente)**
-
-## 🔐 Usuarios de Prueba
-
-| Rol | Email | Contraseña | URL de acceso |
-|-----|-------|------------|---------------|
-| **Superadmin** | superadmin@ecofact.com | superadmin123 | `/admin/` (Django Admin) |
-| **Administrador** | admin@ecofact.com | admin123 | `/admin-dashboard/` |
+| Rol | Email | Contraseña | Dashboard |
+|-----|-------|------------|-----------|
+| **Admin** | admin@ecofact.com | admin123 | `/admin-dashboard/` |
 | **Vendedor** | vendedor@ecofact.com | vendedor123 | `/vendedor-dashboard/` |
 | **Cliente** | cliente@ecofact.com | cliente123 | `/cliente-dashboard/` |
 
-> **Nota:** Los usuarios se crean automáticamente con los scripts de instalación.
+## � Sistema de Autenticación Implementado
 
-## 🌐 URLs Principales
+### ✅ Características de Seguridad
+- **Límite de 3 intentos de login** por usuario
+- **Bloqueo automático por 10 minutos** después de 3 intentos fallidos
+- **Redirección automática por rol** después del login
+- **Protección de URLs** por tipo de usuario
+- **Middleware de seguridad** para prevenir acceso cruzado
 
-- **Página principal:** `http://127.0.0.1:8001/` (redirige al login)
-- **Login:** `http://127.0.0.1:8001/login/`
-- **Registro:** `http://127.0.0.1:8001/registro/`
-- **Admin Panel:** `http://127.0.0.1:8001/admin/`
+### 🎯 Redirecciones por Rol
+- **Admin** → `/admin-dashboard/` (gestión completa)
+- **Vendedor** → `/vendedor-dashboard/` (productos y facturas)
+- **Cliente** → `/cliente-dashboard/` (visualización)
 
-## 📱 Funcionalidades
+## 🛠️ Comandos Útiles para Desarrolladores
 
-### ✅ Implementadas
-- [x] Sistema de autenticación por email
-- [x] Registro de nuevos usuarios (solo clientes)
-- [x] Login con redirección automática por rol
-- [x] Dashboards específicos por rol
-- [x] Control de acceso por decoradores
-- [x] Gestión de archivos estáticos
-- [x] Base de datos con SQLite
+### Gestión de Usuarios
+```bash
+# Crear usuarios de prueba
+python manage.py setup_test_users
 
-### 🔄 Sistema de Roles
-- **Admin:** Acceso completo al sistema
-- **Vendedor:** Gestión de productos y ventas
-- **Cliente:** Visualización de productos y facturas
+# Desbloquear usuario específico
+python manage.py unlock_user --email admin@ecofact.com
 
-## 🛠️ Estructura del Proyecto
+# Desbloquear todos los usuarios
+python manage.py unlock_user --all
 
-```
-front-ecofact/
-├── core/                   # App principal
-│   ├── models.py          # Modelos de usuario y facturación
-│   ├── views.py           # Vistas de login, registro, dashboards
-│   ├── forms.py           # Formularios de registro
-│   ├── templates/         # Templates HTML
-│   └── static/            # CSS y JS
-├── productos/             # App de productos
-├── static/                # Archivos estáticos globales
-├── EcoFactProject/        # Configuración del proyecto
-├── manage.py
-├── requirements.txt       # Dependencias
-└── README.md             # Este archivo
+# Ver estado de intentos de login
+python manage.py check_login_status
+
+# Ver solo usuarios bloqueados
+python manage.py check_login_status --blocked-only
 ```
 
-## 🐛 Solución de Problemas
+### Gestión de Base de Datos
+```bash
+# Crear migraciones
+python manage.py makemigrations
 
-### Error de puerto ocupado
-Si el puerto 8000 está ocupado, usa otro puerto:
+# Aplicar migraciones
+python manage.py migrate
+
+# Crear superusuario para Django Admin
+python manage.py createsuperuser
+```
+
+### Testing y Verificación
+```bash
+# Verificar sistema completo
+python verificar_sistema_completo.py
+
+# Probar solo sistema de login
+python test_login_system.py
+```
+
+## 🌐 URLs del Sistema
+
+### Públicas (sin login)
+- **Login:** `http://127.0.0.1:8000/login/`
+- **Registro:** `http://127.0.0.1:8000/registro/`
+- **Recuperar contraseña:** `http://127.0.0.1:8000/olvido_contraseña/`
+
+### Admin (solo administradores)
+- **Dashboard Admin:** `http://127.0.0.1:8000/admin-dashboard/`
+- **Panel Django:** `http://127.0.0.1:8000/admin/`
+
+### Vendedor (solo vendedores)
+- **Dashboard Vendedor:** `http://127.0.0.1:8000/vendedor-dashboard/`
+- **Crear Factura:** `http://127.0.0.1:8000/crear_factura/`
+- **Historial:** `http://127.0.0.1:8000/historial_factura/`
+
+### Cliente (solo clientes)
+- **Dashboard Cliente:** `http://127.0.0.1:8000/cliente-dashboard/`
+
+## 🐛 Solución de Problemas Comunes
+
+### ❌ "Credenciales incorrectas" con usuarios conocidos
+**Causa:** Los usuarios de prueba no existen en tu base de datos local.
+**Solución:**
+```bash
+python manage.py setup_test_users
+```
+
+### ❌ "Usuario bloqueado por 10 minutos"
+**Causa:** Demasiados intentos fallidos.
+**Solución:**
+```bash
+python manage.py unlock_user --email admin@ecofact.com
+# o para todos:
+python manage.py unlock_user --all
+```
+
+### ❌ Error de migraciones conflictivas
+```bash
+python manage.py makemigrations --merge
+python manage.py migrate
+```
+
+### ❌ Puerto 8000 ocupado
 ```bash
 python manage.py runserver 8001
 ```
 
-### Error de migraciones
-Si hay problemas con la base de datos:
-```bash
-python manage.py makemigrations
-python manage.py migrate
+## � Estructura del Proyecto
+
+```
+front-ecofact/
+├── core/                              # App principal
+│   ├── models.py                      # Usuario, Empresa, etc.
+│   ├── views.py                       # Login, dashboards, etc.
+│   ├── middleware.py                  # Redirección por roles
+│   ├── management/commands/           # Comandos personalizados
+│   │   ├── setup_test_users.py       # Crear usuarios de prueba
+│   │   ├── unlock_user.py            # Desbloquear usuarios
+│   │   └── check_login_status.py     # Ver estado de bloqueos
+│   ├── templates/core/                # Templates HTML
+│   └── static/core/                   # CSS, JS, imágenes
+├── productos/                         # Gestión de productos
+├── facturas/                          # Gestión de facturas
+├── requirements.txt                   # Dependencias Python
+├── test_login_system.py              # Script de pruebas básicas
+├── verificar_sistema_completo.py     # Script de verificación completa
+└── SISTEMA_AUTENTICACION_IMPLEMENTADO.md  # Documentación técnica
 ```
 
-### Error de archivos estáticos
-Si las imágenes no cargan, verifica que el servidor esté ejecutándose y que las rutas en los templates usen `{% static 'img/nombre-imagen.png' %}`.
+## 🔧 Tecnologías Utilizadas
 
-## 📝 Notas de Desarrollo
+- **Backend:** Django 5.2.4
+- **Base de datos:** SQLite (desarrollo)
+- **Frontend:** HTML5, CSS3, JavaScript (ES6)
+- **Autenticación:** Django Auth + Sistema personalizado
+- **Librerías:** ReportLab, QRCode, Pillow
 
-- **Base de datos:** SQLite (para desarrollo)
-- **Puerto por defecto:** 8001 (evita conflictos)
-- **Archivos de media:** Las imágenes están en `static/img/`
-- **Registro:** Solo permite crear usuarios con rol "Cliente"
+## 📈 Estado del Desarrollo
 
+### ✅ Completado
+- [x] Sistema de autenticación con bloqueo por intentos
+- [x] Redirección automática por roles
+- [x] Protección de URLs
+- [x] Gestión de usuarios por comandos
+- [x] Middleware de seguridad
+- [x] Interface de administración mejorada
 
-## 📞 Contacto
+### 🔄 En Desarrollo
+- [ ] Módulo de reportes avanzados
+- [ ] API REST para aplicación móvil
+- [ ] Integración con sistemas de pago
 
-Si tienes problemas con la instalación o ejecución, contacta al equipo de desarrollo.
+## 📞 Soporte
+
+Si tienes problemas:
+
+1. **Verifica que seguiste todos los pasos** de instalación
+2. **Ejecuta los comandos de verificación** incluidos
+3. **Revisa la documentación técnica** en `SISTEMA_AUTENTICACION_IMPLEMENTADO.md`
+4. **Contacta al equipo de desarrollo**
 
 ---
 **Desarrollado por:** Equipo EcoFact  
-**Última actualización:** Septiembre 2025
+**Última actualización:** Octubre 2025  
+**Sistema de autenticación:** ✅ Implementado y funcionando
