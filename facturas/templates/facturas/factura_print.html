@@ -69,8 +69,8 @@
   </div>
 
   <!-- CUFE + QR -->
-  <p class="cufe"><strong>CUFE:</strong> {{ factura.cufe_factura }}</p>
-  <div class="qr-container">
+  <div class="cufe-qr">
+    <p class="cufe"><strong>CUFE:</strong> {{ factura.cufe_factura }}</p>
     <img src="data:image/png;base64,{{ qr_base64 }}" alt="Código QR de la factura" class="qr-img">
   </div>
 
