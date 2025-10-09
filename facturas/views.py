@@ -1,3 +1,32 @@
+from django.http import JsonResponse
+from productos.models import Producto
+# API: productos por categoría
+def api_productos_por_categoria(request):
+    categoria = request.GET.get('categoria')
+    # Solo productos con stock > 0 en inventario
+    from productos.models import Inventario
+    inventarios = Inventario.objects.filter(producto__categoria_producto=categoria, stock_actual_inventario__gt=0)
+    productos = [
+        {
+            'id': inv.producto.id_producto,
+            'nombre': inv.producto.nombre_producto
+        } for inv in inventarios
+    ]
+    return JsonResponse({'productos': productos})
+
+# API: detalles de producto
+def api_detalle_producto(request):
+    id_producto = request.GET.get('id_producto')
+    try:
+        p = Producto.objects.get(id_producto=id_producto)
+        data = {
+            'color': p.color_producto,
+            'almacenamiento': p.capacidad_producto,
+            'precio': str(p.precio_producto)
+        }
+        return JsonResponse(data)
+    except Producto.DoesNotExist:
+        return JsonResponse({'error': 'Producto no encontrado'}, status=404)
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from .models import Factura, DetalleFactura
