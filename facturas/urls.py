@@ -11,4 +11,7 @@ urlpatterns = [
     path("<int:pk>/pdf/", views.factura_pdf, name="factura_pdf"),
     path("<int:pk>/xml/", views.factura_xml, name="factura_xml"),
 
+    # API endpoints
+    path('api/productos_por_categoria/', views.api_productos_por_categoria, name='api_productos_por_categoria'),
+    path('api/detalle_producto/', views.api_detalle_producto, name='api_detalle_producto'),
 ]

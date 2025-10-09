@@ -49,29 +49,6 @@ function agregarProductoATabla() { // Valida los campos para que no queden sin l
 
 }
 
-// --- Datos de productos  ---
-const PRODUCTOS = {
-  moviles: [
-    "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max",
-    "iPhone 14", "iPhone 14 Pro", "iPhone 14 Pro Max",
-    "iPhone 15", "iPhone 15 Pro", "iPhone 15 Pro Max",
-    "iPhone 16", "iPhone 16 Pro", "iPhone 16 Pro Max"
-  ],
-  cargadores: [
-    "Cargador USB-C 20W",
-    "Cargador MagSafe Duo",
-    "Cargador USB-C 35W doble"
-  ],
-  auriculares: [
-    "AirPods 2.ª gen",
-    "AirPods 3.ª gen",
-    "AirPods 4",
-    "AirPods Pro 2.ª gen",
-    "AirPods Max",
-    "EarPods con USB-C",
-    "EarPods con Lightning"
-  ]
-};
 
 // --- Utilidades ---
 function formatearMoneda(valor) {
@@ -126,26 +103,6 @@ function inicializarDropdown() {
 }
 
 // --- Manejo de productos ---
-function mostrarOpciones() {
-  const categoriaSelect = document.getElementById("categoria");
-  const productoSelect = document.getElementById("producto");
-  if (!categoriaSelect || !productoSelect) return;
-
-  const categoria = categoriaSelect.value;
-  productoSelect.innerHTML = '<option value="">Seleccione un producto</option>';
-  mostrarOcultarContenedores(categoria);
-
-  if (categoria && PRODUCTOS[categoria]) {
-    const fragment = document.createDocumentFragment();
-    PRODUCTOS[categoria].forEach(item => {
-      const option = document.createElement("option");
-      option.value = item;
-      option.textContent = item;
-      fragment.appendChild(option);
-    });
-    productoSelect.appendChild(fragment);
-  }
-}
 
 // --- Manejo de tabla de productos ---
 function eliminarProducto(fila, subtotal, iva, total) {
@@ -338,19 +295,98 @@ function generarFactura() {
 }
 
 // --- Inicialización ---
+
+// --- AJAX dinámico para productos y detalles ---
+function cargarProductosPorCategoria() {
+  const categoriaSelect = document.getElementById("categoria");
+  const productoSelect = document.getElementById("producto");
+  const productoContainer = document.getElementById("producto-container");
+  if (!categoriaSelect || !productoSelect) return;
+  const categoria = categoriaSelect.value;
+  productoSelect.innerHTML = '<option value="">Seleccione un producto</option>';
+  if (!categoria) {
+    productoContainer.style.display = "none";
+    return;
+  }
+  fetch(`/facturas/api/productos_por_categoria/?categoria=${encodeURIComponent(categoria)}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.productos && data.productos.length > 0) {
+        data.productos.forEach(p => {
+          const option = document.createElement("option");
+          option.value = p.id;
+          option.textContent = p.nombre;
+          productoSelect.appendChild(option);
+        });
+        productoContainer.style.display = "block";
+      } else {
+        productoContainer.style.display = "none";
+      }
+      // Ocultar selects dependientes
+      document.getElementById("almacenamiento-container").style.display = "none";
+      document.getElementById("color-container").style.display = "none";
+      document.getElementById("precio").value = "";
+    });
+}
+
+function cargarDetallesProducto() {
+  const productoSelect = document.getElementById("producto");
+  const almacenamientoSelect = document.getElementById("almacenamiento");
+  const colorSelect = document.getElementById("color");
+  const precioInput = document.getElementById("precio");
+  const almacenamientoContainer = document.getElementById("almacenamiento-container");
+  const colorContainer = document.getElementById("color-container");
+  const idProducto = productoSelect.value;
+  if (!idProducto) {
+    almacenamientoContainer.style.display = "none";
+    colorContainer.style.display = "none";
+    precioInput.value = "";
+    return;
+  }
+  fetch(`/facturas/api/detalle_producto/?id_producto=${encodeURIComponent(idProducto)}`)
+    .then(res => res.json())
+    .then(data => {
+      // Almacenamiento
+      almacenamientoSelect.innerHTML = '';
+      if (data.almacenamiento) {
+        const option = document.createElement("option");
+        option.value = data.almacenamiento;
+        option.textContent = data.almacenamiento;
+        almacenamientoSelect.appendChild(option);
+        almacenamientoContainer.style.display = "block";
+      } else {
+        almacenamientoContainer.style.display = "none";
+      }
+      // Color
+      colorSelect.innerHTML = '';
+      if (data.color) {
+        const option = document.createElement("option");
+        option.value = data.color;
+        option.textContent = data.color;
+        colorSelect.appendChild(option);
+        colorContainer.style.display = "block";
+      } else {
+        colorContainer.style.display = "none";
+      }
+      // Precio
+      precioInput.value = data.precio || '';
+    });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   inicializarDropdown();
 
   const categoriaSelect = document.getElementById("categoria");
-  if (categoriaSelect) categoriaSelect.addEventListener("change", mostrarOpciones);
+  if (categoriaSelect) categoriaSelect.addEventListener("change", cargarProductosPorCategoria);
+
+  const productoSelect = document.getElementById("producto");
+  if (productoSelect) productoSelect.addEventListener("change", cargarDetallesProducto);
 
   const btnAgregar = document.getElementById("btnAgregar");
   if (btnAgregar) btnAgregar.addEventListener("click", agregarProductoATabla);
 
   const btnGenerarFactura = document.getElementById("btnGenerarFactura");
   if (btnGenerarFactura) btnGenerarFactura.addEventListener("click", generarFactura);
-
-  mostrarOpciones();
 
   // --- NUEVO: establecer fecha automática ---
   const fechaInput = document.getElementById("fecha");

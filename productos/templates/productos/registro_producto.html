@@ -62,8 +62,39 @@
 
         <!-- Formulario para registrar un producto -->
         <form method="post" enctype="multipart/form-data" class="form-card">
-            {% csrf_token %} <!-- Token de seguridad para evitar CSRF -->
-            {{ form.as_p }} <!-- Renderiza el formulario con cada campo dentro de un párrafo -->
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_nombre_producto">Nombre del producto:</label>
+                {{ form.nombre_producto }}
+            </div>
+            <div class="form-group">
+                <label for="id_categoria_producto">Categoría:</label>
+                {{ form.categoria_producto }}
+            </div>
+            <div class="form-group">
+                <label for="id_modelo_producto">Modelo:</label>
+                {{ form.modelo_producto }}
+            </div>
+            <div class="form-group">
+                <label for="id_capacidad_producto">Almacenamiento:</label>
+                {{ form.capacidad_producto }}
+            </div>
+            <div class="form-group">
+                <label for="id_color_producto">Color:</label>
+                {{ form.color_producto }}
+            </div>
+            <div class="form-group">
+                <label for="id_precio_producto">Precio:</label>
+                {{ form.precio_producto }}
+            </div>
+            <div class="form-group">
+                <label for="id_stock_actual_inventario">Stock actual:</label>
+                {{ form.stock_actual_inventario }}
+            </div>
+            <div class="form-group">
+                <label for="id_imagen_producto">Imagen:</label>
+                {{ form.imagen_producto }}
+            </div>
             <button type="submit" class="btn-guardar">Registrar producto</button>
         </form>
     </main>
