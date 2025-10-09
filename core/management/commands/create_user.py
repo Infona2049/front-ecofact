@@ -50,7 +50,7 @@ class Command(BaseCommand):
             )
 
             self.stdout.write(
-                self.style.SUCCESS(f'✅ Usuario {rol} creado exitosamente!')
+                self.style.SUCCESS(f'Usuario {rol} creado exitosamente!')
             )
             self.stdout.write(f'Email: {email}')
             self.stdout.write(f'Nombre: {nombre} {apellido}')

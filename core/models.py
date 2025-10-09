@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
+from datetime import timedelta
 import uuid
 from productos.models import Producto
-from facturas.models import Factura
+
 
 # Opciones para ENUM
 TIPO_DOCUMENTO_CHOICES = [
@@ -53,12 +55,46 @@ class Usuario(AbstractUser):
     telefono_usuario = models.CharField(max_length=15, blank=True, null=True)
     rol_usuario = models.CharField(max_length=10, choices=ROL_USUARIO_CHOICES)
     fecha_creacion_usuario = models.DateTimeField(auto_now_add=True)
+    
+    # Campos para control de intentos de login
+    intentos_fallidos = models.IntegerField(default=0)
+    bloqueado_hasta = models.DateTimeField(null=True, blank=True)
+    ultimo_intento_fallido = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = 'correo_electronico_usuario'
     REQUIRED_FIELDS = ['username', 'nombre_usuario', 'apellido_usuario', 'rol_usuario']
 
     def _str_(self):
         return self.correo_electronico_usuario
+    
+    def esta_bloqueado(self):
+        """Verifica si el usuario está bloqueado por intentos fallidos"""
+        if self.bloqueado_hasta and timezone.now() < self.bloqueado_hasta:
+            return True
+        elif self.bloqueado_hasta and timezone.now() >= self.bloqueado_hasta:
+            # Si el tiempo de bloqueo ya pasó, resetear intentos
+            self.intentos_fallidos = 0
+            self.bloqueado_hasta = None
+            self.save()
+        return False
+    
+    def incrementar_intentos_fallidos(self):
+        """Incrementa los intentos fallidos y bloquea si es necesario"""
+        self.intentos_fallidos += 1
+        self.ultimo_intento_fallido = timezone.now()
+        
+        if self.intentos_fallidos >= 3:
+            # Bloquear por 10 minutos
+            self.bloqueado_hasta = timezone.now() + timedelta(minutes=10)
+        
+        self.save()
+    
+    def resetear_intentos_fallidos(self):
+        """Resetea los intentos fallidos después de un login exitoso"""
+        self.intentos_fallidos = 0
+        self.bloqueado_hasta = None
+        self.ultimo_intento_fallido = None
+        self.save()
 
 class Empresa(models.Model):
     id_empresa = models.AutoField(primary_key=True)
@@ -77,13 +113,3 @@ class Empresa(models.Model):
 
 
 
-class HistorialFactura(models.Model):
-    id_historial_factura = models.AutoField(primary_key=True)
-    factura = models.ForeignKey(Factura, on_delete=models.CASCADE)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    fecha_de_evento = models.DateTimeField(auto_now_add=True)
-    evento_historial_factura = models.CharField(max_length=10, choices=EVENTO_HISTORIAL_CHOICES)
-    observacion_historial_factura = models.TextField(blank=True, null=True)
-
-    def _str_(self):
-        return f"Historial {self.id_historial_factura} - Factura {self.factura.id_factura}"

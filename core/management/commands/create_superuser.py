@@ -20,7 +20,7 @@ class Command(BaseCommand):
             )
             
             self.stdout.write(
-                self.style.SUCCESS('✅ Superusuario creado exitosamente!')
+                self.style.SUCCESS('Superusuario creado exitosamente!')
             )
             self.stdout.write('Email: superadmin@ecofact.com')
             self.stdout.write('Password: superadmin123')
