@@ -99,10 +99,10 @@ def acerca_nosotros_view(request):
     return render(request, 'core/acerca_nosotros.html')
 
 def historial_factura_view(request):
-    return render(request, 'core/historial_factura.html')
+    return render(request, 'facturas/historial_factura.html')
 
 def crear_factura_view(request):
-    return render(request, 'core/crear_factura.html')
+    return render(request, 'facturas/crear_factura.html')
 
 def olvido_contraseña_view(request):
     return render(request, 'core/olvido_contraseña.html')

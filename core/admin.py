@@ -2,10 +2,11 @@ from django.contrib import admin
 from .models import (
     Usuario,
     Empresa,
-    HistorialFactura
+
 )
 # Se cambió el import del modelo DetalleFactura, ahora se importa desde facturas.models
-from facturas.models import DetalleFactura  
+from facturas.models import DetalleFactura 
+from facturas.models import HistorialFactura 
 
 # --- MODELO USUARIO ---
 @admin.register(Usuario)
