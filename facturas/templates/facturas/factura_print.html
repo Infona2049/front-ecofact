@@ -5,121 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Factura #{{ factura.id }}</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 40px;
-      color: #333;
-    }
+  <link rel="stylesheet" href="{% static 'facturas/css/factura_print.css' %}">
 
-    .encabezado {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #0056b3;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
-    }
-
-    .logo {
-      height: 40px;
-    }
-
-    h1 {
-      color: #0056b3;
-      text-align: center;
-      margin: 0;
-      flex-grow: 1;
-    }
-
-    .datos-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 20px;
-    }
-
-    .empresa-info, .datos-factura {
-      width: 48%;
-    }
-
-    .empresa-info p, .datos-factura p {
-      margin: 5px 0;
-      font-size: 14px;
-    }
-
-    .datos-factura {
-      text-align: right;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: center;
-    }
-
-    th {
-      background-color: #0056b3;
-      color: white;
-    }
-
-    .totales {
-      margin-top: 20px;
-      text-align: right;
-    }
-
-    .totales p {
-      font-weight: bold;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 90px;
-      font-size: 12px;
-      color: #666;
-    }
-
-    .cufe {
-      word-break: break-all;
-      font-size: 13px;
-      margin-top: 5px;
-      color: #444;
-    }
-
-    .qr-container {
-      text-align: right;
-      margin-top: 10px;
-    }
-
-    .qr-container img {
-      width: 120px;
-      height: 120px;
-      border: 1px solid #ccc;
-      padding: 5px;
-    }
-
-
-    .qr-container {
-    text-align: right;           /* Alinea hacia la derecha */
-    margin-top: -10px;           /* Ajusta la separación con el CUFE */
-    margin-right: 2000px;          /* Corre el QR hacia la derecha */
-    }
-
-    .qr-img {
-    width: 110px;                /* Tamaño del QR */
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    padding: 4px;
-    background-color: white;
-    }
-
-  </style>
 </head>
 <body>
 
@@ -128,12 +15,10 @@
     <img src="{% static 'img/logo azul sin fondo.png' %}" alt="Logo EcoFact" class="logo">
     <img src="{% static 'img/logo empresa.png' %}" alt="Logo Empresa" class="logo">
     <h1>FACTURA ELECTRÓNICA</h1>
-    
   </div>
 
   <!-- Datos de empresa y cliente -->
   <div class="datos-container">
-    <!-- Izquierda: Empresa -->
     <div class="empresa-info">
       <p><strong>Apple Pereira S.A.S</strong></p>
       <p><strong>NIT:</strong> 901.456.789-3</p>
@@ -142,7 +27,6 @@
       <p><strong>Correo:</strong> contacto@applepereira.com</p>
     </div>
 
-    <!-- Derecha: Cliente -->
     <div class="datos-factura">
       <p><strong>Número de Factura:</strong> {{ factura.id }}</p>
       <p><strong>Cliente:</strong> {{ factura.nombre_receptor }}</p>
@@ -150,8 +34,6 @@
       <p><strong>Correo:</strong> {{ factura.correo_cliente }}</p>
       <p><strong>Fecha de emisión:</strong> {{ factura.fecha_factura|date:"d/m/Y" }}</p>
       <p><strong>Método de pago:</strong> {{ factura.metodo_pago_factura|title }}</p>
-      
-
     </div>
   </div>
 
@@ -186,15 +68,13 @@
     <p>Total a pagar: ${{ factura.total_factura|floatformat:2 }}</p>
   </div>
 
-
-
+  <!-- CUFE + QR -->
   <p class="cufe"><strong>CUFE:</strong> {{ factura.cufe_factura }}</p>
+  <div class="qr-container">
+    <img src="data:image/png;base64,{{ qr_base64 }}" alt="Código QR de la factura" class="qr-img">
+  </div>
 
-      <!-- Nuevo bloque: Código QR -->
-      <div class="qr-container">
-        <img src="data:image/png;base64,{{ qr_base64 }}" alt="Código QR de la factura" width="100">
-      </div>
-
+  <!-- Pie de página -->
   <footer>
     <p>Gracias por su compra.</p>
     <p>EcoFact | {{ factura.fecha_factura|date:"Y" }}</p>

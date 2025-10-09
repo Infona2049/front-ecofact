@@ -135,7 +135,7 @@ def factura_print(request, pk):
     detalles = DetalleFactura.objects.filter(factura=factura)
 
     # === Generar código QR dinámico ===
-    qr_data = f"http://{request.get_host()}/facturas/pdf/{factura.id}/"  # enlace al PDF de la factura
+    qr_data = f"http://{request.get_host()}/facturas/pdf/{factura.id}/"
     qr_img = qrcode.make(qr_data)
 
     # Convertir el QR en base64 para mostrarlo en HTML
@@ -152,7 +152,7 @@ def factura_print(request, pk):
 
 
 # ----------------------------------------------------------------------------------------
-# FACTURA EN PDF (con logos y código QR)
+# FACTURA EN PDF (con logos y código QR debajo del CUFE)
 # ----------------------------------------------------------------------------------------
 def factura_pdf(request, pk):
     factura = get_object_or_404(Factura, pk=pk)
@@ -190,6 +190,7 @@ def factura_pdf(request, pk):
     y -= 100
     p.setFont("Helvetica-Bold", 12)
     p.drawString(230, y, "FACTURA ELECTRÓNICA")
+
     y -= 50
     p.setFont("Helvetica", 10)
     p.drawString(50, y, f"N° Factura: {factura.id}")
@@ -198,21 +199,27 @@ def factura_pdf(request, pk):
     p.drawString(50, y - 45, f"NIT: {factura.nit_receptor}")
     p.drawString(50, y - 60, f"CUFE: {factura.cufe_factura}")
 
-    # === CÓDIGO QR EN EL PDF ===
+    # === CÓDIGO QR debajo del CUFE ===
     qr_data = (
         f"Factura N°: {factura.id}\n"
         f"CUFE: {factura.cufe_factura}\n"
         f"Total: ${factura.total_factura}\n"
         f"Fecha: {factura.fecha_factura}"
     )
+
     qr_img = qrcode.make(qr_data)
     qr_buffer = BytesIO()
     qr_img.save(qr_buffer, format="PNG")
     qr_buffer.seek(0)
-    p.drawImage(ImageReader(qr_buffer), 450, 600, width=100, height=100)
 
-    # === DETALLES ===
+    # Mover hacia abajo del CUFE y a la derecha
     y -= 100
+    p.drawString(50, y, "Verificación QR:")
+    p.drawImage(ImageReader(qr_buffer), 180, y - 20, width=100, height=100)
+
+    y -= 140  # espacio antes de tabla
+
+    # === DETALLES PRODUCTOS ===
     p.setFont("Helvetica-Bold", 10)
     p.drawString(50, y, "Producto")
     p.drawString(230, y, "Cantidad")
@@ -248,7 +255,7 @@ def factura_pdf(request, pk):
     buffer.seek(0)
 
     response = HttpResponse(buffer, content_type="application/pdf")
-    response["Content-Disposition"] = f'inline; filename=\"Factura_{factura.id}.pdf\"'
+    response["Content-Disposition"] = f'inline; filename="Factura_{factura.id}.pdf"'
     return response
 
 
@@ -260,7 +267,7 @@ def factura_xml(request, pk):
     detalles = DetalleFactura.objects.filter(factura=factura)
 
     response = HttpResponse(content_type="application/xml")
-    response["Content-Disposition"] = f'attachment; filename=\"Factura_{factura.id}.xml\"'
+    response["Content-Disposition"] = f'attachment; filename="Factura_{factura.id}.xml"'
 
     response.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     response.write("<factura>\n")
