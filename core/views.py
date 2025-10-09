@@ -4,9 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+from django.db.models import Q
 from functools import wraps
 import json
 from .forms import RegistroUsuarioForm
+from .models import Usuario
 
 def role_required(allowed_roles):
     """Decorador para restringir acceso por roles"""
@@ -16,9 +19,19 @@ def role_required(allowed_roles):
             if not request.user.is_authenticated:
                 return redirect('login')
             
+            # Redirigir a dashboard correspondiente si no tiene permisos
             if request.user.rol_usuario not in allowed_roles:
                 messages.error(request, 'No tienes permisos para acceder a esta página')
-                return redirect('login')
+                
+                # Redirigir al dashboard correcto según el rol
+                if request.user.rol_usuario == 'admin':
+                    return redirect('admin_dashboard')
+                elif request.user.rol_usuario == 'vendedor':
+                    return redirect('vendedor_dashboard')
+                elif request.user.rol_usuario == 'cliente':
+                    return redirect('cliente_dashboard')
+                else:
+                    return redirect('login')
             
             return view_func(request, *args, **kwargs)
         return _wrapped_view
@@ -29,10 +42,32 @@ def login_view(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         
+        # Buscar el usuario por email
+        try:
+            usuario = Usuario.objects.get(correo_electronico_usuario=email)
+        except Usuario.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Credenciales incorrectas'
+            })
+        
+        # Verificar si el usuario está bloqueado
+        if usuario.esta_bloqueado():
+            tiempo_restante = usuario.bloqueado_hasta - timezone.now()
+            minutos_restantes = int(tiempo_restante.total_seconds() / 60)
+            return JsonResponse({
+                'success': False,
+                'message': f'Usuario bloqueado. Intenta de nuevo en {minutos_restantes} minutos.',
+                'bloqueado': True,
+                'tiempo_restante': minutos_restantes
+            })
+        
         # Autenticar usuario
         user = authenticate(request, username=email, password=password)
         
         if user is not None:
+            # Login exitoso - resetear intentos fallidos
+            usuario.resetear_intentos_fallidos()
             login(request, user)
             
             # Redirigir según el rol del usuario
@@ -61,10 +96,24 @@ def login_view(request):
                     'redirect_url': '/cliente-dashboard/'
                 })
         else:
-            return JsonResponse({
-                'success': False,
-                'message': 'Credenciales incorrectas'
-            })
+            # Login fallido - incrementar intentos
+            usuario.incrementar_intentos_fallidos()
+            
+            intentos_restantes = 3 - usuario.intentos_fallidos
+            
+            if usuario.intentos_fallidos >= 3:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Credenciales incorrectas. Usuario bloqueado por 10 minutos.',
+                    'bloqueado': True,
+                    'intentos_restantes': 0
+                })
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'message': f'Credenciales incorrectas. Te quedan {intentos_restantes} intentos.',
+                    'intentos_restantes': intentos_restantes
+                })
     
     # Si es GET, mostrar el formulario de login
     return render(request, 'core/login.html')
@@ -86,9 +135,11 @@ def vendedor_dashboard_view(request):
 def cliente_dashboard_view(request):
     return render(request, 'core/visualizacion_Cliente.html')
 
+@login_required
 def documentos_view(request):
     return render(request, 'core/documentos.html')
 
+@login_required
 def actualizar_perfil_view(request):
     return render(request, 'core/actualizar_perfil.html')
 
@@ -98,9 +149,11 @@ def cambiocontraseña_view(request):
 def acerca_nosotros_view(request):
     return render(request, 'core/acerca_nosotros.html')
 
+@role_required(['admin', 'vendedor'])
 def historial_factura_view(request):
     return render(request, 'core/historial_factura.html')
 
+@role_required(['admin', 'vendedor'])
 def crear_factura_view(request):
     return render(request, 'core/crear_factura.html')
 
@@ -134,11 +187,14 @@ def registro_view(request):
     
     return render(request, 'core/registro.html', {'form': form})
 
+@role_required(['admin'])
 def visualizacion_admin_view(request):
     return render(request, 'core/visualizacion_Admin.html')
 
+@role_required(['cliente'])
 def visualizacion_cliente_view(request):
     return render(request, 'core/visualizacion_Cliente.html')
 
+@role_required(['vendedor'])
 def visualizacion_vendedor_view(request):
     return render(request, 'core/visualizacion_Vendedor.html')

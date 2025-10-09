@@ -28,20 +28,54 @@ function login(event) {
         window.location.href = data.redirect_url;
       });
     } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error de autenticación',
-        text: data.message,
-        confirmButtonText: 'Intentar de nuevo'
-      });
+      // Verificar si el usuario está bloqueado
+      if (data.bloqueado) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Usuario Bloqueado',
+          text: data.message,
+          confirmButtonText: 'Entendido',
+          allowOutsideClick: false,
+          showCloseButton: false
+        });
+      } else if (data.intentos_restantes !== undefined) {
+        // Mostrar intentos restantes
+        let iconType = 'warning';
+        let title = 'Credenciales Incorrectas';
+        
+        if (data.intentos_restantes === 1) {
+          iconType = 'error';
+          title = '¡Último Intento!';
+        } else if (data.intentos_restantes === 2) {
+          iconType = 'warning';
+        }
+        
+        Swal.fire({
+          icon: iconType,
+          title: title,
+          text: data.message,
+          confirmButtonText: 'Intentar de nuevo',
+          footer: data.intentos_restantes > 0 ? 
+            `<span style="color: #e74c3c; font-weight: bold;">⚠️ Intentos restantes: ${data.intentos_restantes}</span>` : 
+            '<span style="color: #e74c3c; font-weight: bold;">🚫 Sin intentos restantes</span>'
+        });
+      } else {
+        // Error genérico
+        Swal.fire({
+          icon: 'error',
+          title: 'Error de autenticación',
+          text: data.message,
+          confirmButtonText: 'Intentar de nuevo'
+        });
+      }
     }
   })
   .catch(error => {
     console.error('Error:', error);
     Swal.fire({
       icon: 'error',
-      title: 'Error',
-      text: 'Ocurrió un error al procesar la solicitud',
+      title: 'Error de conexión',
+      text: 'No se pudo conectar con el servidor. Por favor, intenta de nuevo.',
       confirmButtonText: 'Intentar de nuevo'
     });
   });
