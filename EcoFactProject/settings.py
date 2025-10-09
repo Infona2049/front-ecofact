@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Autenticación
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'core.middleware.RoleRedirectMiddleware',  # Middleware personalizado para redirecciones por rol
+    # 'core.middleware.RoleRedirectMiddleware',  # Middleware personalizado - temporalmente desactivado
 ]
 
 ROOT_URLCONF = 'EcoFactProject.urls'
