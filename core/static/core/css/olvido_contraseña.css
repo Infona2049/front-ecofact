@@ -1,10 +1,15 @@
-/* RESET GENERAL */
+/* =========================
+   RESET GENERAL
+========================= */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box; 
 }
-  
+
+/* =========================
+   CONFIGURACIÓN GENERAL
+========================= */
 body {
   font-family: Arial, sans-serif;
   background: #f4f4f4;
@@ -13,7 +18,9 @@ body {
   flex-direction: column;
 }
 
-/* BARRA SUPERIOR */
+/* =========================
+   BARRA SUPERIOR
+========================= */
 .top-bar {
   background-color: white;
   display: flex;
@@ -70,30 +77,16 @@ header {
 .menu {
   display: flex;
   padding: clamp(8px, 2vw, 13px) clamp(10px, 4vw, 30px);
-  overflow-x: auto;
-  white-space: nowrap;
-  gap: clamp(15px, 4vw, 40px);
 }
 
-
-.menu a:hover {
-  color: #38b6ff;
-
-  
-}
-
-a img {
-  border: none;
+.menu a {
+  color: white;
   text-decoration: none;
+  font-size: clamp(12px, 3vw, 16px);
+  transition: color 0.3s ease;
 }
 
-a {
-  text-decoration: none;
-}
-
-
-
-/* FOOTER */
+/* FOOTER*/
 footer {
   position: fixed;
   bottom: 0;
@@ -130,8 +123,9 @@ footer {
   font-size: clamp(11px, 2.5vw, 14px);
 }
 
-/*PARTE DEL FOOTER DE OLVIDO CONTRASEÑA*/
-
+/* =========================
+   SECCIÓN LOGIN / OLVIDO CONTRASEÑA
+========================= */
 :root {
   --card-bg: #fff;
   --accent: #007bff;
@@ -142,11 +136,10 @@ footer {
   --radius: 12px;
 }
 
-* { box-sizing: border-box; }
-
-body {
+/* Fondo especial para páginas de login */
+body.login-page {
   font-family: Inter, Arial, sans-serif;
-   background: radial-gradient(circle at 50% 50%, #a6a6a6 0%, #ffffff 100%);
+  background: radial-gradient(circle at 50% 50%, #a6a6a6 0%, #ffffff 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -209,7 +202,9 @@ button.secondary {
   margin-top: 8px;
 }
 
-button:hover { background: var(--accent-hover); }
+button:hover { 
+  background: var(--accent-hover); 
+}
 
 .hidden { display: none; }
 
@@ -253,20 +248,25 @@ button:hover { background: var(--accent-hover); }
   margin-top: 6px; 
 }
 
-
-
-/* RESPONSIVE MÍNIMO */
+/* =========================
+   RESPONSIVE
+========================= */
 @media (max-width: 480px) {
   .footer-bar {
     flex-direction: column;
     gap: 8px;
     text-align: center;
   }
-  
+
+  nav.menu {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
   .menu::-webkit-scrollbar {
     height: 3px;
   }
-  
+
   .menu::-webkit-scrollbar-thumb {
     background: rgba(255,255,255,0.3);
     border-radius: 3px;
