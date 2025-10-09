@@ -169,15 +169,20 @@ header {
   width: 100%;
   border-collapse: collapse;
   font-size: clamp(0.7rem, 2vw, 0.8rem);
-  overflow-x: auto;
   display: block;
   white-space: nowrap;
+  background: white;
+  border-radius: clamp(8px, 2vw, 12px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 2px solid #e0e0e0;
 }
 
 .tabla-facturas thead,
 .tabla-facturas tbody {
   display: table;
   width: 100%;
+  
 }
 
 .tabla-facturas th,
@@ -189,7 +194,8 @@ header {
 }
 
 .tabla-facturas th {
-  background-color: #d0def1;
+  background: linear-gradient(135deg, #003f87, #0056b3);
+  color: white;
   font-weight: bold;
   font-size: clamp(0.7rem, 2vw, 0.85rem);
 }
@@ -464,5 +470,5 @@ a img {
 
 .paginacion .current {
   background-color: #003f87;
-  color: white;
+  color:white;
 }
