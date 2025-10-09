@@ -4,7 +4,7 @@ from django.utils import timezone
 from datetime import timedelta
 import uuid
 from productos.models import Producto
-from facturas.models import Factura
+
 
 # Opciones para ENUM
 TIPO_DOCUMENTO_CHOICES = [
@@ -113,13 +113,3 @@ class Empresa(models.Model):
 
 
 
-class HistorialFactura(models.Model):
-    id_historial_factura = models.AutoField(primary_key=True)
-    factura = models.ForeignKey(Factura, on_delete=models.CASCADE)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    fecha_de_evento = models.DateTimeField(auto_now_add=True)
-    evento_historial_factura = models.CharField(max_length=10, choices=EVENTO_HISTORIAL_CHOICES)
-    observacion_historial_factura = models.TextField(blank=True, null=True)
-
-    def _str_(self):
-        return f"Historial {self.id_historial_factura} - Factura {self.factura.id_factura}"

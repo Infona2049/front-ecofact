@@ -4,10 +4,11 @@ from django.contrib import messages
 from .models import (
     Usuario,
     Empresa,
-    HistorialFactura
+
 )
 # Se cambió el import del modelo DetalleFactura, ahora se importa desde facturas.models
-from facturas.models import DetalleFactura  
+from facturas.models import DetalleFactura 
+from facturas.models import HistorialFactura 
 
 # --- FUNCIONES AUXILIARES PARA ADMIN ---
 def desbloquear_usuarios_seleccionados(modeladmin, request, queryset):
