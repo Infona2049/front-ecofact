@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario</title>
+  <!-- Carga la hoja de estilos CSS específica para la página de inventario -->
+  <link rel="stylesheet" href="{% static 'productos/css/inventario.css' %}">
+</head>
+<body>
+  <!-- Barra superior con logos y accesos rápidos -->
+  <div class="top-bar">
+    <div class="left-side">
+      <!-- Enlace a la vista principal del administrador -->
+      <a href="{% url 'visualizacion_admin' %}">
+        <!-- Logos de la aplicación y empresa -->
+        <img src="{% static 'img/Logo azul sin fondo.png' %}" alt="EcoFact Logo" class="logo1" />
+        <img src="{% static 'img/logo empresa.png' %}" alt="Empresa logo" class="logo2" />
+      </a>
+    </div>
+    <div class="right-side">
+      <!-- Iconos con enlaces a documentos, perfil, cambio de contraseña y logout -->
+      <a href="{% url 'documentos' %}"><img src="{% static 'img/documento.png' %}" class="icono"></a>
+      <a href="{% url 'actualizar_perfil' %}"><img src="{% static 'img/editar.png' %}" class="icono"></a>
+      <a href="{% url 'cambiocontraseña' %}"><img src="{% static 'img/contrasena.png' %}" class="icono"></a>
+      <a href="{% url 'login' %}"><img src="{% static 'img/cerrar-sesion.png' %}" class="icono"></a>
+    </div>
+  </div>
+
+  <!-- Barra de navegación principal -->
+  <header>
+    <nav class="menu">
+      <!-- Enlace a la página de inicio para el administrador -->
+      <a href="{% url 'visualizacion_admin' %}">Inicio</a>
+    </nav>
+  </header>
+
+  <!-- Contenido principal: tabla que muestra el inventario -->
+  <main class="contenido">
+    <h2>Inventario</h2>
+    <div class="tabla-container">
+      <table class="tabla-inventario">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Modelo</th>
+            <th>Stock Actual</th>
+            <th>Stock Mínimo</th>
+            <th>Última Actualización</th>
+            <th>Código de barras</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Itera sobre la lista 'inventarios' pasada desde la vista -->
+          {% for inventario in inventarios %}
+          <tr>
+            <!-- Muestra el nombre y modelo del producto relacionado -->
+            <td>{{ inventario.producto.nombre_producto }}</td>
+            <td>{{ inventario.producto.modelo_producto }}</td>
+            <!-- Muestra el stock actual y mínimo del inventario -->
+            <td>{{ inventario.stock_actual_inventario }}</td>
+            <td>{{ inventario.stock_minimo_inventario }}</td>
+            <!-- Formatea la fecha de última actualización -->
+            <td>{{ inventario.fecha_actualizacion_inventario|date:"d/m/Y H:i" }}</td>
+            <!-- Muestra el código de barras del inventario -->
+            <td>{{ inventario.codigo_barras_inventario }}</td>
+          </tr>
+          {% empty %}
+          <!-- Mensaje si no hay productos en el inventario -->
+          <tr>
+            <td colspan="6">No hay productos en el inventario.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Pie de página con información de contacto -->
+  <footer>
+    <div class="footer-bar">
+      <div class="footer-item">
+        <img src="{% static 'img/mensaje.png' %}" alt="Correo">
+        Ecofactproyect@gmail.com
+      </div>
+      <div class="footer-item">
+        <img src="{% static 'img/llamada-telefonica.png' %}" alt="Teléfono">
+        333-333-333
+      </div>
+    </div>
+    <div class="footer-bottom">@2025-ECOFACT</div>
+  </footer>
+</body>
+</html>
