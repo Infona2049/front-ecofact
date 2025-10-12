@@ -1,6 +1,41 @@
+from django.http import HttpResponseRedirect
+def eliminar_inventario_view(request, pk):
+    inventario = get_object_or_404(Inventario, pk=pk)
+    producto = inventario.producto
+    if request.method == 'POST':
+        inventario.delete()
+        producto.delete()
+        return redirect('inventario')
+    # Si es GET, eliminar directamente y redirigir (sin confirmación extra)
+    inventario.delete()
+    producto.delete()
+    return redirect('inventario')
 from django.shortcuts import render, redirect
 from .models import Inventario
 from .forms import ProductoForm
+from django.shortcuts import get_object_or_404
+def editar_inventario_view(request, pk):
+    inventario = get_object_or_404(Inventario, pk=pk)
+    if request.method == 'POST':
+        producto = inventario.producto
+        producto.categoria_producto = request.POST.get('categoria_producto', producto.categoria_producto)
+        producto.nombre_producto = request.POST.get('nombre_producto', producto.nombre_producto)
+        producto.modelo_producto = request.POST.get('modelo_producto', producto.modelo_producto)
+        producto.color_producto = request.POST.get('color_producto', producto.color_producto)
+        producto.capacidad_producto = request.POST.get('capacidad_producto', producto.capacidad_producto)
+        # Nuevo: actualizar precio
+        precio = request.POST.get('precio_producto')
+        if precio is not None and precio != '':
+            try:
+                producto.precio_producto = float(precio)
+            except ValueError:
+                pass
+        producto.save()
+        inventario.stock_actual_inventario = request.POST.get('stock_actual_inventario', inventario.stock_actual_inventario)
+        inventario.stock_minimo_inventario = request.POST.get('stock_minimo_inventario', inventario.stock_minimo_inventario)
+        inventario.save()
+        return redirect('inventario')
+    return redirect('inventario')
 from django.urls import reverse
 
 def registro_producto_view(request):
@@ -14,20 +49,19 @@ def registro_producto_view(request):
     """
     exito = request.GET.get('exito')  # Captura el parámetro para mostrar mensaje de éxito
     if request.method == 'POST':
-        form = ProductoForm(request.POST, request.FILES)  # Crea el formulario con datos enviados y archivos
+        form = ProductoForm(request.POST, request.FILES)
         if form.is_valid():
-            producto = form.save()  # Guarda el nuevo producto en la base de datos
-            # Crea un registro en Inventario asociado al producto recién creado
+            producto = form.save()
+            stock_actual = form.cleaned_data.get('stock_actual_inventario', 0)
             Inventario.objects.create(
                 producto=producto,
-                stock_actual_inventario=0,  # Stock inicial en 0
-                stock_minimo_inventario=1,  # Stock mínimo por defecto en 1
-                codigo_barras_inventario=producto.codigo_barras_producto  # Código de barras igual al del producto
+                stock_actual_inventario=stock_actual,
+                stock_minimo_inventario=1,
+                codigo_barras_inventario=producto.codigo_barras_producto
             )
-            # Redirige a la misma vista con parámetro para mostrar alerta de éxito
             return redirect(f"{reverse('registro_producto')}?exito=1")
     else:
-        form = ProductoForm()  # Formulario vacío para GET
+        form = ProductoForm()
     # Renderiza la plantilla con el formulario y la variable 'exito' para mostrar alertas
     return render(request, 'productos/registro_producto.html', {'form': form, 'exito': exito})
 
@@ -40,5 +74,18 @@ def inventario_view(request):
     - Usa select_related para optimizar la consulta y traer los datos relacionados del producto.
     - Renderiza la plantilla con la lista de inventarios.
     """
+    from django.core.paginator import Paginator
     inventarios = Inventario.objects.select_related('producto').order_by('fecha_actualizacion_inventario')
-    return render(request, 'productos/inventario.html', {'inventarios': inventarios})
+    categoria = request.GET.get('categoria')
+    color = request.GET.get('color')
+    capacidad = request.GET.get('capacidad')
+    if categoria:
+        inventarios = inventarios.filter(producto__categoria_producto=categoria)
+    if color:
+        inventarios = inventarios.filter(producto__color_producto=color)
+    if capacidad:
+        inventarios = inventarios.filter(producto__capacidad_producto=capacidad)
+    paginator = Paginator(inventarios, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'productos/inventario.html', {'inventarios': page_obj})

@@ -120,3 +120,58 @@ const auriculares = [
   // Inicializar vista según valor actual (por si ya viene seleccionado)
   mostrarOpciones();
 });
+
+// --- Validación frontend para registro de producto ---
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('form-registro-producto');
+    if (!form) return;
+    const nombreInput = form.querySelector('[name="nombre_producto"]');
+    const precioInput = form.querySelector('[name="precio_producto"]');
+    const stockInput = form.querySelector('[name="stock_actual"]');
+    form.addEventListener('submit', function(e) {
+        let valid = true;
+    // Validar nombre: letras, números y espacios
+    if (nombreInput && !/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 ]+$/.test(nombreInput.value.trim())) {
+      alert('El nombre solo puede contener letras, números y espacios.');
+      nombreInput.focus();
+      valid = false;
+    }
+        // Validar precio positivo
+        if (precioInput && (isNaN(precioInput.value) || Number(precioInput.value) <= 0)) {
+            alert('El precio debe ser un número positivo.');
+            precioInput.focus();
+            valid = false;
+        }
+        // Validar stock actual mayor a 0
+        if (stockInput && (isNaN(stockInput.value) || Number(stockInput.value) <= 0)) {
+            alert('El stock actual debe ser mayor a 0.');
+            stockInput.focus();
+            valid = false;
+        }
+        if (!valid) e.preventDefault();
+    });
+});
+
+// --- Confirmación de eliminación con SweetAlert en inventario ---
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.btn-eliminar').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const form = btn.closest('form');
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: '¡Esta acción eliminará el registro de forma permanente!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
+  });
+});

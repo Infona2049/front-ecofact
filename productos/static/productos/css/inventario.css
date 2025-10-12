@@ -1,3 +1,34 @@
+.boton-limpiar {
+  background-color: #e0e0e0;
+  color: #003f87;
+  font-weight: bold;
+  border: none;
+  padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 20px);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: clamp(12px, 2.5vw, 14px);
+  transition: background-color 0.3s;
+  min-height: 40px;
+}
+.boton-limpiar:hover {
+  background-color: #bdbdbd;
+}
+/* BOTÓN BUSCAR ESTILO HISTORIAL FACTURA */
+.boton-buscar {
+  background-color: green;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 20px);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: clamp(12px, 2.5vw, 14px);
+  transition: background-color 0.3s;
+  min-height: 40px;
+}
+.boton-buscar:hover {
+  background-color: darkgreen;
+}
 /* RESET GENERAL */
 * {
   margin: 0;
@@ -90,7 +121,7 @@ header {
   display: flex;
   flex-direction: column;
   padding: clamp(20px, 4vw, 40px);
-  max-width: 1400px;
+  max-width: 1800px;
   margin: 0 auto;
   width: 100%;
 }
@@ -122,13 +153,14 @@ h2::after {
   background: white;
   border-radius: clamp(8px, 2vw, 12px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  overflow-x: auto;
   border: 2px solid #e0e0e0;
 }
 
 /* TABLA DE INVENTARIO */
 .tabla-inventario {
   width: 100%;
+  min-width: 1000px;
   border-collapse: collapse;
   font-size: clamp(13px, 2.5vw, 15px);
 }
@@ -139,7 +171,7 @@ h2::after {
 }
 
 .tabla-inventario th {
-  padding: clamp(12px, 2.5vw, 16px) clamp(10px, 2vw, 15px);
+  padding: clamp(10px, 1.5vw, 14px) clamp(8px, 1.5vw, 12px);
   text-align: left;
   font-weight: bold;
   font-size: clamp(14px, 2.5vw, 16px);
@@ -148,8 +180,15 @@ h2::after {
   border-bottom: 3px solid #38b6ff;
 }
 
+.tabla-inventario th:last-child,
+.tabla-inventario td:last-child {
+  text-align: center;
+  min-width: 110px;
+  white-space: nowrap;
+}
+
 .tabla-inventario td {
-  padding: clamp(10px, 2vw, 14px) clamp(10px, 2vw, 15px);
+  padding: clamp(8px, 1vw, 10px) clamp(8px, 1vw, 10px);
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
   transition: background-color 0.2s ease;
@@ -186,12 +225,12 @@ h2::after {
 /* RESPONSIVE PARA TABLA */
 @media (max-width: 768px) {
   .tabla-container {
-    overflow-x: auto;
+    overflow-x: visible;
     -webkit-overflow-scrolling: touch;
   }
   
   .tabla-inventario {
-    min-width: 600px;
+    min-width: 1100px;
   }
   
   .tabla-inventario th,
@@ -342,4 +381,31 @@ a img {
   color: #666;
   font-style: italic;
   font-size: 16px;
+}
+
+/* PAGINACIÓN ESTILO HISTORIAL FACTURA */
+.paginacion {
+  margin: 15px 0;
+  text-align: center;
+}
+.paginacion span,
+.paginacion a {
+  display: inline-block;
+  margin: 0 5px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: #003f87;
+  background-color: #e6eef8;
+  transition: background 0.3s;
+}
+.paginacion a:hover {
+  background-color: #003f87;
+  color: white;
+}
+.paginacion .current {
+  background-color: #003f87;
+  color: white;
 }
