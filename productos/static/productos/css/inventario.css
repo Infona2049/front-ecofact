@@ -162,8 +162,9 @@ h2::after {
   width: 100%;
   min-width: 1000px;
   border-collapse: collapse;
-  font-size: clamp(13px, 2.5vw, 15px);
+  font-size: clamp(11px, 5vw, 15px);
 }
+
 
 .tabla-inventario thead {
   background: linear-gradient(135deg, #003f87, #0056b3);
