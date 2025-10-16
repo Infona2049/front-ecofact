@@ -1,34 +1,5 @@
-.boton-limpiar {
-  background-color: #e0e0e0;
-  color: #003f87;
-  font-weight: bold;
-  border: none;
-  padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 20px);
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: clamp(12px, 2.5vw, 14px);
-  transition: background-color 0.3s;
-  min-height: 40px;
-}
-.boton-limpiar:hover {
-  background-color: #bdbdbd;
-}
-/* BOTÓN BUSCAR ESTILO HISTORIAL FACTURA */
-.boton-buscar {
-  background-color: green;
-  color: white;
-  font-weight: bold;
-  border: none;
-  padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 20px);
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: clamp(12px, 2.5vw, 14px);
-  transition: background-color 0.3s;
-  min-height: 40px;
-}
-.boton-buscar:hover {
-  background-color: darkgreen;
-}
+
+
 /* RESET GENERAL */
 * {
   margin: 0;
@@ -148,26 +119,92 @@ h2::after {
   border-radius: 2px;
 }
 
+.cuadro-blanco {
+  background-color: white;          /* Fondo blanco */
+  border-radius: 15px;              /* Bordes redondeados */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Sombra suave */
+  padding: 30px;                    /* Espacio interno */
+  width: 80%;                       /* Ancho ajustable */
+  margin: 20px auto;                /* Centrado */
+}
+
+/* ------------------------------------------------------------------------------------------*/
+/* BOTONES BUSCAR Y FILTRAR*/
+
+.campo-boton {
+  margin-top: clamp(20px, 2vw, 40px);
+  text-align: center;
+  display: flex;              /* activa el gap */
+  justify-content: center;    /* centra los botones */
+  align-items: center;        /* los alinea verticalmente */
+  gap: 25px; /*Separa los botones entre si*/
+}
+
+
+.boton-limpiar {
+  background-color: #d9d9d9; /* gris más suave */
+  color: #003f87; /* azul oscuro */
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  font-size: clamp(11px, 2.3vw, 13px);
+  transition: all 0.3s ease;
+  min-height: 35px;
+}
+
+.boton-limpiar:hover {
+  background-color: #bfbfbf; /* gris más oscuro al pasar el mouse */
+  color: #002f6c; /* azul más intenso */
+}
+
+
+.boton-buscar { 
+  background-color: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: clamp(12px, 2.5vw, 14px);
+  transition: background-color 0.3s;
+  min-height: 40px;
+ 
+}
+
+.boton-buscar:hover {
+  background-color: darkgreen; 
+}
+
+.boton-buscar,
+.boton-limpiar {
+  width: 110px;
+  height: 40px;
+  font-weight: bold;
+  border-radius: 12px;
+}
+
 /* CONTENEDOR DE TABLA */
 .tabla-container {
-  background: white;
-  border-radius: clamp(8px, 2vw, 12px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  overflow-x: auto;
-  border: 2px solid #e0e0e0;
+  background-color: white;          /* Fondo blanco */
+  border-radius: 15px;              /* Bordes redondeados */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Sombra suave */
+  padding: 30px;                    /* Espacio interno */
+  width: 80%;                       /* Ancho ajustable */
+  margin: 20px auto;                /* Centrado */
 }
+
 
 /* TABLA DE INVENTARIO */
 .tabla-inventario {
   width: 100%;
   min-width: 1000px;
   border-collapse: collapse;
+  border-radius: 15px;             
   font-size: clamp(11px, 5vw, 15px);
 }
 
 
 .tabla-inventario thead {
   background: linear-gradient(135deg, #003f87, #0056b3);
+  border-radius: 15px;            
   color: white;
 }
 
@@ -179,6 +216,7 @@ h2::after {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-bottom: 3px solid #38b6ff;
+  
 }
 
 .tabla-inventario th:last-child,
@@ -188,11 +226,20 @@ h2::after {
   white-space: nowrap;
 }
 
+/* Bordes redondeados en el encabezado azul de la tabla */
+.tabla-inventario th:first-child {
+  border-top-left-radius: 12px;
+}
+.tabla-inventario th:last-child {
+  border-top-right-radius: 12px;
+}
+
 .tabla-inventario td {
   padding: clamp(8px, 1vw, 10px) clamp(8px, 1vw, 10px);
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
   transition: background-color 0.2s ease;
+  
 }
 
 .tabla-inventario tbody tr {

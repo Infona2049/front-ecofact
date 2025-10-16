@@ -1,3 +1,23 @@
+/* Título igual al de inventario */
+.titulo-historial {
+  font-size: clamp(20px, 5vw, 28px);
+  text-align: center;
+  margin-bottom: clamp(20px, 4vw, 30px);
+  color: #003f87;
+  font-weight: bold;
+  position: relative;
+}
+.titulo-historial::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(50px, 12vw, 80px);
+  height: 3px;
+  background: linear-gradient(90deg, #003f87, #38b6ff);
+  border-radius: 2px;
+}
 /* RESET GENERAL */
 * {
   margin: 0;

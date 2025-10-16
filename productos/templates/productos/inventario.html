@@ -42,40 +42,42 @@
 
   <!-- Contenido principal: tabla que muestra el inventario -->
   <main class="contenido">
-    <h2>Inventario</h2>
-    <!-- Filtros de búsqueda arriba de la tabla -->
-          <form method="get" class="row g-3 mb-4" style="max-width: 900px; margin: 0 auto;">
-      <div class="col-md-4">
-        <label for="categoria" class="form-label">Categoría</label>
-        <select id="categoria" name="categoria" class="form-select">
-          <option value="">Todas</option>
-          <option value="Dispositivo" {% if request.GET.categoria == 'Dispositivo' %}selected{% endif %}>Dispositivo</option>
-          <option value="Auricular" {% if request.GET.categoria == 'Auricular' %}selected{% endif %}>Auricular</option>
-          <option value="Cargador" {% if request.GET.categoria == 'Cargador' %}selected{% endif %}>Cargador</option>
-        </select>
+    <div class="cuadro-blanco">
+      <h2>Inventario</h2>
+      <!-- Filtros de búsqueda arriba de la tabla -->
+            <form method="get" class="row g-3 mb-4" style="max-width: 900px; margin: 0 auto;">
+        <div class="col-md-4">
+          <label for="categoria" class="form-label">Categoría</label>
+          <select id="categoria" name="categoria" class="form-select">
+            <option value="">Todas</option>
+            <option value="Dispositivo" {% if request.GET.categoria == 'Dispositivo' %}selected{% endif %}>Dispositivo</option>
+            <option value="Auricular" {% if request.GET.categoria == 'Auricular' %}selected{% endif %}>Auricular</option>
+            <option value="Cargador" {% if request.GET.categoria == 'Cargador' %}selected{% endif %}>Cargador</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="color" class="form-label">Color</label>
+          <select id="color" name="color" class="form-select">
+            <option value="">Todos</option>
+            <option value="negro" {% if request.GET.color == 'negro' %}selected{% endif %}>Negro</option>
+            <option value="blanco" {% if request.GET.color == 'blanco' %}selected{% endif %}>Blanco</option>
+            <option value="dorado" {% if request.GET.color == 'dorado' %}selected{% endif %}>Dorado</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="capacidad" class="form-label">Almacenamiento</label>
+          <select id="capacidad" name="capacidad" class="form-select">
+            <option value="">Todos</option>
+            <option value="128GB" {% if request.GET.capacidad == '128GB' %}selected{% endif %}>128GB</option>
+            <option value="256GB" {% if request.GET.capacidad == '256GB' %}selected{% endif %}>256GB</option>
+            <option value="512GB" {% if request.GET.capacidad == '512GB' %}selected{% endif %}>512GB</option>
+          </select>
+        </div>
+        <div class="campo-boton">
+          <button class="boton-buscar">BUSCAR</button>
+          <button class="boton-limpiar">LIMPIAR</button>
       </div>
-      <div class="col-md-4">
-        <label for="color" class="form-label">Color</label>
-        <select id="color" name="color" class="form-select">
-          <option value="">Todos</option>
-          <option value="negro" {% if request.GET.color == 'negro' %}selected{% endif %}>Negro</option>
-          <option value="blanco" {% if request.GET.color == 'blanco' %}selected{% endif %}>Blanco</option>
-          <option value="dorado" {% if request.GET.color == 'dorado' %}selected{% endif %}>Dorado</option>
-        </select>
-      </div>
-      <div class="col-md-4">
-        <label for="capacidad" class="form-label">Almacenamiento</label>
-        <select id="capacidad" name="capacidad" class="form-select">
-          <option value="">Todos</option>
-          <option value="128GB" {% if request.GET.capacidad == '128GB' %}selected{% endif %}>128GB</option>
-          <option value="256GB" {% if request.GET.capacidad == '256GB' %}selected{% endif %}>256GB</option>
-          <option value="512GB" {% if request.GET.capacidad == '512GB' %}selected{% endif %}>512GB</option>
-        </select>
-      </div>
-      <div class="col-12 text-center">
-  <button type="submit" class="boton-buscar">Filtrar</button>
-  <a href="?" class="boton-limpiar ms-2">Limpiar</a>
-      </div>
+    </div>
     </form>
    
 
