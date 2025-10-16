@@ -182,14 +182,7 @@ h2::after {
 }
 
 /* CONTENEDOR DE TABLA */
-.tabla-container {
-  background-color: white;          /* Fondo blanco */
-  border-radius: 15px;              /* Bordes redondeados */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Sombra suave */
-  padding: 30px;                    /* Espacio interno */
-  width: 80%;                       /* Ancho ajustable */
-  margin: 20px auto;                /* Centrado */
-}
+
 
 
 /* TABLA DE INVENTARIO */
