@@ -16,6 +16,7 @@ body {
   min-height: 100vh;
   display: flex; 
   flex-direction: column;
+  padding-top: clamp(50px, 12vw, 60px);
 }
 
 /* =========================
@@ -86,6 +87,17 @@ header {
   transition: color 0.3s ease;
 }
 
+/* CONTENIDO PRINCIPAL */
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  min-height: calc(100vh - 160px);
+  width: 100%;
+}
+
 /* FOOTER*/
 footer {
   position: fixed;
@@ -136,63 +148,63 @@ footer {
   --radius: 12px;
 }
 
-/* Fondo especial para páginas de login */
-body.login-page {
-  font-family: Inter, Arial, sans-serif;
-  background: radial-gradient(circle at 50% 50%, #a6a6a6 0%, #ffffff 100%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  padding: 20px;
-}
-
 .container {
   background: var(--card-bg);
-  padding: 28px;
+  padding: clamp(28px, 5vw, 36px);
   border-radius: var(--radius);
-  box-shadow: 0 6px 24px rgba(2,6,23,0.08);
-  width: 380px;
-  max-width: 100%;
+  box-shadow: 0 8px 32px rgba(2,6,23,0.12);
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
   text-align: center;
+  position: relative;
 }
 
 h2 {
-  margin: 0 0 14px;
+  margin: 0 0 16px;
   color: #0f172a;
-  font-size: 20px;
+  font-size: clamp(20px, 4vw, 24px);
+  font-weight: 600;
 }
 
 p.small {
-  margin: 0 0 12px;
+  margin: 0 0 18px;
   color: var(--muted);
-  font-size: 13px;
+  font-size: clamp(13px, 3vw, 14px);
+  line-height: 1.5;
 }
 
 input[type="email"],
 input[type="password"],
 input[type="text"] {
   width: 100%;
-  padding: 10px 12px;
-  margin: 8px 0;
+  padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 14px);
+  margin: 10px 0;
   border: 1px solid #e6e9ef;
   border-radius: 10px;
   outline: none;
-  font-size: 14px;
+  font-size: clamp(14px, 3vw, 15px);
+  transition: border-color 0.3s ease;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+  border-color: var(--accent);
 }
 
 button {
   width: 100%;
-  padding: 11px;
-  margin-top: 10px;
+  padding: clamp(11px, 2.5vw, 13px);
+  margin-top: 12px;
   background: var(--accent);
   color: #fff;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 14px;
+  font-size: clamp(14px, 3vw, 15px);
+  transition: all 0.3s ease;
 }
 
 button.secondary {
@@ -206,15 +218,19 @@ button:hover {
   background: var(--accent-hover); 
 }
 
+button.secondary:hover {
+  background: rgba(0, 123, 255, 0.05);
+}
+
 .hidden { display: none; }
 
 .message-error {
   background: #fff5f5;
   color: var(--danger);
   border: 1px solid rgba(220,38,38,0.12);
-  padding: 8px 10px;
+  padding: clamp(6px, 2vw, 8px) clamp(8px, 2vw, 10px);
   border-radius: 8px;
-  font-size: 13px;
+  font-size: clamp(12px, 2.5vw, 13px);
   margin-top: 8px;
 }
 
@@ -225,56 +241,203 @@ button:hover {
   background: rgba(22,163,74,0.08);
   color: var(--success);
   border: 1px solid rgba(16,185,129,0.12);
-  padding: 10px 12px;
+  padding: clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 12px);
   border-radius: 10px;
   font-weight: 600;
   margin: 10px 0 6px;
+  font-size: clamp(12px, 3vw, 14px);
 }
 
 .check {
-  width: 20px;
-  height: 20px;
+  width: clamp(18px, 4vw, 20px);
+  height: clamp(18px, 4vw, 20px);
   display:inline-grid;
   place-items:center;
   background: rgba(16,185,129,0.16);
   color: var(--success);
   border-radius: 6px;
   font-weight: 700;
+  font-size: clamp(14px, 3vw, 16px);
 }
 
 .small-note { 
   color: var(--muted); 
-  font-size: 13px; 
+  font-size: clamp(12px, 2.5vw, 13px); 
   margin-top: 6px; 
 }
 
 /* =========================
    RESPONSIVE
 ========================= */
+@media (max-width: 768px) {
+  main {
+    padding: 20px 15px;
+    min-height: calc(100vh - 150px);
+  }
+  
+  .container {
+    padding: 26px;
+    max-width: 420px;
+  }
+}
+
 @media (max-width: 480px) {
+  body {
+    padding-top: 50px;
+  }
+  
+  .top-bar {
+    padding: 6px 10px;
+    height: 50px;
+  }
+  
+  .logo1, .logo2 {
+    height: 28px;
+  }
+  
+  .icono {
+    width: 18px;
+    height: 18px;
+  }
+  
+  header {
+    top: 50px;
+  }
+  
+  .menu {
+    padding: 8px 15px;
+  }
+  
+  .menu a {
+    font-size: 12px;
+  }
+  
+  main {
+    padding: 15px 10px;
+    min-height: calc(100vh - 140px);
+  }
+  
+  .container {
+    padding: 22px 18px;
+    max-width: 95%;
+  }
+  
+  h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  
+  p.small {
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+  
+  input[type="email"],
+  input[type="password"],
+  input[type="text"] {
+    padding: 10px 12px;
+    font-size: 14px;
+    margin: 8px 0;
+  }
+  
+  button {
+    padding: 11px;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
   .footer-bar {
     flex-direction: column;
     gap: 8px;
     text-align: center;
+    padding: 8px 15px;
+    font-size: 11px;
   }
-
-  nav.menu {
-    flex-wrap: wrap;
-    gap: 12px;
+  
+  .footer-item {
+    gap: 4px;
   }
-
-  .menu::-webkit-scrollbar {
-    height: 3px;
+  
+  .footer-item img {
+    width: 14px;
+    height: 14px;
   }
+  
+  .footer-bottom {
+    padding: 6px;
+    font-size: 11px;
+  }
+}
 
-  .menu::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.3);
-    border-radius: 3px;
+@media (max-width: 360px) {
+  main {
+    padding: 12px 8px;
+  }
+  
+  .container {
+    padding: 18px 14px;
+  }
+  
+  h2 {
+    font-size: 18px;
+  }
+  
+  .top-bar .left-side {
+    gap: 8px;
+  }
+  
+  .top-bar .right-side {
+    gap: 6px;
+  }
+}
+
+@media (min-width: 769px) {
+  main {
+    padding: 40px 20px;
+  }
+  
+  .container {
+    padding: 36px 40px;
+  }
+}
+
+@media (max-height: 600px) {
+  main {
+    padding: 15px 20px;
+    min-height: calc(100vh - 130px);
+  }
+  
+  .container {
+    padding: 20px 24px;
   }
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
-  .welcome img {
-    max-height: 250px;
+  main {
+    padding: 10px 20px;
+    min-height: calc(100vh - 120px);
+  }
+  
+  .container {
+    padding: 18px 24px;
+  }
+  
+  h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  p.small {
+    margin-bottom: 10px;
+  }
+  
+  input[type="email"],
+  input[type="password"],
+  input[type="text"] {
+    margin: 6px 0;
+  }
+  
+  button {
+    margin-top: 8px;
   }
 }

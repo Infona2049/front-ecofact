@@ -40,6 +40,7 @@ Ve a: **http://localhost:8001/login/**
 
 - **Login:** http://localhost:8001/login/
 - **Registro:** http://localhost:8001/registro/
+- **Recuperar Contraseña:** http://localhost:8001/olvido_contraseña/
 - **Admin:** http://localhost:8001/admin/
 
 ## ✅ Lo que el script hace automáticamente:
@@ -64,12 +65,30 @@ Instala Git desde: https://git-scm.com
 python manage.py collectstatic --noinput
 ```
 
-## 💡 Datos Importantes
+## � Recuperación de Contraseña
+
+¿Olvidaste tu contraseña? ¡No hay problema!
+
+1. Ve a: **http://localhost:8001/olvido_contraseña/**
+2. Ingresa tu email (debe ser un email REAL)
+3. **Recibirás un código de 6 dígitos en tu Gmail** 📧
+4. Ingresa el código
+5. Establece tu nueva contraseña
+6. ¡Listo! Inicia sesión con tu nueva contraseña
+
+### ⚠️ Importante sobre emails:
+- Los emails llegan a **Gmail REAL** (no simulados)
+- El código expira en **10 minutos**
+- Solo se puede usar **una vez**
+- Si no llega, revisa tu carpeta de **SPAM**
+
+## �💡 Datos Importantes
 
 - **Base de datos:** Compartida en la nube (Neon)
 - **Puerto:** 8001 (no 8000)
 - **Registro:** Solo permite crear clientes
 - **Admin:** Para crear vendedores/admins usar el panel de Django
+- **Emails:** Sistema de recuperación con Gmail real configurado
 
 ## 🤝 Colaboración
 

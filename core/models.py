@@ -111,5 +111,24 @@ class Empresa(models.Model):
         return self.nombre_empresa
 
 
+class CodigoRecuperacion(models.Model):
+    """Modelo simple para códigos de recuperación de contraseña"""
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='codigos_recuperacion')
+    codigo = models.CharField(max_length=6)
+    creado_en = models.DateTimeField(auto_now_add=True)
+    expira_en = models.DateTimeField()
+    usado = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"Código para {self.usuario.correo_electronico_usuario}"
+    
+    def esta_vigente(self):
+        """Verifica si el código está vigente (no expirado y no usado)"""
+        return not self.usado and timezone.now() < self.expira_en
+    
+    class Meta:
+        ordering = ['-creado_en']
+
+
 
 

@@ -7,9 +7,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.db.models import Q
 from functools import wraps
+from datetime import timedelta
 import json
+import random
 from .forms import RegistroUsuarioForm
-from .models import Usuario
+from .models import Usuario, CodigoRecuperacion
+from django.core.mail import send_mail
+from django.conf import settings
 
 def role_required(allowed_roles):
     """Decorador para restringir acceso por roles"""
@@ -198,3 +202,258 @@ def visualizacion_cliente_view(request):
 @role_required(['vendedor'])
 def visualizacion_vendedor_view(request):
     return render(request, 'core/visualizacion_Vendedor.html')
+
+
+# ==================== RECUPERACIÓN DE CONTRASEÑA (SIN JWT - SIMPLE) ====================
+
+def olvido_contraseña_view(request):
+    """Vista para mostrar el formulario de recuperación de contraseña"""
+    return render(request, 'core/olvido_contraseña.html')
+
+
+def generar_codigo():
+    """Genera un código de 6 dígitos"""
+    return ''.join([str(random.randint(0, 9)) for _ in range(6)])
+
+
+def solicitar_recuperacion_password(request):
+    """Endpoint para solicitar recuperación de contraseña - Envía código por email"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
+    
+    try:
+        data = json.loads(request.body)
+        email = data.get('email', '').strip().lower()
+        
+        if not email:
+            return JsonResponse({
+                'success': False,
+                'message': 'El correo electrónico es obligatorio'
+            })
+        
+        # Buscar el usuario por email
+        try:
+            usuario = Usuario.objects.get(correo_electronico_usuario=email)
+        except Usuario.DoesNotExist:
+            # Por seguridad, no revelamos si el email existe o no
+            return JsonResponse({
+                'success': True,
+                'message': 'Si el correo existe, recibirás un código de verificación'
+            })
+        
+        # Invalidar códigos anteriores del usuario
+        CodigoRecuperacion.objects.filter(
+            usuario=usuario,
+            usado=False,
+            expira_en__gt=timezone.now()
+        ).update(usado=True)
+        
+        # Generar código de 6 dígitos
+        codigo = generar_codigo()
+        
+        # Crear registro de código
+        codigo_obj = CodigoRecuperacion.objects.create(
+            usuario=usuario,
+            codigo=codigo,
+            expira_en=timezone.now() + timedelta(hours=1)
+        )
+        
+        # Enviar email con el código
+        try:
+            asunto = 'Recuperación de Contraseña - EcoFact'
+            mensaje = f"""
+Hola {usuario.nombre_usuario} {usuario.apellido_usuario},
+
+Has solicitado recuperar tu contraseña en EcoFact.
+
+Tu código de verificación es: {codigo}
+
+Este código es válido por 1 hora.
+
+Si no solicitaste este cambio, puedes ignorar este mensaje.
+
+Saludos,
+Equipo EcoFact
+            """
+            
+            send_mail(
+                asunto,
+                mensaje,
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            print(f"Error al enviar email: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'message': 'Error al enviar el correo. Por favor, intenta más tarde.'
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Se ha enviado un código de verificación a tu correo',
+            'email': email  # Lo usaremos para validar después
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'success': False,
+            'message': 'Datos inválidos'
+        })
+    except Exception as e:
+        print(f"Error en solicitar_recuperacion_password: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'message': 'Error al procesar la solicitud'
+        })
+
+
+def verificar_codigo_recuperacion(request):
+    """Endpoint para verificar el código de recuperación"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
+    
+    try:
+        data = json.loads(request.body)
+        email = data.get('email', '').strip().lower()
+        codigo = data.get('codigo', '').strip()
+        
+        if not email or not codigo:
+            return JsonResponse({
+                'success': False,
+                'message': 'Email y código son obligatorios'
+            })
+        
+        # Buscar el usuario
+        try:
+            usuario = Usuario.objects.get(correo_electronico_usuario=email)
+        except Usuario.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Usuario no encontrado'
+            })
+        
+        # Buscar el código más reciente del usuario
+        try:
+            codigo_obj = CodigoRecuperacion.objects.filter(
+                usuario=usuario,
+                codigo=codigo,
+                usado=False
+            ).latest('creado_en')
+        except CodigoRecuperacion.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Código incorrecto o ya utilizado'
+            })
+        
+        # Verificar que no haya expirado
+        if not codigo_obj.esta_vigente():
+            return JsonResponse({
+                'success': False,
+                'message': 'El código ha expirado. Solicita uno nuevo.'
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Código verificado correctamente'
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'success': False,
+            'message': 'Datos inválidos'
+        })
+    except Exception as e:
+        print(f"Error en verificar_codigo_recuperacion: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'message': 'Error al verificar el código'
+        })
+
+
+def restablecer_password(request):
+    """Endpoint para restablecer la contraseña"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
+    
+    try:
+        data = json.loads(request.body)
+        email = data.get('email', '').strip().lower()
+        codigo = data.get('codigo', '').strip()
+        nueva_password = data.get('password', '')
+        confirmar_password = data.get('confirm_password', '')
+        
+        if not email or not codigo or not nueva_password or not confirmar_password:
+            return JsonResponse({
+                'success': False,
+                'message': 'Todos los campos son obligatorios'
+            })
+        
+        # Verificar que las contraseñas coincidan
+        if nueva_password != confirmar_password:
+            return JsonResponse({
+                'success': False,
+                'message': 'Las contraseñas no coinciden'
+            })
+        
+        # Validar fortaleza de la contraseña
+        if len(nueva_password) < 8:
+            return JsonResponse({
+                'success': False,
+                'message': 'La contraseña debe tener al menos 8 caracteres'
+            })
+        
+        # Buscar el usuario
+        try:
+            usuario = Usuario.objects.get(correo_electronico_usuario=email)
+        except Usuario.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Usuario no encontrado'
+            })
+        
+        # Buscar el código
+        try:
+            codigo_obj = CodigoRecuperacion.objects.filter(
+                usuario=usuario,
+                codigo=codigo,
+                usado=False
+            ).latest('creado_en')
+        except CodigoRecuperacion.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Código incorrecto o ya utilizado'
+            })
+        
+        # Verificar que no haya expirado
+        if not codigo_obj.esta_vigente():
+            return JsonResponse({
+                'success': False,
+                'message': 'El código ha expirado. Solicita uno nuevo.'
+            })
+        
+        # Cambiar la contraseña del usuario
+        usuario.set_password(nueva_password)
+        usuario.save()
+        
+        # Marcar el código como usado
+        codigo_obj.usado = True
+        codigo_obj.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Contraseña restablecida exitosamente'
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'success': False,
+            'message': 'Datos inválidos'
+        })
+    except Exception as e:
+        print(f"Error en restablecer_password: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'message': 'Error al restablecer la contraseña'
+        })

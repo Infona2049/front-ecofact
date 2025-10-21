@@ -157,13 +157,20 @@ AUTH_USER_MODEL = 'core.Usuario'
 #    MEDIA_URL es la URL pública para acceder a estos archivos.
 #    MEDIA_ROOT es la ruta absoluta en el sistema donde se guardan los archivos subidos.
 #    Recuerda que en desarrollo debes configurar urls.py para servir estos archivos.
-    
-#CONFIGURACIÓN MAILTRAP
+
+
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "sandbox.smtp.mailtrap.io"
-EMAIL_HOST_USER = "37784d5fd7e4f7"
-EMAIL_HOST_PASSWORD = "d1db56fe8a2834"
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = "facturacion@ecofact.com"
+EMAIL_HOST_USER = "losmejorereal0@gmail.com"
+EMAIL_HOST_PASSWORD = "bamoffqrjaiowxtc"  # Sin espacios
+DEFAULT_FROM_EMAIL = "losmejorereal0@gmail.com"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Después de cambiar la configuración:
+# 1. Guarda este archivo
+# 2. Ejecuta: python test_email.py
+# 3. El email debería llegar al Gmail REAL del usuario
+# ═══════════════════════════════════════════════════════════════════════════

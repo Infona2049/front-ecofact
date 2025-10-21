@@ -4,7 +4,7 @@ from django.contrib import messages
 from .models import (
     Usuario,
     Empresa,
-
+    CodigoRecuperacion,
 )
 # Se cambió el import del modelo DetalleFactura, ahora se importa desde facturas.models
 from facturas.models import DetalleFactura 
@@ -157,3 +157,48 @@ class HistorialFacturaAdmin(admin.ModelAdmin):
     search_fields = ('factura__cufe_factura', 'usuario__correo_electronico_usuario')
     date_hierarchy = 'fecha_de_evento'
     ordering = ('-fecha_de_evento',)
+
+
+# --- MODELO CODIGO RECUPERACION ---
+@admin.register(CodigoRecuperacion)
+class CodigoRecuperacionAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'usuario',
+        'codigo',
+        'creado_en',
+        'expira_en',
+        'usado',
+        'esta_vigente_display',
+    )
+    list_filter = ('usado', 'creado_en', 'expira_en')
+    search_fields = ('usuario__correo_electronico_usuario', 'codigo')
+    readonly_fields = ('creado_en', 'esta_vigente_display')
+    date_hierarchy = 'creado_en'
+    ordering = ('-creado_en',)
+    
+    def esta_vigente_display(self, obj):
+        """Indica si el código está vigente"""
+        if obj.usado:
+            return "❌ Usado"
+        elif not obj.esta_vigente():
+            return "⏰ Expirado"
+        else:
+            return "✅ Vigente"
+    esta_vigente_display.short_description = "Estado"
+    
+    fieldsets = (
+        ('Información del Usuario', {
+            'fields': ('usuario',)
+        }),
+        ('Código', {
+            'fields': ('codigo',)
+        }),
+        ('Estado', {
+            'fields': ('usado', 'esta_vigente_display')
+        }),
+        ('Fechas', {
+            'fields': ('creado_en', 'expira_en')
+        }),
+    )
+
