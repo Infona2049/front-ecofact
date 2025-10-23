@@ -4,115 +4,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actualizar factura</title>
+    <title>Actualizar perfil</title>
     <link rel="stylesheet" href="{% static 'core/css/actualizar_perfil.css' %}">
-</head> 
+    <style>
+        .alert {
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin: 15px auto;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .alert-success { background-color: #b7c9bb; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
 <body>
-    <!-- Barra superior --> 
     <div class="top-bar">
         <div class="left-side">
             <a href="{% url 'visualizacion_admin' %}">
-                <img src="{% static 'img/Logo azul sin fondo.png' %}" alt="EcoFact Logo" class="logo1" />
-                <img src="{% static 'img/logo empresa.png' %}" alt="Empresa logo " class="logo2" />
+                <img src="{% static 'img/Logo azul sin fondo.png' %}" class="logo1" />
+                <img src="{% static 'img/logo empresa.png' %}" class="logo2" />
             </a>
         </div>
-
         <div class="right-side">
             <a href="{% url 'documentos' %}"><img src="{% static 'img/documento.png' %}" class="icono"></a>
             <a href="{% url 'actualizar_perfil' %}"><img src="{% static 'img/editar.png' %}" class="icono"></a>
             <a href="{% url 'cambiocontraseña' %}"><img src="{% static 'img/contrasena.png' %}" class="icono"></a>
-            <a href="{% url 'login' %}"><img src="{% static 'img/cerrar-sesion.png' %}" class="icono"></a>
+            <a href="{% url 'logout' %}"><img src="{% static 'img/cerrar-sesion.png' %}" class="icono"></a>
         </div>
     </div>
 
-<!-- Barra de navegación -->
     <header>
         <nav class="menu">
             <a href="{% url 'visualizacion_admin' %}">Inicio</a>
         </nav>
     </header>
 
-  <!-- FORMULARIO DE ACTUALIZACIÓN DE PERFIL -->
-  <main class="form-container">
-    <form class="form-box" id="formulario">
-      <!-- Imagen de perfil centrada -->
-      <div class="logo-centro">
-        <img src="{% static 'img/logo_foto_perfil.png' %}" alt="Foto de perfil" />
-      </div>
+    {% if messages %}
+    <div id="messages">
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
-      <!-- Grilla de campos del formulario -->
-      <div class="form-grid">
-        <!-- ===== Columna izquierda ===== -->
-        <div class="col">
-          <label for="nombre">Nombre</label> 
-          <input type="text" id="nombre" name="nombre" required />
+    <main class="form-container">
+        <form class="form-box" method="post">
+            {% csrf_token %}
+            <div class="logo-centro">
+                <img src="{% static 'img/logo_foto_perfil.png' %}" />
+            </div>
 
-          <label for="segundoNombre">Segundo nombre</label>
-          <input type="text" id="segundoNombre" name="segundoNombre" />
+            <div class="form-grid">
+                <div class="col">
+                    <label>Nombre</label>
+                    <input type="text" value="{{ user.nombre_usuario|default_if_none:'' }}" disabled>
+                    <label>Segundo nombre</label>
+                    <input type="text" value="{{ user.segundo_nombre_usuario|default_if_none:'' }}" disabled>
+                    <label>Apellido</label>
+                    <input type="text" value="{{ user.apellido_usuario|default_if_none:'' }}" disabled>
+                    <label>Segundo apellido</label>
+                    <input type="text" value="{{ user.segundo_apellido_usuario|default_if_none:'' }}" disabled>
+                </div>
+                <div class="col">
+                    <label>Tipo documento</label>
+                    <input type="text" value="{{ user.tipo_documento_usuario|default_if_none:'' }}" disabled>
+                    <label>Número documento</label>
+                    <input type="text" value="{{ user.numero_documento_usuario|default_if_none:'' }}" disabled>
+                    <label>Correo electrónico</label>
+                    {{ form.correo_electronico_usuario }}
+                    <label>Dirección</label>
+                    {{ form.direccion_usuario }}
+                    <label>Teléfono</label>
+                    {{ form.telefono_usuario }}
+                </div>
+            </div>
 
-          <label for="apellido">Apellido</label>
-          <input type="text" id="apellido" name="apellido" required />
+            <div class="form-buttons">
+                {% if user.rol_usuario == 'admin' %}
+                    <button id="btn-cancelar" type="button" onclick="window.location.href='{% url 'visualizacion_admin' %}'">Cancelar</button>
+                {% elif user.rol_usuario == 'vendedor' %}
+                    <button id="btn-cancelar" type="button" onclick="window.location.href='{% url 'visualizacion_vendedor' %}'">Cancelar</button>
+                {% else %}
+                    <button id="btn-cancelar" type="button" onclick="window.location.href='{% url 'visualizacion_cliente' %}'">Cancelar</button>
+                {% endif %}
+                <button id="btn-siguiente" type="submit">Actualizar</button>
+            </div>
+        </form>
+    </main>
 
-          <label for="segundoApellido">Segundo apellido</label>
-          <input type="text" id="segundoApellido" name="segundoApellido" />
-        </div>
-  
-        <!-- ===== Columna derecha ===== -->
-        <div class="col">
-          <label for="tipoDocumento">Tipo documento</label>
-          <select id="tipoDocumento" name="tipoDocumento" required>
-            <option value="">Seleccione…</option>
-            <option value="cc">Cédula de ciudadanía</option>
-            <option value="ce">Cédula de extranjería</option>
-            <option value="nit">NIT</option>
-            <option value="ti">Tarjeta de identidad</option>
-            <option value="pp">Pasaporte</option>
-          </select>
-
-          <label for="numeroDocumento">Número documento</label>
-          <input type="text" id="numeroDocumento" name="numeroDocumento"
-                 maxlength="12" pattern="\d+" required />
-
-          <label for="email">Correo electrónico</label>
-          <input type="email" id="email" name="email" required />
-
-          <label for="direccion">Dirección</label>
-          <input type="text" id="direccion" name="direccion" required />
-        </div>
-      </div>
-
-      <!-- ===== Botones de acción ===== -->
-      <div class="form-buttons">
-        <button type="button" id="btn-cancelar">Cancelar</button>
-        <button type="submit" id="btn-siguiente">Actualizar</button>
-      </div>
-    </form>
-  </main>
-
-  <!-- Pie de página -->
     <footer>
-        <div class="footer-bar"> 
+        <div class="footer-bar">
             <div class="footer-item">
-                <img src="{% static 'img/mensaje.png' %}" alt="Ubicación">
-                Ecofactproyect@gmail.com
+                <img src="{% static 'img/mensaje.png' %}" alt="Correo"> Ecofactproyect@gmail.com
             </div>
             <div class="footer-item">
-                <img src="{% static 'img/llamada-telefonica.png' %}" alt="Teléfono"> 
-                333-333-333
+                <img src="{% static 'img/llamada-telefonica.png' %}" alt="Teléfono"> 333-333-333
             </div>
         </div>
-        <div class="footer-bottom">@2025-ECOFACT</div> 
+        <div class="footer-bottom">@2025-ECOFACT</div>
     </footer>
 
-  <!-- MODAL DE ÉXITO (se muestra tras actualizar)     -->
-  <div id="modal-exito" class="modal">
-    <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <p>¡Información de perfil actualizada!</p>
-    </div>
-  </div>
-
-  <!-- Scripts JavaScript                              -->
-  <script src="{% static 'core/js/actualizar_perfil.js' %}" defer></script>
+    <script>
+        // Ocultar mensajes automáticamente a los 3s
+        setTimeout(() => {
+            const messages = document.getElementById("messages");
+            if (messages) {
+                messages.style.transition = "opacity 0.5s ease";
+                messages.style.opacity = "0";
+                setTimeout(() => messages.remove(), 500);
+            }
+        }, 3000);
+    </script>
 </body>
 </html>

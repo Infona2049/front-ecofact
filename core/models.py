@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-import uuid
 from productos.models import Producto
 from facturas.models import Factura
 
@@ -53,12 +52,14 @@ class Usuario(AbstractUser):
     telefono_usuario = models.CharField(max_length=15, blank=True, null=True)
     rol_usuario = models.CharField(max_length=10, choices=ROL_USUARIO_CHOICES)
     fecha_creacion_usuario = models.DateTimeField(auto_now_add=True)
+    intentos_fallidos = models.IntegerField(default=0)
 
     USERNAME_FIELD = 'correo_electronico_usuario'
     REQUIRED_FIELDS = ['username', 'nombre_usuario', 'apellido_usuario', 'rol_usuario']
 
     def _str_(self):
         return self.correo_electronico_usuario
+
 
 class Empresa(models.Model):
     id_empresa = models.AutoField(primary_key=True)
@@ -75,17 +76,16 @@ class Empresa(models.Model):
         return self.nombre_empresa
 
 
-
 class DetalleFactura(models.Model):
     id_detalle_factura = models.AutoField(primary_key=True)
-    factura = models.ForeignKey(Factura, on_delete=models.CASCADE)  
+    factura = models.ForeignKey(Factura, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad_detalle_factura = models.IntegerField()
     precio_unitario_detalle_factura = models.DecimalField(max_digits=10, decimal_places=2)
     subtotal_detalle_factura = models.DecimalField(max_digits=10, decimal_places=2)
     iva_detalle_factura = models.DecimalField(max_digits=10, decimal_places=2)
     total_detalle_factura = models.DecimalField(max_digits=10, decimal_places=2)
-  
+
     def _str_(self):
         return f"Detalle {self.id_detalle_factura} - Factura {self.factura.id}"
 
@@ -99,4 +99,4 @@ class HistorialFactura(models.Model):
     observacion_historial_factura = models.TextField(blank=True, null=True)
 
     def _str_(self):
-        return f"Historial {self.id_historial_factura} - Factura {self.factura.id_factura}"
+        return f"Historial {self.id_historial_factura} - Factura {self.factura.id}"
