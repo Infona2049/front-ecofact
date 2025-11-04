@@ -6,7 +6,8 @@ from django.core.mail import send_mail
 from datetime import date
 from django.core.paginator import Paginator
 from io import BytesIO
-import json, traceback, os
+import json, traceback, os, uuid
+
 
 # === Librerías adicionales ===
 from django.conf import settings
@@ -46,7 +47,7 @@ def crear_factura(request):
                 sutotal_factura=data.get("sutotal_factura", 0),
                 iva_total_factura=data.get("iva_total_factura", 0),
                 total_factura=data.get("total_factura", 0),
-                cufe_factura="TEMP"
+                cufe_factura=f"TEMP-{uuid.uuid4()}"
             )
 
             # Guardar detalle de productos

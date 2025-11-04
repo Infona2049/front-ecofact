@@ -62,8 +62,8 @@ class UsuarioAdmin(admin.ModelAdmin):
     ordering = ('id_usuario',)
     actions = [desbloquear_usuarios_seleccionados, resetear_intentos_fallidos]
     
-    # Campos de solo lectura para mostrar información del bloqueo
-    readonly_fields = ('estado_bloqueo', 'tiempo_restante_bloqueo')
+    # Campos de solo lectura para mostrar información del bloqueo y fechas no editables
+    readonly_fields = ('estado_bloqueo', 'tiempo_restante_bloqueo', 'fecha_creacion_usuario', 'last_login', 'date_joined')
     
     def estado_bloqueo(self, obj):
         """Muestra el estado de bloqueo del usuario"""
