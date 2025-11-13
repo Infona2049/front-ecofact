@@ -98,9 +98,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (type === "password") {
         icon.classList.remove("fa-eye-slash");
         icon.classList.add("fa-eye");
+        togglePassword.setAttribute('aria-label', 'Mostrar contraseña');
       } else {
         icon.classList.remove("fa-eye");
         icon.classList.add("fa-eye-slash");
+        togglePassword.setAttribute('aria-label', 'Ocultar contraseña');
       }
     });
   }

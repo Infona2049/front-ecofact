@@ -21,47 +21,57 @@
 
 <body> <!-- Inicio del cuerpo visible del documento -->
 
+  <!-- Skip link para saltar al contenido principal (visible al enfocarlo) -->
+  <a class="skip-link" href="#content">Saltar al contenido</a>
+
   <!-- Contenedor principal del formulario -->
-  <div class="form-content">
-    
-    <!-- Logo de la empresa EcoFact -->
-    <img class="logo" src="{% static 'img/Logo azul sin fondo.png' %}" alt="Logo EcoFact">
-
-    <!-- Formulario de inicio de sesión -->
-    <!-- Usa el método POST para enviar los datos de forma segura -->
-    <!-- onsubmit llama a la función login(event) definida en login.js -->
-    <form method="post" onsubmit="login(event)">
+  <main id="content">
+    <div class="form-content">
       
-      {% csrf_token %} <!-- Token de seguridad para evitar ataques CSRF (Cross-Site Request Forgery) -->
+      <!-- Logo de la empresa EcoFact -->
+      <img class="logo" src="{% static 'img/Logo azul sin fondo.png' %}" alt="Logo EcoFact">
 
-      <!-- Campo para ingresar el correo electrónico -->
-      <input type="email" name="email" required placeholder="Correo">
+      <!-- Formulario de inicio de sesión -->
+      <!-- Usa el método POST para enviar los datos de forma segura -->
+      <!-- onsubmit llama a la función login(event) definida en login.js -->
+      <form method="post" onsubmit="login(event)" aria-describedby="login_help">
+        
+        {% csrf_token %} <!-- Token de seguridad para evitar ataques CSRF (Cross-Site Request Forgery) -->
 
-      <!-- Campo de contraseña con ícono para mostrar/ocultar -->
-      <div class="password-container">
-        <!-- Campo de texto de tipo contraseña -->
-        <input type="password" name="password" id="password" placeholder="Contraseña" required>
+        <!-- Mensajes de formulario (announced to assistive tech) -->
+        <div id="login_help" class="sr-only" aria-live="polite"></div>
 
-        <!-- Ícono de ojito para alternar la visibilidad de la contraseña -->
-        <span class="toggle-password" id="togglePassword">
-          <i class="fa-solid fa-eye"></i> <!-- Ícono de ojo proveniente de Font Awesome -->
-        </span>
-      </div>
+        <!-- Campo para ingresar el correo electrónico -->
+        <label for="email" class="sr-only">Correo electrónico</label>
+        <input id="email" type="email" name="email" required placeholder="Correo" aria-required="true">
 
-      <!-- Enlace para recuperar contraseña en caso de olvido -->
-      <p class="recuperar">
-         <a href="{% url 'olvido_contraseña' %}"><u>¿Olvidó su contraseña?</u></a>
-      </p>
+        <!-- Campo de contraseña con ícono para mostrar/ocultar -->
+        <div class="password-container">
+          <!-- Campo de texto de tipo contraseña -->
+          <label for="password" class="sr-only">Contraseña</label>
+          <input type="password" name="password" id="password" placeholder="Contraseña" required aria-required="true">
 
-      <!-- Botón principal del formulario -->
-      <button type="submit" class="boton2">Iniciar Sesión</button>
+          <!-- Ícono de ojito para alternar la visibilidad de la contraseña (botón accesible) -->
+          <button type="button" class="toggle-password" id="togglePassword" aria-label="Mostrar contraseña">
+            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+          </button>
+        </div>
 
-      <!-- Enlace para los usuarios que aún no tienen cuenta -->
-      <p class="registro">
-        <a href="{% url 'registro' %}"><u>¿No estás registrado?  Regístrate aquí</u></a> 
-      </p>
-    </form> <!-- Cierre del formulario -->
-  </div> <!-- Cierre del contenedor principal -->
+        <!-- Enlace para recuperar contraseña en caso de olvido -->
+        <p class="recuperar">
+           <a href="{% url 'olvido_contraseña' %}">¿Olvidó su contraseña?</a>
+        </p>
+
+        <!-- Botón principal del formulario -->
+        <button type="submit" class="boton2">Iniciar Sesión</button>
+
+        <!-- Enlace para los usuarios que aún no tienen cuenta -->
+        <p class="registro">
+          <a href="{% url 'registro' %}">¿No estás registrado? Regístrate aquí</a> 
+        </p>
+      </form> <!-- Cierre del formulario -->
+    </div> <!-- Cierre del contenedor principal -->
+  </main>
 
   <!-- Archivo JavaScript propio para manejar el inicio de sesión -->
   <!-- 'defer' hace que se ejecute cuando todo el HTML haya cargado -->

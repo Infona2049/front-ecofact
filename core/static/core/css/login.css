@@ -125,3 +125,49 @@ input::placeholder {
     width: 80%;
   }
 }
+
+/* =========================
+   ACCESIBILIDAD: UTILIDADES
+   - skip-link visible al focus
+   - sr-only para labels accesibles pero ocultos visualmente
+   - outlines visibles para foco en inputs y botones
+========================= */
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: -999;
+}
+.skip-link:focus {
+  left: 10px;
+  top: 10px;
+  width: auto;
+  height: auto;
+  padding: 8px 12px;
+  background: #003f87;
+  color: #fff;
+  border-radius: 4px;
+  z-index: 10000;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* foco visible para inputs, botones y enlaces */
+input:focus, button:focus, a:focus {
+  outline: 3px solid rgba(3,79,135,0.25);
+  outline-offset: 2px;
+}
